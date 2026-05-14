@@ -1,4 +1,4 @@
-Project Overview
+*Project Overview*
 Maidanja WiFi is a full-stack, production-ready WiFi hotspot management platform built with Node.js, Express, PostgreSQL, and vanilla HTML/CSS/Tailwind.
 
 Core Features
