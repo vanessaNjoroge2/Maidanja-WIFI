@@ -1,0 +1,22 @@
+﻿# Environment variables — contains API keys and secrets
+.env
+
+# Dependencies — reinstalled via npm install
+node_modules/
+
+# Database seed files — may contain real data
+database/seed.sql
+backend/seed-database.js
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime
+.npm
+.node_repl_history
