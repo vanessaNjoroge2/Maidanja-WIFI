@@ -1,14 +1,14 @@
 // frontend/js/api.js
 // Shared API helper used by all pages
 
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-  ? (window.location.port === '3000' ? '/api' : 'http://localhost:3000/api')
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? (window.location.port === '3000' ? '/api' : 'https://maidanja-wifi.onrender.com')
   : '/api';
 
 const api = {
   // ── Auth helpers ──────────────────────────────────────────────────────────
-  getToken()  { return localStorage.getItem('maidanja_token'); },
-  getUser()   { return JSON.parse(localStorage.getItem('maidanja_user') || 'null'); },
+  getToken() { return localStorage.getItem('maidanja_token'); },
+  getUser() { return JSON.parse(localStorage.getItem('maidanja_user') || 'null'); },
   setSession(token, user) {
     localStorage.setItem('maidanja_token', token);
     localStorage.setItem('maidanja_user', JSON.stringify(user));
@@ -33,7 +33,7 @@ const api = {
     if (body) opts.body = JSON.stringify(body);
 
     try {
-      const res  = await fetch(`${API_BASE}${endpoint}`, opts);
+      const res = await fetch(`${API_BASE}${endpoint}`, opts);
       const data = await res.json();
 
       if (res.status === 401) {
@@ -50,13 +50,13 @@ const api = {
         }
         throw new Error(errorMsg);
       }
-      
+
       // Ensure data has the correct structure
       if (!data.data) {
         console.warn('API response missing data field:', data);
         throw new Error('Invalid API response format');
       }
-      
+
       return data;
     } catch (err) {
       console.error(`API Error [${method} ${endpoint}]:`, err);
@@ -64,11 +64,11 @@ const api = {
     }
   },
 
-  get(endpoint, auth = true)         { return this.request('GET',  endpoint, null, auth); },
-  post(endpoint, body, auth = true)  { return this.request('POST', endpoint, body, auth); },
-  put(endpoint, body, auth = true)   { return this.request('PUT',  endpoint, body, auth); },
-  logout() { 
-    this.clearSession(); 
+  get(endpoint, auth = true) { return this.request('GET', endpoint, null, auth); },
+  post(endpoint, body, auth = true) { return this.request('POST', endpoint, body, auth); },
+  put(endpoint, body, auth = true) { return this.request('PUT', endpoint, body, auth); },
+  logout() {
+    this.clearSession();
     window.location.href = '/login.html';
   }
 };
@@ -86,7 +86,7 @@ function goBack() {
 function showError(msg, containerId = 'error-banner') {
   const el = document.getElementById(containerId);
   if (el) { el.textContent = msg; el.classList.remove('hidden'); }
-  else      { alert(msg); }
+  else { alert(msg); }
 }
 
 function showSuccess(msg, containerId = 'success-banner') {
