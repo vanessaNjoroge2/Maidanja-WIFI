@@ -525,7 +525,7 @@
           <span>Maidanja WiFi</span>
         </a>
 
-        <div class="nav-links">
+        <div class="nav-links" id="nav-links">
           <a href="/packages.html">Packages</a>
           <a href="/dashboard.html">Dashboard</a>
           <a href="/login.html" class="login-btn">Login</a>
@@ -823,7 +823,38 @@
         window.location.href = "/checkout.html";
       }
 
-      // Load packages from API on page load
+      // Initialize navbar based on login state
+      function initNavbar() {
+        const navLinks = document.getElementById("nav-links");
+        const isLoggedIn = api.isLoggedIn();
+        const user = api.getUser();
+
+        if (isLoggedIn && user) {
+          // User is logged in - show user info and logout button
+          const userName = user.name || user.phone_number || "User";
+          const displayName = userName.split(" ")[0]; // Get first name
+          
+          navLinks.innerHTML = `
+            <a href="/packages.html">Packages</a>
+            <a href="/dashboard.html">Dashboard</a>
+            <span style="color: #bbc9cf; font-weight: 500;">Hi, ${displayName}</span>
+            <button onclick="api.logout()" style="background: none; border: none; color: #e4e1ed; cursor: pointer; text-decoration: underline; font-weight: 500; transition: color 0.3s;">
+              Logout
+            </button>
+          `;
+        } else {
+          // User is not logged in - show login and register buttons
+          navLinks.innerHTML = `
+            <a href="/packages.html">Packages</a>
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/login.html" class="login-btn">Login</a>
+            <a href="/login.html?tab=register" style="color: #3cd7ff; font-weight: 600;">Register</a>
+          `;
+        }
+      }
+
+      // Initialize navbar and load packages on page load
+      initNavbar();
       loadPackages();
     </script>
   </body>
