@@ -147,11 +147,15 @@ router.post(
       const token = signToken(user.id);
       const { password_hash, ...safeUser } = user;
 
-      res.json({
+      const responsePayload = {
         success: true,
         message: 'Login successful.',
         data: { token, user: safeUser },
-      });
+      };
+      
+      console.log('✅ Sending login response payload:', JSON.stringify(responsePayload, null, 2));
+
+      res.json(responsePayload);
     } catch (err) {
       console.error('❌ Login error:', err.message);
       next(err);

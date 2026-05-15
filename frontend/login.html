@@ -283,6 +283,7 @@
             },
             false,
           );
+          console.log("✅ Login API Response:", res);
           api.setSession(res.data.token, res.data.user);
           window.location.href =
             res.data.user.role === "admin" ? "/admin.html" : "/packages.html";
