@@ -14,43 +14,58 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/css/globals.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
     <style>
+      :root {
+        --primary: #00d4ff;
+        --secondary: #6001d1;
+        --bg: #0a0a0f;
+        --card: rgba(18, 18, 26, 0.7);
+        --text: #e4e1ed;
+        --muted: #bbc9cf;
+      }
+      .mesh-bg {
+        background-color: var(--bg);
+        background-image: radial-gradient(at 0% 0%, rgba(0, 212, 255, 0.15) 0px, transparent 50%),
+          radial-gradient(at 100% 0%, rgba(96, 1, 209, 0.15) 0px, transparent 50%),
+          radial-gradient(at 50% 100%, rgba(0, 212, 255, 0.1) 0px, transparent 50%);
+      }
+      .glass-card {
+        background: var(--card);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      }
+      .timer-glow {
+        filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
+      }
       @keyframes ripple {
         0% { transform: scale(0.8); opacity: 0.5; }
         100% { transform: scale(1.5); opacity: 0; }
       }
       .ripple-effect { animation: ripple 2s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
-      .glass-panel {
-        background: rgba(18, 18, 26, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+      .gradient-text {
+        background: linear-gradient(135deg, #a8e8ff, #d2bbff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
-      .inner-glow { box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.05); }
-      .cyan-violet-gradient { background: linear-gradient(135deg, #00d4ff 0%, #6001d1 100%); }
-      .timer-glow { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4)); }
-      @keyframes pulse-green {
-        0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
-        70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
-      }
-      .status-pulse { animation: pulse-green 2s infinite; }
     </style>
-    <link rel="stylesheet" href="/css/globals.css" />
-    <link rel="stylesheet" href="/css/navbar.css" />
   </head>
-  <body class="bg-background text-on-surface min-h-screen font-body-md relative overflow-x-hidden">
+  <body class="bg-[#0A0A0F] text-[#e4e1ed] font-body-md mesh-bg min-h-screen flex flex-col overflow-x-hidden">
     <!-- Global Navigation Bar -->
     <nav id="navbar" class="navbar">
       <div class="navbar-container">
         <div class="navbar-left">
-          <button class="back-button" onclick="goBack()" title="Go back">←</button>
+          <button class="back-button" onclick="window.location.href='/dashboard.html'" title="Dashboard">←</button>
           <a href="/index.html" class="navbar-brand">
             <img src="/images/logo.jpg" alt="Maidanja WiFi" />
             <span class="hidden sm:inline">Maidanja WiFi</span>
           </a>
         </div>
         <div class="navbar-center">
-          <h1 class="navbar-title">Connected</h1>
+          <h1 class="navbar-title">Status</h1>
         </div>
         <div class="navbar-right">
           <button id="mobile-menu-btn" aria-label="Toggle menu">
@@ -61,28 +76,26 @@
       </div>
     </nav>
 
-    <main class="relative z-10 pt-28 pb-20 px-margin-mobile">
-      <div class="max-w-xl mx-auto flex flex-col items-center">
-        <!-- Success Hero Section -->
-        <section class="text-center mb-xl">
-          <div class="relative w-24 h-24 mb-md mx-auto flex items-center justify-center">
+    <main class="flex-grow flex items-center justify-center px-margin-mobile pt-24 pb-12">
+      <div class="glass-card w-full max-w-lg rounded-2xl p-xl flex flex-col items-center relative">
+        <!-- Hero Section -->
+        <div class="text-center mb-xl">
+          <div class="relative w-20 h-20 mb-md mx-auto flex items-center justify-center">
             <div class="absolute inset-0 bg-green-500/20 rounded-full ripple-effect"></div>
-            <div class="relative w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]">
-              <span class="material-symbols-outlined text-white text-4xl font-bold">check</span>
+            <div class="relative w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+              <span class="material-symbols-outlined text-white text-3xl font-bold">check</span>
             </div>
           </div>
-          <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">You're Connected! 🎉</h1>
-          <p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">
-            Enjoy your internet session. Your time starts now.
-          </p>
-        </section>
+          <h1 class="font-headline-lg text-3xl md:text-4xl gradient-text mb-xs">You're Connected! 🎉</h1>
+          <p class="text-muted font-body-md max-w-xs mx-auto">Your high-speed internet session is active. Enjoy!</p>
+        </div>
 
-        <!-- Main Countdown Session Card -->
-        <div class="w-full glass-panel inner-glow rounded-2xl p-xl flex flex-col items-center mb-lg">
-          <div class="relative w-56 h-56 mb-lg">
+        <!-- Timer Card -->
+        <div class="w-full bg-surface-container-low/30 rounded-2xl p-lg border border-white/5 mb-lg flex flex-col items-center">
+          <div class="relative w-48 h-48 mb-lg">
             <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
               <circle cx="50" cy="50" fill="transparent" r="46" stroke="rgba(255,255,255,0.05)" stroke-width="6"></circle>
-              <circle class="timer-glow transition-all duration-1000" cx="50" cy="50" fill="transparent" r="46" stroke="url(#timerGradient)" stroke-dasharray="289" stroke-dashoffset="0" stroke-linecap="round" stroke-width="6"></circle>
+              <circle id="timer-progress" class="timer-glow transition-all duration-1000" cx="50" cy="50" fill="transparent" r="46" stroke="url(#timerGradient)" stroke-dasharray="289" stroke-dashoffset="0" stroke-linecap="round" stroke-width="6"></circle>
               <defs>
                 <linearGradient id="timerGradient" x1="0%" x2="100%" y1="0%" y2="100%">
                   <stop offset="0%" stop-color="#00d4ff"></stop>
@@ -91,58 +104,56 @@
               </defs>
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span id="countdown" class="font-display-lg text-display-lg text-on-surface tracking-tighter">--:--:--</span>
-              <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mt-1">Remaining</span>
+              <span id="countdown" class="font-display-lg text-4xl md:text-5xl text-white tracking-tighter">--:--:--</span>
+              <span class="text-[10px] text-muted uppercase tracking-[0.2em] mt-1">Remaining</span>
             </div>
           </div>
-          <div class="w-full grid grid-cols-2 gap-md pt-lg border-t border-white/5">
+
+          <div class="w-full grid grid-cols-2 gap-lg pt-lg border-t border-white/5">
             <div class="flex flex-col">
-              <span class="text-on-surface-variant text-[12px] font-medium uppercase tracking-tight">Expires at</span>
-              <span id="expires-at" class="font-body-md text-body-md text-on-surface font-semibold">—</span>
+              <span class="text-[11px] text-muted uppercase tracking-widest mb-1">Expires At</span>
+              <span id="expires-at" class="font-headline-md text-lg text-white">—</span>
             </div>
             <div class="flex flex-col text-right">
-              <span class="text-on-surface-variant text-[12px] font-medium uppercase tracking-tight">Speed</span>
-              <span id="session-speed" class="font-body-md text-body-md text-primary font-semibold">—</span>
+              <span class="text-[11px] text-muted uppercase tracking-widest mb-1">Speed</span>
+              <span id="session-speed" class="font-headline-md text-lg text-primary">—</span>
             </div>
           </div>
         </div>
 
-        <!-- Stats Bento Row -->
-        <div class="w-full grid-auto-fit gap-md mb-xl">
-          <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col">
-            <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs">Data Used</span>
-            <div class="flex items-baseline gap-xs">
-              <span id="data-used" class="font-headline-md text-headline-md text-on-surface">0</span>
-              <span class="font-label-md text-label-md text-on-surface-variant">MB</span>
+        <!-- Stats Row -->
+        <div class="w-full grid grid-cols-2 gap-md mb-xl">
+          <div class="bg-white/5 rounded-xl p-md border border-white/5">
+            <span class="text-[11px] text-muted uppercase tracking-widest mb-1 block">Data Used</span>
+            <div class="flex items-baseline gap-1">
+              <span id="data-used" class="text-xl font-bold text-white">0</span>
+              <span class="text-xs text-muted">MB</span>
             </div>
           </div>
-          <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col">
-            <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs">Session Start</span>
-            <span id="session-start" class="font-headline-md text-headline-md text-on-surface">—</span>
-          </div>
-          <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col items-start">
-            <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs">Status</span>
-            <div class="flex items-center gap-sm mt-xs">
-              <div class="w-2.5 h-2.5 bg-green-400 rounded-full status-pulse"></div>
-              <span class="font-label-md text-label-md text-green-400 font-bold">Active</span>
-            </div>
+          <div class="bg-white/5 rounded-xl p-md border border-white/5">
+            <span class="text-[11px] text-muted uppercase tracking-widest mb-1 block">Session Start</span>
+            <span id="session-start" class="text-xl font-bold text-white">—</span>
           </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="w-full flex flex-col gap-md">
-          <button onclick="window.location.href = 'packages.html'" class="cyan-violet-gradient w-full py-md rounded-xl font-headline-md text-white shadow-[0_8px_30px_rgb(0,212,255,0.2)] active:scale-95 transition-transform">
+          <button onclick="window.location.href = 'packages.html'" class="w-full bg-gradient-to-r from-primary-container to-secondary-container text-white py-lg rounded-xl font-headline-md shadow-[0_8px_30px_rgba(0,212,255,0.2)] active:scale-[0.98] transition-all">
             Buy More Time
+          </button>
+          <button class="w-full bg-white/5 border border-white/10 text-white py-md rounded-xl font-label-md flex items-center justify-center gap-2 hover:bg-white/10 transition-all">
+            <span class="material-symbols-outlined text-sm">share</span>
+            Share WiFi
           </button>
         </div>
       </div>
     </main>
 
-    <footer class="bg-surface dark:bg-surface border-t border-white/5 w-full mt-auto">
+    <footer class="bg-surface border-t border-white/5 mt-auto">
       <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive">
-        <div class="flex flex-col items-center md:items-start mb-lg md:mb-0">
-          <div class="font-headline-md text-headline-md text-primary font-bold mb-xs">Maidanja WiFi</div>
-          <p class="font-body-md text-body-md text-on-surface-variant">© 2026 Maidanja WiFi. Powered by M-Pesa.</p>
+        <div class="mb-md md:mb-0">
+          <span class="font-headline-md text-headline-md text-primary font-bold">Maidanja WiFi</span>
+          <p class="text-muted text-xs mt-xs">© 2026 Maidanja WiFi. Powered by M-Pesa.</p>
         </div>
       </div>
     </footer>
@@ -162,7 +173,7 @@
         const sessionStartEl = document.getElementById("session-start");
         const sessionSpeedEl = document.getElementById("session-speed");
         const dataUsedEl = document.getElementById("data-used");
-        const timerCircle = document.querySelector(".timer-glow");
+        const timerCircle = document.getElementById("timer-progress");
 
         function formatCountdown(secondsRemaining) {
           if (secondsRemaining <= 0) return "00:00:00";
@@ -211,7 +222,6 @@
               return;
             }
 
-            // Start Time
             if (sessionStartEl) {
               sessionStartEl.textContent = new Date(session.started_at).toLocaleTimeString("en-KE", {
                 hour: "2-digit",
@@ -219,7 +229,6 @@
               });
             }
 
-            // End Time
             if (expiresAtEl) {
               expiresAtEl.textContent = new Date(session.expires_at).toLocaleString("en-KE", {
                 hour: "2-digit",
@@ -229,11 +238,9 @@
               });
             }
 
-            // Speed & Data
             if (sessionSpeedEl) sessionSpeedEl.textContent = `${session.speed_mbps || 0} Mbps`;
             if (dataUsedEl) dataUsedEl.textContent = parseFloat(session.data_used_mb || 0).toFixed(1);
 
-            // Start Countdown
             startCountdown(session.expires_at, session.started_at);
 
           } catch (err) {
