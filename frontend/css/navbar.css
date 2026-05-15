@@ -37,6 +37,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   height: var(--navbar-height);
+  overflow: visible;
 }
 
 /* ── Navbar Flex Container ────────────────────────────────────────────────── */
@@ -243,7 +244,8 @@ body {
   #nav-items {
     position: fixed;
     top: 0;
-    right: -280px; /* Off-screen to the right */
+    right: 0 !important; /* Fix off-screen scroll bug */
+    transform: translateX(100%);
     width: 260px;
     height: 100dvh;
     flex-direction: column;
@@ -255,7 +257,7 @@ body {
     border-left: 1px solid rgba(255, 255, 255, 0.08);
     padding: calc(var(--navbar-height-mobile) + 20px) 16px 24px 16px;
     box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 999; /* Below navbar but above page content */
     overflow-y: auto;
     gap: 4px;
@@ -263,7 +265,7 @@ body {
 
   /* Slide in when active */
   #nav-items.active {
-    right: 0;
+    transform: translateX(0);
   }
 
   /* Mobile nav links — full width, stacked */
@@ -305,27 +307,25 @@ body {
 
   /* Full-width dropdown on phones instead of sidebar */
   #nav-items {
-    right: auto;
-    left: 0;
+    right: 0 !important;
+    left: 0 !important;
     top: var(--navbar-height-mobile);
-    width: 100%;
+    width: 100% !important;
     height: calc(100dvh - var(--navbar-height-mobile));
     border-left: none;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding: 16px;
     /* Override right-slide with top transform */
-    transform: translateY(-110%);
-    right: 0; /* Reset right so it stays full-width */
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-110%) !important;
+    transition: transform 0.3s ease, opacity 0.3s ease !important;
     opacity: 0;
     pointer-events: none;
   }
 
   #nav-items.active {
-    transform: translateY(0);
-    opacity: 1;
+    transform: translateY(0) !important;
+    opacity: 1 !important;
     pointer-events: auto;
-    right: 0;
   }
 }
 
