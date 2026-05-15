@@ -274,12 +274,12 @@
 </footer>
 </main>
 <script>
-// Guard: must be logged in as admin
+/* Guard: must be logged in as admin */
 if (!api.isLoggedIn()) window.location.href = '/login.html';
 const adminUser = api.getUser();
 if (adminUser && adminUser.role !== 'admin') window.location.href = '/dashboard.html'; 
 
-// ── Load KPI Stats ──────────────────────────────────────────────────────────────
+/* ── Load KPI Stats ────────────────────────────────────────────────────────────── */
 async function loadStats() { 
   try { 
     const res = await api.get('/admin/stats'); 
@@ -293,7 +293,7 @@ async function loadStats() {
   }
 } 
 
-// ── Load Active Sessions Table ───────────────────────────────────────────────
+/* ── Load Active Sessions Table ─────────────────────────────────────────────── */
 async function loadSessions() { 
   try { 
     const res = await api.get('/admin/sessions?status=active&limit=20'); 
@@ -326,7 +326,7 @@ async function disconnectUser(sessionId, btn) {
   }
 } 
 
-// ── Init ───────────────────────────────────────────────────────────────────
+/* ── Init ─────────────────────────────────────────────────────────────────── */
 loadStats();
 loadSessions();
 setInterval(() => { loadStats(); loadSessions(); }, 30000); // refresh every 30s

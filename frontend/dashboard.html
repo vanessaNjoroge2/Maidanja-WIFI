@@ -276,7 +276,7 @@
       return 'KES ' + parseFloat(amount || 0).toLocaleString('en-KE', { minimumFractionDigits: 0 });
     }
 
-    // ── Active Session ────────────────────────────────────────────────────────
+    /* ── Active Session ──────────────────────────────────────────────────────── */
     (async () => {
       try {
         const res = await api.get("/sessions/active");
@@ -298,7 +298,7 @@
         }
       } catch (err) { console.warn("Session load error:", err.message); }
 
-      // ── Stats & History ────────────────────────────────────────────────────
+      /* ── Stats & History ──────────────────────────────────────────────────── */
       try {
         const histRes = await api.get("/sessions/history?limit=10");
         const sessions = histRes.data.sessions;
@@ -334,7 +334,7 @@
         }).join("");
       } catch (err) { console.warn("History load error:", err.message); }
 
-      // ── Weekly Spending Chart ─────────────────────────────────────────────
+      /* ── Weekly Spending Chart ───────────────────────────────────────────── */
       try {
         const chartRes = await api.get("/sessions/weekly-spending");
         const spending = chartRes.data.spending;
