@@ -1,3 +1,254 @@
-<!doctype html> <html class="dark" lang="en"> <head> <meta charset="utf-8" /> <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <title>Connected - Maidanja WiFi</title> <script src="/js/api.js"></script> <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet" /> <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" /> <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" /> <style> @keyframes ripple { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.5); opacity: 0; } } .ripple-effect { animation: ripple 2s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .glass-panel { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); } .inner-glow { box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.05); } .cyan-violet-gradient { background: linear-gradient(135deg, #00d4ff 0%, #6001d1 100%); } .timer-glow { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4)); } @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); } } .status-pulse { animation: pulse-green 2s infinite; } </style> <script id="tailwind-config"> tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-surface": "#e4e1ed", error: "#ffb4ab", "surface-container": "#1f1f27", "inverse-surface": "#e4e1ed", "surface-container-low": "#1b1b23", "on-secondary-fixed-variant": "#5a00c6", "on-secondary-container": "#c9aeff", "on-error": "#690005", "surface-dim": "#13131b", outline: "#859398", "surface-tint": "#3cd7ff", surface: "#13131b", "outline-variant": "#3c494e", "inverse-primary": "#00677e", background: "#0A0A0F", "on-surface-variant": "#bbc9cf", "tertiary-container": "#c2c3c3", "surface-variant": "#34343d", primary: "#a8e8ff", "surface-container-high": "#292932", "on-tertiary-fixed-variant": "#454747", "on-secondary-fixed": "#25005a", "surface-container-lowest": "#0d0d15", "secondary-container": "#6001d1", secondary: "#d2bbff", "on-tertiary": "#2f3131", "on-tertiary-fixed": "#1a1c1c", "on-primary-container": "#00586b", "error-container": "#93000a", "primary-container": "#00d4ff", "primary-fixed-dim": "#3cd7ff", "surface-bright": "#393841", "on-error-container": "#ffdad6", "on-primary-fixed-variant": "#004e5f", "inverse-on-surface": "#303038", tertiary: "#dedfdf", "on-secondary": "#3f008e", "tertiary-fixed": "#e2e2e2", "secondary-fixed-dim": "#d2bbff", "on-tertiary-container": "#4f5051", "on-primary": "#003642", "tertiary-fixed-dim": "#c6c6c7", "on-background": "#e4e1ed", "surface-container-highest": "#34343d", "secondary-fixed": "#eaddff", "primary-fixed": "#b4ebff", "on-primary-fixed": "#001f27", }, borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "12px", "2xl": "16px", full: "9999px", }, spacing: { sm: "8px", "margin-desktop": "64px", lg: "24px", md: "16px", base: "4px", xs: "4px", gutter: "16px", xl: "40px", "margin-mobile": "20px", }, fontFamily: { "headline-md": ["Sora"], "headline-lg": ["Sora"], "body-md": ["DM Sans"], "body-lg": ["DM Sans"], "label-md": ["DM Sans"], "display-lg": ["Sora"], }, }, }, }; </script> <style> body { min-height: max(884px, 100dvh); } </style> <link rel="stylesheet" href="/css/globals.css" /> </head> <link rel="stylesheet" href="/css/navbar.css" /> <body class="bg-background text-on-surface min-h-screen font-body-md relative overflow-x-hidden" > <!-- Global Navigation Bar --> <nav id="navbar" class="navbar"> <div class="navbar-container"> <div class="navbar-left"> <button class="back-button" onclick="goBack()" title="Go back to previous page" aria-label="Go back" > ← </button> <a href="/index.html" class="navbar-brand"> <img src="/images/logo.jpg" alt="Maidanja WiFi" /> <span class="hidden sm:inline">Maidanja WiFi</span> </a> </div> <div class="navbar-center"> <h1 class="navbar-title">Loading...</h1> </div> <div class="navbar-right"> <button id="mobile-menu-btn" aria-label="Toggle navigation menu"> <span></span><span></span><span></span> </button> <div id="nav-items" class="hidden sm:flex"></div> </div> </div> </nav> <!-- Global Background Elements --> <div class="fixed inset-0 overflow-hidden pointer-events-none z-0"> <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full" ></div> <div class="absolute top-[40%] -right-[10%] w-[35%] h-[35%] bg-secondary-container/10 blur-[100px] rounded-full" ></div> <div class="absolute -bottom-[5%] left-[20%] w-[30%] h-[30%] bg-primary-container/5 blur-[80px] rounded-full" ></div> </div> <!-- Top Navigation Anchor --> <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10 h-20" > <div class="flex justify-between items-center h-full w-full container-responsive" > <a href="index.html" class="flex items-center gap-2"> <img src="/images/logo.jpg" alt="Maidanja WiFi" style="height: 50px; width: auto" /> </a> <div class="hidden md:flex items-center gap-lg"> <a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="packages.html" >Packages</a > <a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="dashboard.html" >Dashboard</a > </div> <div class="flex items-center gap-md"> <button onclick="goBack()" class="text-on-surface-variant hover:text-primary transition-colors active:scale-95" title="Go Back" > <span class="material-symbols-outlined" data-icon="arrow_back" >arrow_back</span > </button> <button onclick="window.location.href = 'dashboard.html'" class="bg-surface-variant/50 border border-white/10 px-md py-sm rounded-xl font-label-md text-label-md active:scale-95 transition-transform text-on-surface" > Account </button> </div> </div> </header> <main class="relative z-10 pt-28 pb-20 px-margin-mobile"> <div class="max-w-xl mx-auto flex flex-col items-center"> <!-- Success Hero Section --> <section class="text-center mb-xl"> <div class="relative w-24 h-24 mb-md mx-auto flex items-center justify-center" > <div class="absolute inset-0 bg-green-500/20 rounded-full ripple-effect" ></div> <div class="absolute inset-0 bg-green-500/10 rounded-full ripple-effect" style="animation-delay: 0.7s" ></div> <div class="relative w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]" > <span class="material-symbols-outlined text-white text-4xl font-bold" data-icon="check" data-weight="fill" >check</span > </div> </div> <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs"> You're Connected! 🎉 </h1> <p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto" > Enjoy your internet session. Your time starts now. </p> </section> <!-- Main Countdown Session Card --> <div class="w-full glass-panel inner-glow rounded-2xl p-xl flex flex-col items-center mb-lg" > <div class="relative w-56 h-56 mb-lg"> <!-- SVG Countdown Timer --> <svg class="w-full h-full -rotate-90 transform" viewbox="0 0 100 100" > <circle cx="50" cy="50" fill="transparent" r="46" stroke="rgba(255,255,255,0.05)" stroke-width="6" ></circle> <circle class="timer-glow" cx="50" cy="50" fill="transparent" r="46" stroke="url(#timerGradient)" stroke-dasharray="289" stroke-dashoffset="40" stroke-linecap="round" stroke-width="6" ></circle> <defs> <lineargradient id="timerGradient" x1="0%" x2="100%" y1="0%" y2="100%" > <stop offset="0%" stop-color="#00d4ff"></stop> <stop offset="100%" stop-color="#6001d1"></stop> </lineargradient> </defs> </svg> <div class="absolute inset-0 flex flex-col items-center justify-center text-center" > <span id="countdown" class="font-display-lg text-display-lg text-on-surface tracking-tighter" >--:--:--</span > <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mt-1" >Remaining</span > </div> </div> <div class="w-full grid grid-cols-2 gap-md pt-lg border-t border-white/5" > <div class="flex flex-col"> <span class="text-on-surface-variant text-[12px] font-medium uppercase tracking-tight" >Expires at</span > <span id="expires-at" class="font-body-md text-body-md text-on-surface font-semibold" >—</span > </div> <div class="flex flex-col text-right"> <span class="text-on-surface-variant text-[12px] font-medium uppercase tracking-tight" >Speed</span > <span id="session-speed" class="font-body-md text-body-md text-primary font-semibold" >—</span > </div> </div> <div class="w-full mt-lg p-md bg-surface-container-low/50 rounded-xl flex items-center gap-md border border-white/5" > <div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center" > <span class="material-symbols-outlined text-primary text-xl" data-icon="smartphone" >smartphone</span > </div> <div class="flex flex-col"> <span class="font-label-md text-label-md text-on-surface font-bold" >iPhone 15 Pro</span > <span class="text-[12px] text-on-surface-variant" >(This device)</span > </div> <div class="ml-auto"> <span class="material-symbols-outlined text-on-surface-variant" data-icon="wifi_tethering" >wifi_tethering</span > </div> </div> </div> <!-- Stats Bento Row --> <div class="w-full grid-auto-fit gap-md mb-xl"> <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col"> <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs" >Data Used</span > <div class="flex items-baseline gap-xs"> <span id="data-used" class="font-headline-md text-headline-md text-on-surface" >0</span > <span class="font-label-md text-label-md text-on-surface-variant" >MB</span > </div> </div> <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col"> <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs" >Session Start</span > <span id="session-start" class="font-headline-md text-headline-md text-on-surface" >—</span > </div> <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col items-start" > <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs" >Status</span > <div class="flex items-center gap-sm mt-xs"> <div class="w-2.5 h-2.5 bg-green-400 rounded-full status-pulse" ></div> <span class="font-label-md text-label-md text-green-400 font-bold" >Active</span > </div> </div> </div> <!-- Action Buttons --> <div class="w-full flex flex-col gap-md"> <button onclick="window.location.href = 'packages.html'" class="cyan-violet-gradient w-full py-md rounded-xl font-headline-md text-white shadow-[0_8px_30px_rgb(0,212,255,0.2)] active:scale-95 transition-transform" > Buy More Time </button> <button class="w-full py-md border border-white/10 bg-white/5 rounded-xl font-headline-md text-on-surface flex items-center justify-center gap-sm active:scale-95 transition-transform backdrop-blur-md" > <span class="material-symbols-outlined" data-icon="share" >share</span > Share WiFi </button> </div> </div> </main> <!-- Visual Divider --> <div class="container-responsive px-margin-mobile mb-xl"> <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" ></div> </div> <!-- Additional Content Grid --> <section class="container-responsive px-margin-mobile pb-20"> <div class="grid-auto-fit gap-lg"> <!-- Promo Card 1 --> <div class="glass-panel rounded-2xl p-lg overflow-hidden relative group" > <img alt="Speed Illustration" class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity" data-alt="A macro shot of vibrant electric cyan and deep violet light waves flowing through a transparent medium. The lighting is high-contrast and atmospheric, representing high-speed digital connectivity. The scene is futuristic and captures the essence of a premium tech brand with sleek, glossy reflections and sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_VvM3p_dRqesatlk4jdPT-pxaiR2yPudBzvf3tUUML362E2OtDEqgJGTNmgLZ-cNAbMvtP4mZHrSJj1tjUpTUE9gX_sFVjdNEcjjLE2rcaiT0qUzjUyEccVcVGUWJOu9z3cIzOvlT8Ny48Iz6eAJEMyhPxVXA4m-oPqpWH26xWN8-0QQZ2mjA4KnuBxm3_xsKnIoYxZibl3-vJA9w1bqsqaUMKtlEmiyYwNF78kYmEjbF1dMUbqyQJnSOYVY0Ho0i7FN2yyhURQ" /> <div class="relative z-10"> <h3 class="font-headline-md text-headline-md text-primary mb-sm"> Ultra-Fast </h3> <p class="font-body-md text-body-md text-on-surface-variant"> Experience low latency for gaming and video calls. </p> </div> </div> <!-- Promo Card 2 --> <div class="glass-panel rounded-2xl p-lg flex flex-col justify-center"> <span class="material-symbols-outlined text-secondary text-4xl mb-md" data-icon="security" >security</span > <h3 class="font-headline-md text-headline-md text-on-surface mb-sm"> Secure </h3> <p class="font-body-md text-body-md text-on-surface-variant"> Bank-grade encryption for all your financial transactions. </p> </div> <!-- Promo Card 3 --> <div class="glass-panel rounded-2xl p-lg flex flex-col justify-center"> <span class="material-symbols-outlined text-primary text-4xl mb-md" data-icon="payments" >payments</span > <h3 class="font-headline-md text-headline-md text-on-surface mb-sm"> Seamless </h3> <p class="font-body-md text-body-md text-on-surface-variant"> Instant activation with M-Pesa integrated payments. </p> </div> <!-- Promo Card 4 --> <div class="glass-panel rounded-2xl p-lg flex flex-col justify-center bg-gradient-to-br from-surface-container-high to-surface" > <span class="material-symbols-outlined text-on-surface-variant text-4xl mb-md" data-icon="headset_mic" >headset_mic</span > <h3 class="font-headline-md text-headline-md text-on-surface mb-sm"> 24/7 Help </h3> <p class="font-body-md text-body-md text-on-surface-variant"> Our support team is always ready to assist you. </p> </div> </div> </section> <!-- Shared Footer Component --> <footer class="bg-surface dark:bg-surface border-t border-white/5 w-full"> <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive" > <div class="flex flex-col items-center md:items-start mb-lg md:mb-0"> <div class="font-headline-md text-headline-md text-primary font-bold mb-xs" > Maidanja </div> <p class="font-body-md text-body-md text-on-surface-variant"> © 2024 Maidanja WiFi. Powered by M-Pesa. </p> </div> <div class="flex gap-lg"> <a class="text-on-surface-variant hover:text-primary-fixed-dim transition-colors font-label-md text-label-md" href="packages.html" >Packages</a > <a class="text-on-surface-variant hover:text-primary-fixed-dim transition-colors font-label-md text-label-md" href="dashboard.html" >Dashboard</a > <a class="text-on-surface-variant hover:text-primary-fixed-dim transition-colors font-label-md text-label-md" href="admin.html" >Admin</a > </div> </div> </footer> <script> if (!api.isLoggedIn()) window.location.href = "/login.html"; let countdownInterval = null; function startCountdown(expiresAt) { const tick = () => { const remaining = Math.max( 0, (new Date(expiresAt) - Date.now()) / 1000, ); document.getElementById("countdown").textContent = formatCountdown(remaining); if (remaining <= 0) { clearInterval(countdownInterval); document.getElementById("countdown").textContent = "EXPIRED"; setTimeout(() => (window.location.href = "/packages.html"), 3000); } }; tick(); countdownInterval = setInterval(tick, 1000); } (async () => { try { const res = await api.get("/sessions/active"); const session = res.data.session; if (!session) { // No active session — go buy one window.location.href = "/packages.html"; return; } startCountdown(session.expires_at); document.getElementById("expires-at").textContent = new Date( session.expires_at, ).toLocaleString("en-KE", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short", }); document.getElementById("session-speed").textContent = `${session.speed_mbps} Mbps`; document.getElementById("data-used").textContent = parseFloat( session.data_used_mb || 0, ).toFixed(1); document.getElementById("session-start").textContent = new Date( session.started_at, ).toLocaleTimeString("en-KE", { hour: "2-digit", minute: "2-digit" }); } catch (err) { console.error("Session load error:", err.message); // Allow page to stay and show placeholders } })(); </script> <script src="/js/navbar.js"></script> <script src="/js/footer.js"></script>
-</body>
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Connected | Maidanja WiFi</title>
+    <script src="/js/api.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes ripple {
+        0% { transform: scale(0.8); opacity: 0.5; }
+        100% { transform: scale(1.5); opacity: 0; }
+      }
+      .ripple-effect { animation: ripple 2s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
+      .glass-panel {
+        background: rgba(18, 18, 26, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .inner-glow { box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.05); }
+      .cyan-violet-gradient { background: linear-gradient(135deg, #00d4ff 0%, #6001d1 100%); }
+      .timer-glow { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4)); }
+      @keyframes pulse-green {
+        0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+      }
+      .status-pulse { animation: pulse-green 2s infinite; }
+    </style>
+    <link rel="stylesheet" href="/css/globals.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+  </head>
+  <body class="bg-background text-on-surface min-h-screen font-body-md relative overflow-x-hidden">
+    <!-- Global Navigation Bar -->
+    <nav id="navbar" class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-left">
+          <button class="back-button" onclick="goBack()" title="Go back">←</button>
+          <a href="/index.html" class="navbar-brand">
+            <img src="/images/logo.jpg" alt="Maidanja WiFi" />
+            <span class="hidden sm:inline">Maidanja WiFi</span>
+          </a>
+        </div>
+        <div class="navbar-center">
+          <h1 class="navbar-title">Connected</h1>
+        </div>
+        <div class="navbar-right">
+          <button id="mobile-menu-btn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div id="nav-items" class="hidden sm:flex"></div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="relative z-10 pt-28 pb-20 px-margin-mobile">
+      <div class="max-w-xl mx-auto flex flex-col items-center">
+        <!-- Success Hero Section -->
+        <section class="text-center mb-xl">
+          <div class="relative w-24 h-24 mb-md mx-auto flex items-center justify-center">
+            <div class="absolute inset-0 bg-green-500/20 rounded-full ripple-effect"></div>
+            <div class="relative w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+              <span class="material-symbols-outlined text-white text-4xl font-bold">check</span>
+            </div>
+          </div>
+          <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">You're Connected! 🎉</h1>
+          <p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">
+            Enjoy your internet session. Your time starts now.
+          </p>
+        </section>
+
+        <!-- Main Countdown Session Card -->
+        <div class="w-full glass-panel inner-glow rounded-2xl p-xl flex flex-col items-center mb-lg">
+          <div class="relative w-56 h-56 mb-lg">
+            <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" fill="transparent" r="46" stroke="rgba(255,255,255,0.05)" stroke-width="6"></circle>
+              <circle class="timer-glow transition-all duration-1000" cx="50" cy="50" fill="transparent" r="46" stroke="url(#timerGradient)" stroke-dasharray="289" stroke-dashoffset="0" stroke-linecap="round" stroke-width="6"></circle>
+              <defs>
+                <linearGradient id="timerGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                  <stop offset="0%" stop-color="#00d4ff"></stop>
+                  <stop offset="100%" stop-color="#6001d1"></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span id="countdown" class="font-display-lg text-display-lg text-on-surface tracking-tighter">--:--:--</span>
+              <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mt-1">Remaining</span>
+            </div>
+          </div>
+          <div class="w-full grid grid-cols-2 gap-md pt-lg border-t border-white/5">
+            <div class="flex flex-col">
+              <span class="text-on-surface-variant text-[12px] font-medium uppercase tracking-tight">Expires at</span>
+              <span id="expires-at" class="font-body-md text-body-md text-on-surface font-semibold">—</span>
+            </div>
+            <div class="flex flex-col text-right">
+              <span class="text-on-surface-variant text-[12px] font-medium uppercase tracking-tight">Speed</span>
+              <span id="session-speed" class="font-body-md text-body-md text-primary font-semibold">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Bento Row -->
+        <div class="w-full grid-auto-fit gap-md mb-xl">
+          <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col">
+            <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs">Data Used</span>
+            <div class="flex items-baseline gap-xs">
+              <span id="data-used" class="font-headline-md text-headline-md text-on-surface">0</span>
+              <span class="font-label-md text-label-md text-on-surface-variant">MB</span>
+            </div>
+          </div>
+          <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col">
+            <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs">Session Start</span>
+            <span id="session-start" class="font-headline-md text-headline-md text-on-surface">—</span>
+          </div>
+          <div class="glass-panel inner-glow rounded-2xl p-md flex flex-col items-start">
+            <span class="text-[12px] text-on-surface-variant uppercase font-bold tracking-tight mb-xs">Status</span>
+            <div class="flex items-center gap-sm mt-xs">
+              <div class="w-2.5 h-2.5 bg-green-400 rounded-full status-pulse"></div>
+              <span class="font-label-md text-label-md text-green-400 font-bold">Active</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="w-full flex flex-col gap-md">
+          <button onclick="window.location.href = 'packages.html'" class="cyan-violet-gradient w-full py-md rounded-xl font-headline-md text-white shadow-[0_8px_30px_rgb(0,212,255,0.2)] active:scale-95 transition-transform">
+            Buy More Time
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-surface dark:bg-surface border-t border-white/5 w-full mt-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive">
+        <div class="flex flex-col items-center md:items-start mb-lg md:mb-0">
+          <div class="font-headline-md text-headline-md text-primary font-bold mb-xs">Maidanja WiFi</div>
+          <p class="font-body-md text-body-md text-on-surface-variant">© 2026 Maidanja WiFi. Powered by M-Pesa.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/navbar.js"></script>
+    <script src="/js/footer.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (!api.isLoggedIn()) {
+          window.location.href = "/login.html";
+          return;
+        }
+
+        let countdownInterval = null;
+        const countdownEl = document.getElementById("countdown");
+        const expiresAtEl = document.getElementById("expires-at");
+        const sessionStartEl = document.getElementById("session-start");
+        const sessionSpeedEl = document.getElementById("session-speed");
+        const dataUsedEl = document.getElementById("data-used");
+        const timerCircle = document.querySelector(".timer-glow");
+
+        function formatCountdown(secondsRemaining) {
+          if (secondsRemaining <= 0) return "00:00:00";
+          const h = Math.floor(secondsRemaining / 3600);
+          const m = Math.floor((secondsRemaining % 3600) / 60);
+          const s = Math.floor(secondsRemaining % 60);
+          return [h, m, s].map((v) => String(v).padStart(2, "0")).join(":");
+        }
+
+        function updateTimerCircle(remaining, total) {
+          if (!timerCircle) return;
+          const percentage = Math.max(0, remaining / total);
+          const dashArray = 289; 
+          const offset = dashArray * (1 - percentage);
+          timerCircle.style.strokeDashoffset = offset;
+        }
+
+        function startCountdown(expiresAt, startedAt) {
+          const totalDuration = (new Date(expiresAt) - new Date(startedAt)) / 1000;
+          
+          const tick = () => {
+            const now = Date.now();
+            const remaining = Math.max(0, (new Date(expiresAt) - now) / 1000);
+            
+            if (countdownEl) countdownEl.textContent = formatCountdown(remaining);
+            updateTimerCircle(remaining, totalDuration);
+
+            if (remaining <= 0) {
+              clearInterval(countdownInterval);
+              if (countdownEl) countdownEl.textContent = "EXPIRED";
+              setTimeout(() => (window.location.href = "/packages.html"), 3000);
+            }
+          };
+
+          tick();
+          countdownInterval = setInterval(tick, 1000);
+        }
+
+        (async () => {
+          try {
+            const res = await api.get("/sessions/active");
+            const session = res.data.session;
+
+            if (!session) {
+              window.location.href = "/packages.html";
+              return;
+            }
+
+            // Start Time
+            if (sessionStartEl) {
+              sessionStartEl.textContent = new Date(session.started_at).toLocaleTimeString("en-KE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+            }
+
+            // End Time
+            if (expiresAtEl) {
+              expiresAtEl.textContent = new Date(session.expires_at).toLocaleString("en-KE", {
+                hour: "2-digit",
+                minute: "2-digit",
+                day: "2-digit",
+                month: "short",
+              });
+            }
+
+            // Speed & Data
+            if (sessionSpeedEl) sessionSpeedEl.textContent = `${session.speed_mbps || 0} Mbps`;
+            if (dataUsedEl) dataUsedEl.textContent = parseFloat(session.data_used_mb || 0).toFixed(1);
+
+            // Start Countdown
+            startCountdown(session.expires_at, session.started_at);
+
+          } catch (err) {
+            console.error("Session load error:", err.message);
+          }
+        })();
+      });
+
+      function goBack() {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "/index.html";
+        }
+      }
+    </script>
+  </body>
 </html>
