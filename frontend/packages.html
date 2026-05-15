@@ -6,6 +6,9 @@
 
     <title>Maidanja WiFi - Packages</title>
 
+    <!-- API -->
+    <script src="/js/api.js"></script>
+
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 
@@ -20,6 +23,9 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
+
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/globals.css" />
 
     <style>
       * {
@@ -57,67 +63,7 @@
         overflow-x: hidden;
       }
 
-      /* NAVBAR */
-
-      .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        backdrop-filter: blur(18px);
-        background: rgba(10, 10, 15, 0.88);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      }
-
-      .navbar-container {
-        max-width: 1200px;
-        margin: auto;
-        padding: 1rem 1.2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-        text-decoration: none;
-        color: white;
-        font-family: "Sora", sans-serif;
-        font-weight: 700;
-      }
-
-      .brand img {
-        width: 42px;
-        height: 42px;
-        object-fit: cover;
-        border-radius: 12px;
-      }
-
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .nav-links a {
-        color: var(--muted);
-        text-decoration: none;
-        transition: 0.3s;
-        font-weight: 500;
-      }
-
-      .nav-links a:hover {
-        color: var(--primary);
-      }
-
-      .login-btn {
-        background: linear-gradient(135deg, #3cd7ff, #6001d1);
-        color: white !important;
-        padding: 0.7rem 1.2rem;
-        border-radius: 10px;
-        font-weight: 700;
-      }
+      /* NAVBAR (Handled by global CSS) */
 
       /* HERO */
 
@@ -451,47 +397,7 @@
         color: var(--secondary);
       }
 
-      /* FOOTER */
-
-      footer {
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
-        padding: 3rem 1.2rem;
-        background: rgba(10, 10, 15, 0.95);
-      }
-
-      .footer-grid {
-        max-width: 1200px;
-        margin: auto;
-
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 2rem;
-      }
-
-      .footer-title {
-        font-family: "Sora", sans-serif;
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-      }
-
-      .footer-link {
-        display: block;
-        color: var(--muted);
-        text-decoration: none;
-        margin-bottom: 0.6rem;
-        transition: 0.3s;
-      }
-
-      .footer-link:hover {
-        color: var(--primary);
-      }
-
-      .copyright {
-        margin-top: 2rem;
-        text-align: center;
-        color: var(--muted);
-        font-size: 0.85rem;
-      }
+      /* FOOTER (Handled by global CSS) */
 
       @media (max-width: 768px) {
         .nav-links {
@@ -517,18 +423,23 @@
 
   <body>
     <!-- NAVBAR -->
-
-    <nav class="navbar">
+    <nav id="navbar" class="navbar">
       <div class="navbar-container">
-        <a href="/index.html" class="brand">
-          <img src="/images/logo.jpg" alt="Maidanja WiFi" />
-          <span>Maidanja WiFi</span>
-        </a>
-
-        <div class="nav-links" id="nav-links">
-          <a href="/packages.html">Packages</a>
-          <a href="/dashboard.html">Dashboard</a>
-          <a href="/login.html" class="login-btn">Login</a>
+        <div class="navbar-left">
+          <button class="back-button" onclick="goBack()" title="Go back">←</button>
+          <a href="/index.html" class="navbar-brand">
+            <img src="/images/logo.jpg" alt="Maidanja WiFi" />
+            <span class="hidden sm:inline">Maidanja WiFi</span>
+          </a>
+        </div>
+        <div class="navbar-center">
+          <h1 class="navbar-title">WiFi Packages</h1>
+        </div>
+        <div class="navbar-right">
+          <button id="mobile-menu-btn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div id="nav-items" class="hidden sm:flex"></div>
         </div>
       </div>
     </nav>
@@ -597,41 +508,33 @@
     </section>
 
     <!-- FOOTER -->
-
-    <footer>
-      <div class="footer-grid">
-        <div>
-          <div class="footer-title">Maidanja WiFi</div>
-
-          <p style="color: #bbc9cf; line-height: 1.7">
-            Fast, reliable and affordable internet solutions within Thika and
-            surrounding areas.
+    <footer class="w-full glass-card border-t border-white/5 mt-20">
+      <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive gap-lg md:gap-0 max-w-[1200px] mx-auto">
+        <!-- Left: Brand & Info -->
+        <div class="flex flex-col gap-sm items-center md:items-start mb-4 md:mb-0">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-2xl">wifi</span>
+            <span class="font-headline-md text-headline-md text-primary font-bold">Maidanja Hotspot WiFi</span>
+          </div>
+          <p class="text-on-surface-variant text-label-md font-label-md">
+            Fast, Reliable, Affordable Internet in Thika
+          </p>
+          <p class="text-on-surface-variant text-xs mt-1">
+            © 2026 Maidanja WiFi. Powered by M-Pesa.
           </p>
         </div>
 
-        <div>
-          <div class="footer-title">Quick Links</div>
-
-          <a href="/packages.html" class="footer-link">Packages</a>
-          <a href="/dashboard.html" class="footer-link">Dashboard</a>
-          <a href="/login.html" class="footer-link">Login</a>
-        </div>
-
-        <div>
-          <div class="footer-title">Contact</div>
-
-          <a href="tel:0706407084" class="footer-link"> 📞 0706407084 </a>
-
-          <a href="mailto:maidanja31@gmail.com" class="footer-link">
-            ✉ maidanja31@gmail.com
-          </a>
-
-          <p style="color: #bbc9cf">📍 Thika, Kenya</p>
+        <!-- Right: Links -->
+        <div class="flex gap-8">
+          <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="/packages.html">Packages</a>
+          <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="/dashboard.html">Dashboard</a>
+          <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="/login.html">Login</a>
         </div>
       </div>
-
-      <div class="copyright">© 2026 Maidanja WiFi. Powered by M-Pesa.</div>
     </footer>
+
+    <script src="/js/navbar.js"></script>
+    <script src="/js/footer.js"></script>
 
     <script>
       // Fetch packages from backend API
@@ -639,7 +542,8 @@
       let currentFilter = "all";
 
       // Helper: Format duration hours to human readable format
-      function formatDuration(hours) {
+      function formatDuration(h) {
+        const hours = Number(h);
         if (hours < 1) return `${Math.round(hours * 60)} Minutes`;
         if (hours === 1) return "1 Hour";
         if (hours === 24) return "1 Day";
@@ -651,7 +555,8 @@
       }
 
       // Helper: Select icon based on package duration
-      function getIconForDuration(hours) {
+      function getIconForDuration(h) {
+        const hours = Number(h);
         if (hours <= 1) return "timer";
         if (hours <= 12) return "brightness_4";
         if (hours === 24) return "calendar_today";
@@ -661,7 +566,8 @@
       }
 
       // Helper: Generate features based on duration
-      function getDefaultFeatures(hours) {
+      function getDefaultFeatures(h) {
+        const hours = Number(h);
         const baseFeatures = [
           "Instant M-Pesa Pay",
           "24/7 Support",
@@ -692,7 +598,7 @@
             speed: `${pkg.speed_mbps} Mbps`,
             speed_mbps: pkg.speed_mbps,
             icon: getIconForDuration(pkg.duration_hours),
-            type: pkg.duration_hours >= 24 ? "unlimited" : "limited",
+            type: pkg.name.toLowerCase().includes("unlimited") ? "unlimited" : "data",
             features: getDefaultFeatures(pkg.duration_hours),
             badge: null,
             badgeClass: null,
@@ -823,38 +729,8 @@
         window.location.href = "/checkout.html";
       }
 
-      // Initialize navbar based on login state
-      function initNavbar() {
-        const navLinks = document.getElementById("nav-links");
-        const isLoggedIn = api.isLoggedIn();
-        const user = api.getUser();
 
-        if (isLoggedIn && user) {
-          // User is logged in - show user info and logout button
-          const userName = user.name || user.phone_number || "User";
-          const displayName = userName.split(" ")[0]; // Get first name
-          
-          navLinks.innerHTML = `
-            <a href="/packages.html">Packages</a>
-            <a href="/dashboard.html">Dashboard</a>
-            <span style="color: #bbc9cf; font-weight: 500;">Hi, ${displayName}</span>
-            <button onclick="api.logout()" style="background: none; border: none; color: #e4e1ed; cursor: pointer; text-decoration: underline; font-weight: 500; transition: color 0.3s;">
-              Logout
-            </button>
-          `;
-        } else {
-          // User is not logged in - show login and register buttons
-          navLinks.innerHTML = `
-            <a href="/packages.html">Packages</a>
-            <a href="/dashboard.html">Dashboard</a>
-            <a href="/login.html" class="login-btn">Login</a>
-            <a href="/login.html?tab=register" style="color: #3cd7ff; font-weight: 600;">Register</a>
-          `;
-        }
-      }
-
-      // Initialize navbar and load packages on page load
-      initNavbar();
+      // Initialize packages on page load
       loadPackages();
     </script>
   </body>
