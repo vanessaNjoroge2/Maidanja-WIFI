@@ -20,18 +20,23 @@ function initNavbar() {
   if (isLoggedIn && user) {
     // Show logout button and user info
     navItems.innerHTML = `
-      <div class="flex items-center gap-4">
-        <span class="text-sm text-gray-400 hidden sm:inline">Welcome, ${user.name || 'User'}</span>
-        <button onclick="api.logout()" class="px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium transition-all">
-          Logout
-        </button>
-      </div>
+      <a href="/packages.html" class="text-on-surface-variant hover:text-primary transition-colors">Packages</a>
+      <a href="/dashboard.html" class="text-on-surface-variant hover:text-primary transition-colors">Dashboard</a>
+      <span class="text-sm text-gray-400 hidden sm:inline ml-2">Welcome, ${user.name || 'User'}</span>
+      <button onclick="api.logout()" class="px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium transition-all ml-2">
+        Logout
+      </button>
     `;
   } else {
     // Show login link
     navItems.innerHTML = `
-      <a href="/login.html" class="px-4 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-sm font-medium transition-all">
+      <a href="/packages.html" class="text-on-surface-variant hover:text-primary transition-colors">Packages</a>
+      <a href="/dashboard.html" class="text-on-surface-variant hover:text-primary transition-colors">Dashboard</a>
+      <a href="/login.html" class="px-4 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-sm font-medium transition-all ml-2">
         Login
+      </a>
+      <a href="/packages.html" class="btn-primary-gradient px-4 py-2 rounded-lg text-white text-sm font-medium transition-all ml-2">
+        Connect Now
       </a>
     `;
   }
@@ -72,15 +77,20 @@ function setupMobileMenu() {
   
   if (!menuBtn || !navItems) return;
   
+  // Clean up any old tailwind classes that might interfere
+  navItems.classList.remove('hidden', 'sm:flex');
+
   menuBtn.addEventListener('click', () => {
-    navItems.classList.toggle('hidden');
+    menuBtn.classList.toggle('active');
+    navItems.classList.toggle('active');
   });
   
   // Close menu when clicking on items
   const links = navItems.querySelectorAll('a, button');
   links.forEach(link => {
     link.addEventListener('click', () => {
-      navItems.classList.add('hidden');
+      menuBtn.classList.remove('active');
+      navItems.classList.remove('active');
     });
   });
 }

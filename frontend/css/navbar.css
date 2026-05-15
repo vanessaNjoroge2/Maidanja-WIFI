@@ -1,34 +1,34 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Navbar Styles - Consistent across all pages
+   Navbar Styles - Responsive & Consistent
    ═════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --navbar-height: 64px;
-  --navbar-height-mobile: 56px;
+  --navbar-height: 72px;
+  --navbar-height-mobile: 64px;
 }
 
-/* Navbar Container */
+/* Navbar Global Fixed Wrapper */
 #navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 9999; /* Z-index management to stay above all content */
   background: rgba(10, 10, 15, 0.95);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Navbar Flexbox Container */
 .navbar-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 1rem;
   height: var(--navbar-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
 }
 
 /* Left Section - Logo & Back Button */
@@ -36,7 +36,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  flex: 0 0 auto;
+  flex-shrink: 0; /* Logo container must not shrink */
 }
 
 /* Back Button */
@@ -44,8 +44,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px; /* Touch target min 44px */
+  height: 44px;
   border-radius: 8px;
   background: rgba(60, 215, 255, 0.1);
   border: 1px solid rgba(60, 215, 255, 0.2);
@@ -61,10 +61,6 @@
   transform: translateX(-2px);
 }
 
-.back-button:active {
-  transform: scale(0.95);
-}
-
 /* Logo/Brand */
 .navbar-brand {
   display: flex;
@@ -73,7 +69,7 @@
   text-decoration: none;
   color: #e4e1ed;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 1.125rem;
   transition: color 0.3s ease;
 }
 
@@ -82,24 +78,29 @@
 }
 
 .navbar-brand img {
-  height: 32px;
-  width: auto;
+  max-height: 40px; /* Logo image max-height requirement */
+  width: auto;      /* Logo image width auto requirement */
   border-radius: 4px;
 }
 
 /* Center Section - Title */
 .navbar-center {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 1rem;
+  min-width: 0; /* allows text truncation if needed, preventing overflow */
 }
 
 .navbar-title {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 600;
   color: #e4e1ed;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Right Section - Navigation Items */
@@ -107,13 +108,14 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  flex: 0 0 auto;
+  flex-shrink: 0; /* Nav links container must not shrink */
 }
 
 #nav-items {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-direction: row;
 }
 
 #nav-items a,
@@ -126,28 +128,25 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  display: inline-block;
-}
-
-#nav-items a:hover,
-#nav-items button:hover {
-  transform: translateY(-2px);
-}
-
-#nav-items a:active,
-#nav-items button:active {
-  transform: translateY(0);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px; /* Touch target min 44px */
 }
 
 /* Mobile Menu Button */
 #mobile-menu-btn {
   display: none;
   flex-direction: column;
-  gap: 4px;
+  justify-content: center;
+  gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  width: 44px;  /* Touch target min 44px */
+  height: 44px;
+  padding: 10px;
+  z-index: 10000; /* Ensure button is clickable when menu opens */
 }
 
 #mobile-menu-btn span {
@@ -156,10 +155,11 @@
   background: #a8e8ff;
   border-radius: 2px;
   transition: all 0.3s ease;
+  display: block;
 }
 
 #mobile-menu-btn.active span:nth-child(1) {
-  transform: rotate(45deg) translate(8px, 8px);
+  transform: rotate(45deg) translate(5px, 5px);
 }
 
 #mobile-menu-btn.active span:nth-child(2) {
@@ -167,10 +167,14 @@
 }
 
 #mobile-menu-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Responsive Design */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Responsive Breakpoints
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+/* Tablet Breakpoint (768px and below) */
 @media (max-width: 768px) {
   :root {
     --navbar-height: var(--navbar-height-mobile);
@@ -181,7 +185,7 @@
   }
 
   .navbar-center {
-    display: none;
+    display: none; /* Hide page title on tablet/mobile to save space */
   }
 
   #mobile-menu-btn {
@@ -189,80 +193,79 @@
   }
 
   #nav-items {
-    position: absolute;
-    top: var(--navbar-height-mobile);
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: 0;
+    right: -100%; /* Slide-in sidebar off-screen by default */
+    width: 250px;
+    height: 100vh;
     flex-direction: column;
-    gap: 0;
+    justify-content: flex-start;
+    align-items: stretch;
     background: rgba(10, 10, 15, 0.98);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(16px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    padding: calc(var(--navbar-height-mobile) + 16px) 16px 16px 16px;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease-in-out;
+    z-index: 9998; /* Just below the navbar container so logo/btn stay above */
+    overflow-y: auto;
   }
 
-  #nav-items.hidden {
-    display: none;
+  #nav-items.active {
+    right: 0; /* Slide in */
+  }
+  
+  /* Reset tailwind inline flex for the wrapper inside nav-items */
+  #nav-items > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
   }
 
   #nav-items a,
   #nav-items button {
     width: 100%;
     text-align: left;
+    justify-content: flex-start;
     padding: 12px 16px;
-  }
-
-  .navbar-title {
-    font-size: 16px;
-  }
-
-  .back-button {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-
-  .navbar-brand img {
-    height: 28px;
-  }
-
-  .navbar-brand {
-    font-size: 16px;
+    margin-bottom: 8px;
+    min-height: 44px; /* Touch target min 44px */
   }
 }
 
+/* Mobile Breakpoint (480px and below) */
 @media (max-width: 480px) {
-  .navbar-brand {
-    font-size: 14px;
+  .navbar-brand span {
+    display: none; /* Hide brand text on very small screens to ensure no overlap */
   }
 
   .navbar-brand img {
-    height: 24px;
-  }
-
-  .navbar-right {
-    gap: 8px;
-  }
-
-  .back-button {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
+    max-height: 36px;
   }
 
   #nav-items {
-    padding: 12px;
+    width: 100%; /* Full width dropdown on mobile */
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    top: var(--navbar-height-mobile); /* Slide down from navbar instead of side */
+    height: calc(100vh - var(--navbar-height-mobile));
+    right: 0;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
   }
 
-  #nav-items a,
-  #nav-items button {
-    padding: 10px 12px;
-    font-size: 13px;
+  #nav-items.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 
-/* Add space below navbar for content */
+/* Utilities */
 body {
   padding-top: var(--navbar-height);
 }
@@ -273,7 +276,7 @@ body {
   }
 }
 
-/* Button Styling Utilities */
+/* Buttons */
 .btn-logout {
   background: rgba(255, 107, 107, 0.15) !important;
   color: #ffb4ab !important;
@@ -294,17 +297,4 @@ body {
 .btn-login:hover {
   background: rgba(60, 215, 255, 0.25) !important;
   border-color: rgba(60, 215, 255, 0.5) !important;
-}
-
-/* Welcome text styling */
-.navbar-welcome {
-  font-size: 14px;
-  color: #bbc9cf;
-  white-space: nowrap;
-}
-
-@media (max-width: 600px) {
-  .navbar-welcome {
-    display: none;
-  }
 }
