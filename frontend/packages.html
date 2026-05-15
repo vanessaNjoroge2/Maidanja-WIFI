@@ -1,2 +1,903 @@
-<!doctype html> <html class="dark" lang="en"> <head> <meta charset="utf-8" /> <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <title>Maidanja WiFi - Affordable Packages</title> <script src="/js/api.js"></script> <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" /> <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" /> <!-- Tailwind Configuration --> <script id="tailwind-config"> tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-tint": "#3cd7ff", "secondary-fixed": "#eaddff", "surface-container-highest": "#34343d", "on-secondary-fixed-variant": "#5a00c6", surface: "#13131b", "on-primary": "#003642", "tertiary-fixed": "#e2e2e2", "on-primary-container": "#00586b", "inverse-on-surface": "#303038", "on-surface-variant": "#bbc9cf", "surface-container-high": "#292932", "error-container": "#93000a", "tertiary-container": "#c2c3c3", "surface-variant": "#34343d", "primary-fixed": "#b4ebff", "secondary-fixed-dim": "#d2bbff", "inverse-primary": "#00677e", "on-tertiary": "#2f3131", "surface-container-lowest": "#0d0d15", "on-tertiary-fixed-variant": "#454747", primary: "#a8e8ff", "on-surface": "#e4e1ed", "tertiary-fixed-dim": "#c6c6c7", "surface-dim": "#13131b", "on-primary-fixed-variant": "#004e5f", outline: "#859398", secondary: "#d2bbff", "outline-variant": "#3c494e", "on-tertiary-fixed": "#1a1c1c", "on-tertiary-container": "#4f5051", "on-background": "#e4e1ed", "primary-container": "#00d4ff", "on-secondary-fixed": "#25005a", "on-secondary": "#3f008e", background: "#13131b", "secondary-container": "#6001d1", "on-primary-fixed": "#001f27", "on-error-container": "#ffdad6", tertiary: "#dedfdf", "on-error": "#690005", "surface-bright": "#393841", "primary-fixed-dim": "#3cd7ff", "inverse-surface": "#e4e1ed", "surface-container": "#1f1f27", "on-secondary-container": "#c9aeff", error: "#ffb4ab", "surface-container-low": "#1b1b23", }, borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px", }, spacing: { gutter: "16px", lg: "24px", "margin-desktop": "64px", base: "4px", sm: "8px", xl: "40px", "margin-mobile": "20px", xs: "4px", md: "16px", }, fontFamily: { "headline-lg": ["Sora"], "display-lg": ["Sora"], "label-md": ["DM Sans"], "headline-md": ["Sora"], "body-md": ["DM Sans"], "body-lg": ["DM Sans"], }, fontSize: { "headline-lg": [ "32px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600", }, ], "display-lg": [ "48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700", }, ], "label-md": [ "14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500", }, ], "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }], "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }], "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }], }, }, }, }; </script> <style> .glass-card { background: rgba(31, 31, 39, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s ease; } .glass-card:hover { transform: translateY(-8px); border-color: rgba(60, 215, 255, 0.4); box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15); } .gradient-btn { background: linear-gradient(135deg, #3cd7ff 0%, #6001d1 100%); } .mesh-gradient { background-color: #0a0a0f; background-image: radial-gradient( at 0% 0%, rgba(60, 215, 255, 0.15) 0px, transparent 50% ), radial-gradient( at 100% 100%, rgba(96, 1, 209, 0.15) 0px, transparent 50% ); } .filter-tab { background: rgba(255, 255, 255, 0.05); color: #bbc9cf; border: 1px solid rgba(255, 255, 255, 0.1); } .filter-tab.active { background: rgba(168, 232, 255, 0.2); color: #a8e8ff; border-color: rgba(168, 232, 255, 0.4); } body { min-height: max(884px, 100dvh); } </style> <link rel="stylesheet" href="/css/navbar.css" /> <link rel="stylesheet" href="/css/globals.css" /> </head> <body class="bg-background text-on-surface font-body-md overflow-x-hidden mesh-gradient min-h-screen flex flex-col" > <!-- Global Navigation Bar --> <nav id="navbar" class="navbar"> <div class="navbar-container"> <div class="navbar-left"> <button class="back-button" onclick="goBack()" title="Go back to previous page" aria-label="Go back" > ← </button> <a href="/index.html" class="navbar-brand"> <img src="/images/logo.jpg" alt="Maidanja WiFi" /> <span class="hidden sm:inline">Maidanja WiFi</span> </a> </div> <div class="navbar-center"> <h1 class="navbar-title">Loading...</h1> </div> <div class="navbar-right"> <button id="mobile-menu-btn" aria-label="Toggle navigation menu"> <span></span><span></span><span></span> </button> <div id="nav-items" class="hidden sm:flex"></div> </div> </div> </nav> <main class="flex-grow pt-8 pb-xl"> <!-- Hero Section --> <section class=" container-responsive text-center mb-xl" > <h2 class="font-display-lg text-display-lg mb-md bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" > Affordable Internet for Everyone </h2> <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mx-auto mb-lg" > Fast, reliable, and flexible WiFi packages. Pay only for what you use. Instant activation via M-Pesa. </p> <!-- Filter Tabs --> <div class="flex gap-md justify-center flex-wrap"> <button onclick="filterPackages('all')" class="filter-tab active px-lg py-sm rounded-lg font-bold text-label-md transition-all" data-filter="all" > All Packages </button> <button onclick="filterPackages('data')" class="filter-tab px-lg py-sm rounded-lg font-bold text-label-md transition-all" data-filter="data" > Data </button> <button onclick="filterPackages('unlimited')" class="filter-tab px-lg py-sm rounded-lg font-bold text-label-md transition-all" data-filter="unlimited" > Unlimited Time </button> </div> </section> <!-- Pricing Grid --> <section class=" container-responsive mb-xl" > <!-- Loading state --> <div id="packages-loading" class="text-center py-20 text-on-surface-variant" > <span class="material-symbols-outlined animate-spin text-4xl text-primary" >progress_activity</span > <p class="mt-4">Loading packages...</p> </div> <!-- Error state --> <div id="error-banner" class="hidden mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400" ></div> <!-- Dynamic packages grid --> <div id="packages-grid" class="grid-auto-fit gap-gutter" ></div> </section> <!-- CTA Banner --> <section class=" container-responsive mb-xl" > <div class="glass-card rounded-xl p-lg md:p-xl bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/30" > <h3 class="font-headline-lg text-headline-lg mb-md text-center text-on-surface" > Bring Maidanja WiFi to Your Area </h3> <p class="text-on-surface-variant text-body-md text-center mb-lg max-w-2xl mx-auto" > Not covered yet? Full installation within 72hrs anywhere in Thika. Free connection — flexible, reliable, affordable and stable internet. </p> <div class="flex flex-col md:flex-row gap-md justify-center items-center flex-wrap" > <a href="tel:0706407084" class="px-lg py-sm rounded-lg bg-primary/20 hover:bg-primary/30 text-primary font-bold transition-all inline-flex items-center gap-2" > <span class="material-symbols-outlined text-sm">call</span> 0706407084 </a> <a href="mailto:maidanja31@gmail.com" class="px-lg py-sm rounded-lg bg-secondary/20 hover:bg-secondary/30 text-secondary font-bold transition-all inline-flex items-center gap-2" > <span class="material-symbols-outlined text-sm">mail</span> maidanja31@gmail.com </a> </div> </div> </section> </main> <!-- Footer --> <footer class="bg-surface border-t border-white/5 mt-xl"> <div class="py-xl w-full container-responsive" > <!-- Top Row: 3-Column Layout --> <div class="grid-auto-fit gap-lg mb-lg"> <!-- Left: Brand --> <div class="flex flex-col gap-sm items-center md:items-start"> <div class="flex items-center gap-sm"> <span class="material-symbols-outlined text-primary text-2xl" >wifi</span > <span class="font-headline-md text-headline-md text-primary font-bold" >Maidanja WiFi</span > </div> <p class="text-on-surface-variant text-body-md"> Fast, Reliable, Affordable Internet </p> </div> <!-- Center: Contact --> <div class="flex flex-col gap-sm items-center"> <p class="font-headline-md text-headline-md">Contact Us</p> <div class="flex flex-col gap-sm text-center"> <a href="tel:0706407084" class="flex items-center justify-center gap-2 text-primary hover:text-primary/80 transition-colors" > <span class="material-symbols-outlined text-sm">call</span> <span class="font-label-md">0706407084</span> </a> <a href="mailto:maidanja31@gmail.com" class="flex items-center justify-center gap-2 text-primary hover:text-primary/80 transition-colors" > <span class="material-symbols-outlined text-sm">mail</span> <span class="font-label-md text-xs">maidanja31@gmail.com</span> </a> <p class="text-on-surface-variant text-label-md">Thika</p> </div> </div> <!-- Right: Quick Links --> <div class="flex flex-col gap-sm items-center md:items-end"> <p class="font-headline-md text-headline-md">Quick Links</p> <div class="flex flex-col gap-sm text-center md:text-right"> <a href="packages.html" class="text-on-surface-variant hover:text-primary transition-colors font-label-md" >View Packages</a > <a href="dashboard.html" class="text-on-surface-variant hover:text-primary transition-colors font-label-md" >Dashboard</a > <a href="login.html" class="text-on-surface-variant hover:text-primary transition-colors font-label-md" >Login</a > </div> </div> </div> <!-- Bottom: Copyright --> <div class="border-t border-white/10 pt-lg text-center"> <p class="text-on-surface-variant text-label-md"> © 2026 Maidanja WiFi. Powered by M-Pesa. </p> </div> </div> </footer> <script> /* ── Navigation setup ───────────────────────────────────────────────── const user = api.getUser(); if (user) { const navUser = document.getElementById("nav-user"); const navBtn = document.getElementById("nav-btn"); const navLogoutBtn = document.getElementById("nav-logout-btn"); if (navUser) navUser.textContent = user.name || user.phone_number; if (navBtn) navBtn.textContent = "My Account"; if (navLogoutBtn) navLogoutBtn.classList.remove("hidden"); } function handleNavBtn() { if (api.isLoggedIn()) window.location.href = "/dashboard.html"; else window.location.href = "/login.html"; } // ── Package metadata (display properties) ───────────────────────────── const PACKAGE_METADATA = { student: { type: "data", badge: "STUDENT OFFER", icon: "school", data_gb: 2, }, p30min: { type: "unlimited", badge: null, icon: "timer" }, p1hr: { type: "unlimited", badge: null, icon: "timer" }, p2hr: { type: "unlimited", badge: null, icon: "bolt" }, p3hr: { type: "unlimited", badge: null, icon: "bolt" }, p12hr: { type: "unlimited", badge: null, icon: "brightness_4" }, p1day: { type: "unlimited", badge: null, icon: "calendar_today" }, p1week: { type: "unlimited", badge: null, icon: "calendar_month" }, p2week: { type: "unlimited", badge: "MOST POPULAR", icon: "calendar_month", }, p1month: { type: "unlimited", badge: "BEST VALUE", icon: "calendar_month", }, }; // Map database names to metadata keys const PACKAGE_NAME_MAP = { "Student Package": "student", "30 Minutes Unlimited": "p30min", "1 Hour Unlimited": "p1hr", "2 Hours Unlimited": "p2hr", "3 Hours Unlimited": "p3hr", "12 Hours Unlimited": "p12hr", "1 Day Unlimited": "p1day", "1 Week Unlimited": "p1week", "2 Weeks Unlimited": "p2week", "1 Month Unlimited": "p1month", }; let allPackages = []; // Store all packages globally // ── Fetch packages from backend API ──────────────────────────────────── async function loadPackages() { try { console.log("Loading packages..."); const res = await api.get("/packages", false); // public - no login needed console.log("Packages loaded:", res.data.packages); if (!res.data.packages || res.data.packages.length === 0) { throw new Error("No packages available"); } allPackages = res.data.packages.map((pkg) => { const metaKey = PACKAGE_NAME_MAP[pkg.name] || "p1day"; const meta = PACKAGE_METADATA[metaKey] || { type: "unlimited", badge: null, icon: "wifi", }; return { ...pkg, type: meta.type, badge: meta.badge, icon: meta.icon, data_gb: meta.data_gb || null, }; }); console.log("Mapped packages:", allPackages); renderPackages(allPackages); document.getElementById("packages-loading").classList.add("hidden"); } catch (err) { console.error("Failed to load packages:", err); document.getElementById("packages-loading").classList.add("hidden"); const errorBanner = document.getElementById("error-banner"); errorBanner.textContent = "Failed to load packages: " + (err.message || "Unknown error. Please refresh the page."); errorBanner.classList.remove("hidden"); } } // ── Render package cards ─────────────────────────────────────────────── function renderPackages(packages) { const grid = document.getElementById("packages-grid"); grid.innerHTML = ""; packages.forEach((pkg) => { const card = document.createElement("div"); const isPopular = pkg.badge === "MOST POPULAR"; const isBestValue = pkg.badge === "BEST VALUE"; const isStudent = pkg.badge === "STUDENT OFFER"; let cardClasses = "glass-card rounded-xl p-lg flex flex-col h-full relative"; if (isPopular) cardClasses += " border-primary/50 ring-2 ring-primary/30 shadow-lg shadow-primary/20"; if (isBestValue) cardClasses += " border-primary/40"; card.className = cardClasses; card.dataset.type = pkg.type; const badgeHTML = pkg.badge ? ` <div class="absolute -top-4 left-1/2 -translate-x-1/2 ${isStudent ? "bg-blue-600" : isPopular ? "bg-primary-container" : "bg-amber-600"} ${isStudent ? "text-white" : isPopular ? "text-on-primary-container" : "text-amber-900"} font-bold px-md py-xs rounded-full text-xs shadow-lg tracking-widest"> ${pkg.badge} </div> ` : ""; const durationText = pkg.duration_hours < 1 ? `${Math.round(pkg.duration_hours * 60)} min` : pkg.duration_hours === 24 ? "24 Hours" : pkg.duration_hours <= 12 ? `${pkg.duration_hours}h` : `${Math.round(pkg.duration_hours / 24)}d`; card.innerHTML = ` ${badgeHTML} <div class="flex justify-between items-start mb-md ${pkg.badge ? "pt-4" : ""}"> <span class="px-sm py-xs ${isStudent ? "bg-blue-600/20 text-blue-300" : "bg-surface-container-high text-on-surface-variant"} rounded text-xs font-bold tracking-widest uppercase">${durationText}</span> <span class="material-symbols-outlined text-primary">${pkg.icon}</span> </div> <h3 class="font-headline-md text-headline-md mb-sm">${pkg.name}</h3> <div class="flex items-baseline gap-xs mb-lg"> <span class="font-display-lg text-display-lg text-white font-bold">KES ${parseFloat(pkg.price_kes).toLocaleString()}</span> </div> <div class="flex items-center gap-sm mb-lg py-sm border-y ${isPopular ? "border-primary/20" : "border-white/5"}"> <span class="material-symbols-outlined text-primary text-sm">speed</span> <span class="font-headline-md text-headline-md text-primary">${pkg.speed_mbps} Mbps</span> </div> <ul class="space-y-sm mb-xl flex-grow"> ${pkg.type === "data" ? `<li class="flex items-center gap-sm text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> ${pkg.data_gb}GB Data</li>` : ""} <li class="flex items-center gap-sm text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> Unlimited Data</li> <li class="flex items-center gap-sm text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> Instant M-Pesa Pay</li> <li class="flex items-center gap-sm text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> 24/7 Support</li> ${isPopular ? `<li class="flex items-center gap-sm text-primary font-bold text-label-md"><span class="material-symbols-outlined text-primary text-sm">stars</span> Most Popular</li>` : ""} </ul> <button onclick="selectPackage('${pkg.id}', '${pkg.name}', ${pkg.price_kes})" class="w-full py-md rounded-lg ${isPopular || isBestValue ? "gradient-btn text-white shadow-xl" : "border border-primary text-primary hover:bg-primary/10"} transition-colors font-bold text-label-md active:scale-95"> Buy Now </button> `; grid.appendChild(card); }); document.getElementById("packages-loading").classList.add("hidden"); } // ── Filter packages by type ──────────────────────────────────────────── function filterPackages(type) { // Update active tab document.querySelectorAll(".filter-tab").forEach((tab) => { tab.classList.remove("active"); }); document .querySelector(`[data-filter="${type}"]`) .classList.add("active"); // Filter and render const filtered = type === "all" ? allPackages : allPackages.filter((p) => p.type === type); renderPackages(filtered); } function selectPackage(id, name, price) { if (!api.isLoggedIn()) { localStorage.setItem( "maidanja_pending_package", JSON.stringify({ id, name, price }), ); window.location.href = "/login.html"; return; } // Store with id property for checkout to use in payment API localStorage.setItem( "maidanja_package", JSON.stringify({ id, name, price }), ); window.location.href = "/checkout.html"; } // ── Initialize on page load ──────────────────────────────────────────── window.addEventListener("DOMContentLoaded", () => { loadPackages(); }); */</script> <script src="/js/navbar.js"></script> <script src="/js/footer.js"></script>
-</body> </html> 
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Maidanja WiFi - Packages</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #a8e8ff;
+            --secondary: #d2bbff;
+            --bg: #0a0a0f;
+            --card: rgba(22, 22, 32, 0.7);
+            --text: #e4e1ed;
+            --muted: #bbc9cf;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(60, 215, 255, 0.15), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(96, 1, 209, 0.15), transparent 30%),
+                var(--bg);
+
+            color: var(--text);
+            font-family: "DM Sans", sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(18px);
+            background: rgba(10, 10, 15, 0.88);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            text-decoration: none;
+            color: white;
+            font-family: "Sora", sans-serif;
+            font-weight: 700;
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #3cd7ff, #6001d1);
+            color: white !important;
+            padding: 0.7rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        /* HERO */
+
+        .hero {
+            max-width: 1200px;
+            margin: auto;
+            padding: 4rem 1.2rem 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: clamp(2.3rem, 6vw, 4.2rem);
+            font-family: "Sora", sans-serif;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+
+            background: linear-gradient(135deg, #a8e8ff, #d2bbff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: var(--muted);
+            max-width: 720px;
+            margin: auto;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* FILTERS */
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .filter-btn {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--muted);
+            padding: 0.8rem 1.3rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 700;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(168, 232, 255, 0.12);
+            color: var(--primary);
+            border-color: rgba(168, 232, 255, 0.4);
+        }
+
+        /* PACKAGES */
+
+        .packages-section {
+            max-width: 1200px;
+            margin: auto;
+            padding: 2rem 1.2rem 4rem;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .package-card {
+            position: relative;
+            overflow: hidden;
+
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+
+            padding: 1.5rem;
+
+            backdrop-filter: blur(18px);
+
+            transition: 0.35s ease;
+        }
+
+        .package-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(168, 232, 255, 0.25);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .glow-effect::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            border-radius: inherit;
+
+            background:
+                linear-gradient(135deg,
+                    rgba(168, 232, 255, 0.35),
+                    rgba(210, 187, 255, 0.08));
+
+            -webkit-mask: linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0);
+
+            pointer-events: none;
+        }
+
+        .badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.18);
+            color: #93c5fd;
+        }
+
+        .badge-primary {
+            background: rgba(168, 232, 255, 0.16);
+            color: var(--primary);
+        }
+
+        .badge-gold {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fcd34d;
+        }
+
+        .package-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(135deg,
+                    rgba(168, 232, 255, 0.18),
+                    rgba(210, 187, 255, 0.12));
+
+            margin-bottom: 1.2rem;
+        }
+
+        .package-icon span {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .package-duration {
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .package-name {
+            font-family: "Sora", sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-top: 0.35rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .package-price {
+            font-size: 2.8rem;
+            font-family: "Sora", sans-serif;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .package-price span {
+            font-size: 1rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .speed-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+
+            padding: 0.9rem;
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+
+            margin-bottom: 1.2rem;
+        }
+
+        .speed-box span {
+            color: var(--primary);
+        }
+
+        .features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.7rem;
+        }
+
+        .features li {
+            display: flex;
+            gap: 0.7rem;
+            align-items: center;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .features .material-symbols-outlined {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .buy-btn {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+
+            padding: 0.95rem 1rem;
+
+            border-radius: 14px;
+
+            font-size: 0.95rem;
+            font-weight: 800;
+
+            transition: 0.3s ease;
+        }
+
+        .buy-btn.primary {
+            background: linear-gradient(135deg, #3cd7ff, #6001d1);
+            color: white;
+        }
+
+        .buy-btn.primary:hover {
+            transform: scale(1.02);
+            opacity: 0.95;
+        }
+
+        .buy-btn.outline {
+            background: transparent;
+            border: 1px solid rgba(168, 232, 255, 0.3);
+            color: var(--primary);
+        }
+
+        .buy-btn.outline:hover {
+            background: rgba(168, 232, 255, 0.08);
+        }
+
+        /* CTA */
+
+        .cta-section {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 1.2rem 4rem;
+        }
+
+        .cta-card {
+            position: relative;
+            overflow: hidden;
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(135deg,
+                    rgba(168, 232, 255, 0.08),
+                    rgba(210, 187, 255, 0.06));
+
+            border: 1px solid rgba(168, 232, 255, 0.12);
+
+            padding: 3rem 2rem;
+
+            text-align: center;
+        }
+
+        .cta-card h2 {
+            font-family: "Sora", sans-serif;
+            font-size: clamp(1.6rem, 4vw, 2.6rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta-card p {
+            color: var(--muted);
+            max-width: 760px;
+            margin: auto;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            margin-top: 2rem;
+
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            text-decoration: none;
+            padding: 0.9rem 1.3rem;
+            border-radius: 14px;
+            font-weight: 700;
+        }
+
+        .call-btn {
+            background: rgba(168, 232, 255, 0.12);
+            color: var(--primary);
+        }
+
+        .mail-btn {
+            background: rgba(210, 187, 255, 0.12);
+            color: var(--secondary);
+        }
+
+        /* FOOTER */
+
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 3rem 1.2rem;
+            background: rgba(10, 10, 15, 0.95);
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-title {
+            font-family: "Sora", sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 0.6rem;
+            transition: 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .package-price {
+                font-size: 2.3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+        <div class="navbar-container">
+
+            <a href="/index.html" class="brand">
+                <img src="/images/logo.jpg" alt="Maidanja WiFi">
+                <span>Maidanja WiFi</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/packages.html">Packages</a>
+                <a href="/dashboard.html">Dashboard</a>
+                <a href="/login.html" class="login-btn">Login</a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <h1 class="hero-title">
+            Affordable Internet <br>
+            For Everyone
+        </h1>
+
+        <p class="hero-subtitle">
+            Fast, reliable and flexible WiFi packages with instant activation via M-Pesa.
+            Enjoy stable internet for streaming, gaming, browsing and studying.
+        </p>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterPackages('all')">
+                All Packages
+            </button>
+
+            <button class="filter-btn" onclick="filterPackages('data')">
+                Data
+            </button>
+
+            <button class="filter-btn" onclick="filterPackages('unlimited')">
+                Unlimited
+            </button>
+        </div>
+
+    </section>
+
+    <!-- PACKAGES -->
+
+    <section class="packages-section">
+
+        <div class="packages-grid" id="packages-grid"></div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+
+        <div class="cta-card glow-effect">
+
+            <h2>
+                Bring Maidanja WiFi To Your Area
+            </h2>
+
+            <p>
+                If not part of Maidanja Hotspot WiFi, make your region or apartment
+                a hotspot zone. Anyone in need within Thika can call 0706407084 and
+                full installation will be done within 72 hours.
+
+                <br><br>
+
+                Free connection to flexible, reliable, affordable and stable internet.
+            </p>
+
+            <div class="cta-buttons">
+
+                <a href="tel:0706407084" class="cta-btn call-btn">
+                    📞 Call: 0706407084
+                </a>
+
+                <a href="mailto:maidanja31@gmail.com" class="cta-btn mail-btn">
+                    ✉ Email: maidanja31@gmail.com
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-grid">
+
+            <div>
+                <div class="footer-title">Maidanja WiFi</div>
+
+                <p style="color:#bbc9cf; line-height:1.7;">
+                    Fast, reliable and affordable internet solutions within Thika and surrounding areas.
+                </p>
+            </div>
+
+            <div>
+                <div class="footer-title">Quick Links</div>
+
+                <a href="/packages.html" class="footer-link">Packages</a>
+                <a href="/dashboard.html" class="footer-link">Dashboard</a>
+                <a href="/login.html" class="footer-link">Login</a>
+            </div>
+
+            <div>
+                <div class="footer-title">Contact</div>
+
+                <a href="tel:0706407084" class="footer-link">
+                    📞 0706407084
+                </a>
+
+                <a href="mailto:maidanja31@gmail.com" class="footer-link">
+                    ✉ maidanja31@gmail.com
+                </a>
+
+                <p style="color:#bbc9cf;">
+                    📍 Thika, Kenya
+                </p>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © 2026 Maidanja WiFi. Powered by M-Pesa.
+        </div>
+
+    </footer>
+
+    <script>
+
+        const PACKAGES = [
+
+            {
+                id: "student",
+                type: "data",
+                badge: "STUDENT OFFER",
+                badgeClass: "badge-blue",
+                icon: "school",
+                name: "Student Package",
+                duration: "24 Hours",
+                price: 20,
+                speed: "5 Mbps",
+                features: [
+                    "2GB Data",
+                    "Instant M-Pesa Pay",
+                    "24/7 Support"
+                ]
+            },
+
+            {
+                id: "30min",
+                type: "unlimited",
+                icon: "timer",
+                name: "30 Minutes Unlimited",
+                duration: "30 Minutes",
+                price: 5,
+                speed: "5 Mbps",
+                features: [
+                    "Unlimited Access",
+                    "Instant Activation",
+                    "Reliable Connection"
+                ]
+            },
+
+            {
+                id: "1hr",
+                type: "unlimited",
+                icon: "timer",
+                name: "1 Hour Unlimited",
+                duration: "1 Hour",
+                price: 10,
+                speed: "5 Mbps",
+                features: [
+                    "Unlimited Access",
+                    "Smooth Browsing",
+                    "Fast Activation"
+                ]
+            },
+
+            {
+                id: "2hr",
+                type: "unlimited",
+                icon: "bolt",
+                name: "2 Hours Unlimited",
+                duration: "2 Hours",
+                price: 15,
+                speed: "5 Mbps",
+                features: [
+                    "Unlimited Streaming",
+                    "Stable Speeds",
+                    "Instant Activation"
+                ]
+            },
+
+            {
+                id: "3hr",
+                type: "unlimited",
+                icon: "bolt",
+                name: "3 Hours Unlimited",
+                duration: "3 Hours",
+                price: 20,
+                speed: "5 Mbps",
+                features: [
+                    "Unlimited Data",
+                    "Reliable Connection",
+                    "24/7 Support"
+                ]
+            },
+
+            {
+                id: "12hr",
+                type: "unlimited",
+                icon: "brightness_4",
+                name: "12 Hours Unlimited",
+                duration: "12 Hours",
+                price: 55,
+                speed: "5 Mbps",
+                features: [
+                    "Night Browsing",
+                    "Stable Speeds",
+                    "Unlimited Usage"
+                ]
+            },
+
+            {
+                id: "1day",
+                type: "unlimited",
+                icon: "calendar_today",
+                name: "1 Day Unlimited",
+                duration: "24 Hours",
+                price: 80,
+                speed: "5 Mbps",
+                features: [
+                    "All Day Internet",
+                    "Unlimited Usage",
+                    "Fast Support"
+                ]
+            },
+
+            {
+                id: "1week",
+                type: "unlimited",
+                icon: "calendar_month",
+                name: "1 Week Unlimited",
+                duration: "1 Week",
+                price: 200,
+                speed: "5 Mbps",
+                features: [
+                    "Best Weekly Browsing",
+                    "Unlimited Data",
+                    "Stable Connection"
+                ]
+            },
+
+            {
+                id: "2week",
+                type: "unlimited",
+                badge: "MOST POPULAR",
+                badgeClass: "badge-primary",
+                icon: "workspace_premium",
+                name: "2 Weeks Unlimited",
+                duration: "2 Weeks",
+                price: 350,
+                speed: "5 Mbps",
+                features: [
+                    "Most Popular Plan",
+                    "Unlimited Streaming",
+                    "Reliable Speeds"
+                ]
+            },
+
+            {
+                id: "1month",
+                type: "unlimited",
+                badge: "BEST VALUE",
+                badgeClass: "badge-gold",
+                icon: "verified",
+                name: "1 Month Unlimited",
+                duration: "1 Month",
+                price: 600,
+                speed: "5 Mbps",
+                features: [
+                    "Best Savings",
+                    "Unlimited Browsing",
+                    "Premium Stability"
+                ]
+            }
+
+        ];
+
+        let currentFilter = "all";
+
+        function renderPackages() {
+
+            const grid = document.getElementById("packages-grid");
+
+            grid.innerHTML = "";
+
+            const filtered =
+                currentFilter === "all"
+                    ? PACKAGES
+                    : PACKAGES.filter(pkg => pkg.type === currentFilter);
+
+            filtered.forEach(pkg => {
+
+                const card = document.createElement("div");
+
+                card.className = "package-card glow-effect";
+
+                card.innerHTML = `
+          ${pkg.badge ? `
+            <div class="badge ${pkg.badgeClass}">
+              ${pkg.badge}
+            </div>
+          ` : ""}
+
+          <div class="package-icon">
+            <span class="material-symbols-outlined">
+              ${pkg.icon}
+            </span>
+          </div>
+
+          <div class="package-duration">
+            ${pkg.duration}
+          </div>
+
+          <div class="package-name">
+            ${pkg.name}
+          </div>
+
+          <div class="package-price">
+            KES ${pkg.price}
+            <span>/once</span>
+          </div>
+
+          <div class="speed-box">
+            <span class="material-symbols-outlined">speed</span>
+            <strong>${pkg.speed}</strong>
+          </div>
+
+          <ul class="features">
+            ${pkg.features.map(feature => `
+              <li>
+                <span class="material-symbols-outlined">
+                  check_circle
+                </span>
+
+                ${feature}
+              </li>
+            `).join("")}
+          </ul>
+
+          <button
+            class="buy-btn ${pkg.badge ? "primary" : "outline"}"
+            onclick="buyPackage('${pkg.id}')"
+          >
+            Buy Now
+          </button>
+        `;
+
+                grid.appendChild(card);
+
+            });
+
+        }
+
+        function filterPackages(type) {
+
+            currentFilter = type;
+
+            document.querySelectorAll(".filter-btn")
+                .forEach(btn => btn.classList.remove("active"));
+
+            event.target.classList.add("active");
+
+            renderPackages();
+        }
+
+        function buyPackage(id) {
+
+            const selected = PACKAGES.find(p => p.id === id);
+
+            localStorage.setItem(
+                "maidanja_package",
+                JSON.stringify(selected)
+            );
+
+            window.location.href = "/checkout.html";
+        }
+
+        renderPackages();
+
+    </script>
+
+</body>
+
+</html>
