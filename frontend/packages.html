@@ -644,167 +644,96 @@
 
     <script>
 
-        const PACKAGES = [
-
-            {
-                id: "student",
-                type: "data",
-                badge: "STUDENT OFFER",
-                badgeClass: "badge-blue",
-                icon: "school",
-                name: "Student Package",
-                duration: "24 Hours",
-                price: 20,
-                speed: "5 Mbps",
-                features: [
-                    "2GB Data",
-                    "Instant M-Pesa Pay",
-                    "24/7 Support"
-                ]
-            },
-
-            {
-                id: "30min",
-                type: "unlimited",
-                icon: "timer",
-                name: "30 Minutes Unlimited",
-                duration: "30 Minutes",
-                price: 5,
-                speed: "5 Mbps",
-                features: [
-                    "Unlimited Access",
-                    "Instant Activation",
-                    "Reliable Connection"
-                ]
-            },
-
-            {
-                id: "1hr",
-                type: "unlimited",
-                icon: "timer",
-                name: "1 Hour Unlimited",
-                duration: "1 Hour",
-                price: 10,
-                speed: "5 Mbps",
-                features: [
-                    "Unlimited Access",
-                    "Smooth Browsing",
-                    "Fast Activation"
-                ]
-            },
-
-            {
-                id: "2hr",
-                type: "unlimited",
-                icon: "bolt",
-                name: "2 Hours Unlimited",
-                duration: "2 Hours",
-                price: 15,
-                speed: "5 Mbps",
-                features: [
-                    "Unlimited Streaming",
-                    "Stable Speeds",
-                    "Instant Activation"
-                ]
-            },
-
-            {
-                id: "3hr",
-                type: "unlimited",
-                icon: "bolt",
-                name: "3 Hours Unlimited",
-                duration: "3 Hours",
-                price: 20,
-                speed: "5 Mbps",
-                features: [
-                    "Unlimited Data",
-                    "Reliable Connection",
-                    "24/7 Support"
-                ]
-            },
-
-            {
-                id: "12hr",
-                type: "unlimited",
-                icon: "brightness_4",
-                name: "12 Hours Unlimited",
-                duration: "12 Hours",
-                price: 55,
-                speed: "5 Mbps",
-                features: [
-                    "Night Browsing",
-                    "Stable Speeds",
-                    "Unlimited Usage"
-                ]
-            },
-
-            {
-                id: "1day",
-                type: "unlimited",
-                icon: "calendar_today",
-                name: "1 Day Unlimited",
-                duration: "24 Hours",
-                price: 80,
-                speed: "5 Mbps",
-                features: [
-                    "All Day Internet",
-                    "Unlimited Usage",
-                    "Fast Support"
-                ]
-            },
-
-            {
-                id: "1week",
-                type: "unlimited",
-                icon: "calendar_month",
-                name: "1 Week Unlimited",
-                duration: "1 Week",
-                price: 200,
-                speed: "5 Mbps",
-                features: [
-                    "Best Weekly Browsing",
-                    "Unlimited Data",
-                    "Stable Connection"
-                ]
-            },
-
-            {
-                id: "2week",
-                type: "unlimited",
-                badge: "MOST POPULAR",
-                badgeClass: "badge-primary",
-                icon: "workspace_premium",
-                name: "2 Weeks Unlimited",
-                duration: "2 Weeks",
-                price: 350,
-                speed: "5 Mbps",
-                features: [
-                    "Most Popular Plan",
-                    "Unlimited Streaming",
-                    "Reliable Speeds"
-                ]
-            },
-
-            {
-                id: "1month",
-                type: "unlimited",
-                badge: "BEST VALUE",
-                badgeClass: "badge-gold",
-                icon: "verified",
-                name: "1 Month Unlimited",
-                duration: "1 Month",
-                price: 600,
-                speed: "5 Mbps",
-                features: [
-                    "Best Savings",
-                    "Unlimited Browsing",
-                    "Premium Stability"
-                ]
-            }
-
-        ];
-
+        // Fetch packages from backend API
+        let PACKAGES = [];
         let currentFilter = "all";
+
+        // Helper: Format duration hours to human readable format
+        function formatDuration(hours) {
+            if (hours < 1) return `${Math.round(hours * 60)} Minutes`;
+            if (hours === 1) return "1 Hour";
+            if (hours === 24) return "1 Day";
+            if (hours === 168) return "1 Week";
+            if (hours === 336) return "2 Weeks";
+            if (hours === 720) return "1 Month";
+            if (hours <= 12) return `${hours} Hours`;
+            return `${Math.round(hours / 24)} Days`;
+        }
+
+        // Helper: Select icon based on package duration
+        function getIconForDuration(hours) {
+            if (hours <= 1) return "timer";
+            if (hours <= 12) return "brightness_4";
+            if (hours === 24) return "calendar_today";
+            if (hours === 168) return "calendar_month";
+            if (hours >= 336) return "workspace_premium";
+            return "bolt";
+        }
+
+        // Helper: Generate features based on duration
+        function getDefaultFeatures(hours) {
+            const baseFeatures = [
+                "Instant M-Pesa Pay",
+                "24/7 Support",
+                "Reliable Connection"
+            ];
+            
+            if (hours >= 24) {
+                baseFeatures.unshift("Unlimited Data");
+            } else {
+                baseFeatures.unshift("Unlimited Access");
+            }
+            
+            return baseFeatures;
+        }
+
+        // Fetch packages from backend
+        async function loadPackages() {
+            try {
+                const res = await api.get("/packages", false); // No auth required
+                
+                // Transform backend data to frontend format
+                PACKAGES = res.data.packages.map(pkg => ({
+                    id: pkg.id,
+                    name: pkg.name,
+                    duration: formatDuration(pkg.duration_hours),
+                    duration_hours: pkg.duration_hours,
+                    price: pkg.price_kes,
+                    speed: `${pkg.speed_mbps} Mbps`,
+                    speed_mbps: pkg.speed_mbps,
+                    icon: getIconForDuration(pkg.duration_hours),
+                    type: pkg.duration_hours >= 24 ? "unlimited" : "limited",
+                    features: getDefaultFeatures(pkg.duration_hours),
+                    badge: null,
+                    badgeClass: null,
+                    description: pkg.description || ""
+                }));
+
+                // Add special badges for popular packages
+                const populars = PACKAGES.filter(p => p.duration_hours === 336); // 2 weeks
+                if (populars.length > 0) {
+                    populars[0].badge = "MOST POPULAR";
+                    populars[0].badgeClass = "badge-primary";
+                }
+
+                const best = PACKAGES.filter(p => p.duration_hours === 720); // 1 month
+                if (best.length > 0) {
+                    best[0].badge = "BEST VALUE";
+                    best[0].badgeClass = "badge-gold";
+                }
+
+                renderPackages();
+            } catch (err) {
+                console.error('Failed to load packages:', err);
+                // Show error message to user
+                const grid = document.getElementById("packages-grid");
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                        <p style="color: #e4e1ed;">Failed to load packages. Please refresh the page.</p>
+                    </div>
+                `;
+            }
+        }
 
         function renderPackages() {
 
@@ -904,7 +833,8 @@
             window.location.href = "/checkout.html";
         }
 
-        renderPackages();
+        // Load packages from API on page load
+        loadPackages();
 
     </script>
 

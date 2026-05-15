@@ -1,201 +1,333 @@
 <!doctype html>
 <html class="dark" lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Login | Maidanja WiFi</title>
-  <script src="/js/api.js"></script>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/navbar.css" />
-  <link rel="stylesheet" href="/css/globals.css" />
-  <style>
-    body {
-      background-color: #0a0a0f;
-      color: #e4e1ed;
-      min-height: 100dvh;
-      font-family: "DM Sans", sans-serif;
-      /* No top padding — navbar is hidden on login page */
-      padding-top: 0 !important;
-      /* Column layout so footer sits BELOW the card, not beside it */
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
-    /* Centred card wrapper — grows to push footer down */
-    .login-main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem 1.25rem;
-    }
-    .glass {
-      background: rgba(18, 18, 26, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .gradient-btn {
-      background: linear-gradient(135deg, #3cd7ff 0%, #6001d1 100%);
-    }
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.12;
-      pointer-events: none;
-    }
-    /* Footer rendered by footer.js — full width, below the card */
-    .maidanja-footer {
-      width: 100%;
-      position: relative;
-      z-index: 1;
-      flex-shrink: 0;
-    }
-  </style>
-</head>
-<body>
-  <!-- Decorative orbs -->
-  <div class="orb w-96 h-96 bg-cyan-400" style="top: -5rem; left: -5rem;"></div>
-  <div class="orb w-96 h-96 bg-violet-600" style="bottom: 0; right: 0;"></div>
-
-  <!-- Login card wrapper — fills remaining height, centres the card -->
-  <main class="login-main">
-  <!-- Login Card — max-width ensures it never overflows on 320px -->
-  <div class="glass rounded-2xl p-6 sm:p-8 w-full z-10" style="max-width: min(100%, 448px);">
-
-    <!-- Logo -->
-    <div class="flex items-center justify-center gap-2 mb-8">
-      <img src="/images/logo.jpg" alt="Maidanja WiFi" style="height: 80px; width: auto; max-width: 100%;" />
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Login | Maidanja WiFi</title>
+    <script src="/js/api.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/globals.css" />
+    <style>
+      body {
+        background-color: #0a0a0f;
+        color: #e4e1ed;
+        min-height: 100dvh;
+        font-family: "DM Sans", sans-serif;
+        /* No top padding — navbar is hidden on login page */
+        padding-top: 0 !important;
+        /* Column layout so footer sits BELOW the card, not beside it */
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      /* Centred card wrapper — grows to push footer down */
+      .login-main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem 1.25rem;
+      }
+      .glass {
+        background: rgba(18, 18, 26, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .gradient-btn {
+        background: linear-gradient(135deg, #3cd7ff 0%, #6001d1 100%);
+      }
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.12;
+        pointer-events: none;
+      }
+      /* Footer rendered by footer.js — full width, below the card */
+      .maidanja-footer {
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Back Button (top-left corner) -->
+    <div style="position: absolute; top: 1rem; left: 1rem; z-index: 50">
+      <button
+        onclick="goBack()"
+        title="Go back to previous page"
+        aria-label="Go back"
+        style="
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #e4e1ed;
+          padding: 0.5rem 0.75rem;
+          border-radius: 0.5rem;
+          font-size: 1.25rem;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        ←
+      </button>
     </div>
 
-    <!-- Tabs -->
-    <div class="flex mb-6 bg-white/5 rounded-xl p-1">
-      <button id="tab-login" onclick="switchTab('login')"
-        class="flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-cyan-500/20 text-cyan-300"
-        style="min-height: 44px;">Login</button>
-      <button id="tab-register" onclick="switchTab('register')"
-        class="flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-400"
-        style="min-height: 44px;">Register</button>
-    </div>
+    <!-- Decorative orbs -->
+    <div
+      class="orb w-96 h-96 bg-cyan-400"
+      style="top: -5rem; left: -5rem"
+    ></div>
+    <div class="orb w-96 h-96 bg-violet-600" style="bottom: 0; right: 0"></div>
 
-    <!-- Error Banner -->
-    <div id="error-banner" class="hidden mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm"></div>
+    <!-- Login card wrapper — fills remaining height, centres the card -->
+    <main class="login-main">
+      <!-- Login Card — max-width ensures it never overflows on 320px -->
+      <div
+        class="glass rounded-2xl p-6 sm:p-8 w-full z-10"
+        style="max-width: min(100%, 448px)"
+      >
+        <!-- Logo -->
+        <div class="flex items-center justify-center gap-2 mb-8">
+          <img
+            src="/images/logo.jpg"
+            alt="Maidanja WiFi"
+            style="height: 80px; width: auto; max-width: 100%"
+          />
+        </div>
 
-    <!-- Login Form -->
-    <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-      <div>
-        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Phone Number</label>
-        <input type="tel" id="login-phone" placeholder="0712345678 or 254712345678"
-          class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-          style="min-height: 48px;" />
+        <!-- Tabs -->
+        <div class="flex mb-6 bg-white/5 rounded-xl p-1">
+          <button
+            id="tab-login"
+            onclick="switchTab('login')"
+            class="flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-cyan-500/20 text-cyan-300"
+            style="min-height: 44px"
+          >
+            Login
+          </button>
+          <button
+            id="tab-register"
+            onclick="switchTab('register')"
+            class="flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-400"
+            style="min-height: 44px"
+          >
+            Register
+          </button>
+        </div>
+
+        <!-- Error Banner -->
+        <div
+          id="error-banner"
+          class="hidden mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm"
+        ></div>
+
+        <!-- Login Form -->
+        <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label
+              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
+              >Phone Number</label
+            >
+            <input
+              type="tel"
+              id="login-phone"
+              placeholder="0712345678 or 254712345678"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+              style="min-height: 48px"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
+              >Password</label
+            >
+            <input
+              type="password"
+              id="login-password"
+              placeholder="••••••••"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+              style="min-height: 48px"
+            />
+          </div>
+          <button
+            type="submit"
+            id="login-btn"
+            class="gradient-btn w-full py-3 rounded-xl font-bold text-white mt-2 active:scale-95 transition-transform"
+            style="min-height: 48px"
+          >
+            Login
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form
+          id="register-form"
+          onsubmit="handleRegister(event)"
+          class="space-y-4 hidden"
+        >
+          <div>
+            <label
+              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
+              >Phone Number</label
+            >
+            <input
+              type="tel"
+              id="reg-phone"
+              placeholder="0712345678 or 254712345678"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+              style="min-height: 48px"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
+              >Name (Optional)</label
+            >
+            <input
+              type="text"
+              id="reg-name"
+              placeholder="John Doe"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+              style="min-height: 48px"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
+              >Password</label
+            >
+            <input
+              type="password"
+              id="reg-password"
+              placeholder="Min 6 characters"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+              style="min-height: 48px"
+            />
+          </div>
+          <button
+            type="submit"
+            id="reg-btn"
+            class="gradient-btn w-full py-3 rounded-xl font-bold text-white mt-2 active:scale-95 transition-transform"
+            style="min-height: 48px"
+          >
+            Create Account
+          </button>
+        </form>
       </div>
-      <div>
-        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Password</label>
-        <input type="password" id="login-password" placeholder="••••••••"
-          class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-          style="min-height: 48px;" />
-      </div>
-      <button type="submit" id="login-btn"
-        class="gradient-btn w-full py-3 rounded-xl font-bold text-white mt-2 active:scale-95 transition-transform"
-        style="min-height: 48px;">Login</button>
-    </form>
+    </main>
+    <!-- end .login-main -->
 
-    <!-- Register Form -->
-    <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-      <div>
-        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Phone Number</label>
-        <input type="tel" id="reg-phone" placeholder="0712345678 or 254712345678"
-          class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-          style="min-height: 48px;" />
-      </div>
-      <div>
-        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Name (Optional)</label>
-        <input type="text" id="reg-name" placeholder="John Doe"
-          class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-          style="min-height: 48px;" />
-      </div>
-      <div>
-        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Password</label>
-        <input type="password" id="reg-password" placeholder="Min 6 characters"
-          class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-          style="min-height: 48px;" />
-      </div>
-      <button type="submit" id="reg-btn"
-        class="gradient-btn w-full py-3 rounded-xl font-bold text-white mt-2 active:scale-95 transition-transform"
-        style="min-height: 48px;">Create Account</button>
-    </form>
-  </div>
-  </main><!-- end .login-main -->
+    <!-- Footer injected here by footer.js — renders below the card -->
+    <script src="/js/footer.js"></script>
 
-  <!-- Footer injected here by footer.js — renders below the card -->
-  <script src="/js/footer.js"></script>
+    <script>
+      /* Redirect if already logged in */
+      if (api.isLoggedIn()) window.location.href = "/packages.html";
 
-  <script>
-    /* Redirect if already logged in */
-    if (api.isLoggedIn()) window.location.href = "/packages.html";
-
-    function showError(message) {
-      const banner = document.getElementById("error-banner");
-      banner.textContent = message;
-      banner.classList.remove("hidden");
-    }
-
-    function switchTab(tab) {
-      const isLogin = tab === "login";
-      document.getElementById("login-form").classList.toggle("hidden", !isLogin);
-      document.getElementById("register-form").classList.toggle("hidden", isLogin);
-      document.getElementById("tab-login").className =
-        `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${isLogin ? "bg-cyan-500/20 text-cyan-300" : "text-gray-400"}`;
-      document.getElementById("tab-register").className =
-        `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${!isLogin ? "bg-cyan-500/20 text-cyan-300" : "text-gray-400"}`;
-      document.getElementById("error-banner").classList.add("hidden");
-    }
-
-    async function handleLogin(e) {
-      e.preventDefault();
-      const btn = document.getElementById("login-btn");
-      btn.textContent = "Logging in...";
-      btn.disabled = true;
-      document.getElementById("error-banner").classList.add("hidden");
-      try {
-        const res = await api.post("/auth/login", {
-          phone_number: document.getElementById("login-phone").value.trim(),
-          password: document.getElementById("login-password").value,
-        }, false);
-        api.setSession(res.data.token, res.data.user);
-        window.location.href = res.data.user.role === "admin" ? "/admin.html" : "/packages.html";
-      } catch (err) {
-        showError(err.message || "Login failed. Please check your credentials.");
-        btn.textContent = "Login";
-        btn.disabled = false;
+      // Check if the URL has a tab parameter to show register tab by default
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get("tab");
+      if (tabParam === "register") {
+        // Switch to register tab on page load
+        switchTab("register");
       }
-    }
 
-    async function handleRegister(e) {
-      e.preventDefault();
-      const btn = document.getElementById("reg-btn");
-      btn.textContent = "Creating account...";
-      btn.disabled = true;
-      document.getElementById("error-banner").classList.add("hidden");
-      try {
-        const res = await api.post("/auth/register", {
-          phone_number: document.getElementById("reg-phone").value.trim(),
-          name: document.getElementById("reg-name").value.trim(),
-          password: document.getElementById("reg-password").value,
-        }, false);
-        api.setSession(res.data.token, res.data.user);
-        window.location.href = "/packages.html";
-      } catch (err) {
-        showError(err.message || "Registration failed. Please try again.");
-        btn.textContent = "Create Account";
-        btn.disabled = false;
+      function showError(message) {
+        const banner = document.getElementById("error-banner");
+        banner.textContent = message;
+        banner.classList.remove("hidden");
       }
-    }
-  </script>
-  <!-- navbar.js loads goBack() — navbar itself is hidden via updateNavbarVisibility -->
-  <script src="/js/navbar.js"></script>
-</body>
+
+      function switchTab(tab) {
+        const isLogin = tab === "login";
+        document
+          .getElementById("login-form")
+          .classList.toggle("hidden", !isLogin);
+        document
+          .getElementById("register-form")
+          .classList.toggle("hidden", isLogin);
+        document.getElementById("tab-login").className =
+          `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${isLogin ? "bg-cyan-500/20 text-cyan-300" : "text-gray-400"}`;
+        document.getElementById("tab-register").className =
+          `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${!isLogin ? "bg-cyan-500/20 text-cyan-300" : "text-gray-400"}`;
+        document.getElementById("error-banner").classList.add("hidden");
+      }
+
+      async function handleLogin(e) {
+        e.preventDefault();
+        const btn = document.getElementById("login-btn");
+        btn.textContent = "Logging in...";
+        btn.disabled = true;
+        document.getElementById("error-banner").classList.add("hidden");
+        try {
+          const res = await api.post(
+            "/auth/login",
+            {
+              phone_number: document.getElementById("login-phone").value.trim(),
+              password: document.getElementById("login-password").value,
+            },
+            false,
+          );
+          api.setSession(res.data.token, res.data.user);
+          window.location.href =
+            res.data.user.role === "admin" ? "/admin.html" : "/packages.html";
+        } catch (err) {
+          showError(
+            err.message || "Login failed. Please check your credentials.",
+          );
+          btn.textContent = "Login";
+          btn.disabled = false;
+        }
+      }
+
+      async function handleRegister(e) {
+        e.preventDefault();
+        const btn = document.getElementById("reg-btn");
+        btn.textContent = "Creating account...";
+        btn.disabled = true;
+        document.getElementById("error-banner").classList.add("hidden");
+        try {
+          const registerData = {
+            phone_number: document.getElementById("reg-phone").value.trim(),
+            name: document.getElementById("reg-name").value.trim(),
+            password: document.getElementById("reg-password").value,
+          };
+
+          console.log("📝 Sending registration data:", {
+            phone: registerData.phone_number,
+            name: registerData.name,
+            api_url: API_BASE,
+          });
+
+          const res = await api.post("/auth/register", registerData, false);
+
+          console.log("✅ Registration successful:", res.data.user);
+          api.setSession(res.data.token, res.data.user);
+          window.location.href = "/packages.html";
+        } catch (err) {
+          console.error("❌ Registration error:", err);
+          showError(err.message || "Registration failed. Please try again.");
+          btn.textContent = "Create Account";
+          btn.disabled = false;
+        }
+      }
+    </script>
+    <!-- navbar.js loads goBack() — navbar itself is hidden via updateNavbarVisibility -->
+    <script src="/js/navbar.js"></script>
+  </body>
 </html>

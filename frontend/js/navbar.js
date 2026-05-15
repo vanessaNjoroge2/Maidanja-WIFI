@@ -35,7 +35,8 @@ function initNavbar() {
   } else {
     navItems.innerHTML = `
       <a href="/packages.html" class="nav-link">Packages</a>
-      <a href="/login.html" class="btn-login nav-link">Login</a>
+      <a href="/login.html" class="nav-link">Login</a>
+      <a href="/login.html?tab=register" class="nav-link" style="color: #3cd7ff; font-weight: 600;">Register</a>
       <a href="/packages.html" class="btn-primary-gradient nav-link" style="padding: 8px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; white-space: nowrap;">
         Connect Now
       </a>

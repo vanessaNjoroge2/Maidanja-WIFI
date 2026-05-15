@@ -75,6 +75,8 @@ router.post(
       );
 
       const user  = result.rows[0];
+      console.log(`✅ New user registered: ${user.phone_number} (ID: ${user.id})`);
+      
       const token = signToken(user.id);
 
       res.status(201).json({
@@ -83,6 +85,7 @@ router.post(
         data: { token, user },
       });
     } catch (err) {
+      console.error('❌ Registration error:', err.message);
       next(err);
     }
   }
@@ -138,6 +141,8 @@ router.post(
 
       // Update last login
       await pool.query('UPDATE users SET last_login_at = NOW() WHERE id = $1', [user.id]);
+      
+      console.log(`✅ User login successful: ${user.phone_number}`);
 
       const token = signToken(user.id);
       const { password_hash, ...safeUser } = user;
@@ -148,6 +153,7 @@ router.post(
         data: { token, user: safeUser },
       });
     } catch (err) {
+      console.error('❌ Login error:', err.message);
       next(err);
     }
   }
