@@ -6,10 +6,20 @@ const RENDER_BACKEND = 'https://maidanja-wifi.onrender.com/api';
 
 const API_BASE = (() => {
   const { hostname, port } = window.location;
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    // Dev: port 3000 = backend is proxying /api, otherwise hit Render directly
-    return port === '3000' ? '/api' : RENDER_BACKEND;
+  
+  // Check if we are on a local development environment (localhost or local network IP)
+  const isLocal = hostname === 'localhost' || 
+                  hostname === '127.0.0.1' || 
+                  hostname.startsWith('192.168.') || 
+                  hostname.startsWith('10.') || 
+                  /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
+
+  if (isLocal) {
+    // If the frontend is served on port 3000 (Express static), use relative path
+    // If served on any other port (like Live Server on 5000), use absolute local URL to backend on 3000
+    return port === '3000' ? '/api' : `http://${hostname}:3000/api`;
   }
+  
   // Production (Vercel, custom domain, etc.) → always use Render backend
   return RENDER_BACKEND;
 })();
