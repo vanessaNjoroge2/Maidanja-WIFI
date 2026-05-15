@@ -7,6 +7,25 @@ const mpesa = require('../services/mpesa.service');
 
 const router = express.Router();
 
+/**
+ * Shared helper to create a session after successful payment.
+ */
+async function createSession(paymentId, userId, packageId, durationHours) {
+  try {
+    const expiresAt = new Date(Date.now() + durationHours * 3600 * 1000);
+    await pool.query(
+      `INSERT INTO sessions (user_id, package_id, payment_id, expires_at)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT DO NOTHING`,
+      [userId, packageId, paymentId, expiresAt.toISOString()]
+    );
+    console.log(`✅ Session created for user ${userId}, payment ${paymentId}`);
+  } catch (err) {
+    console.error('❌ Failed to create session:', err.message);
+    // Don't throw — we don't want to crash the callback/status check
+  }
+}
+
 // ── POST /api/payments/initiate ──────────────────────────────────────────────
 router.post(
   '/initiate',
@@ -137,12 +156,23 @@ router.get('/status/:checkoutRequestId', auth, async (req, res, next) => {
             [checkoutRequestId]
           );
           payment.status = 'completed';
+
+          // Ensure session is created if it doesn't exist yet
+          if (!payment.session_id) {
+            const payInfo = await pool.query(
+              `SELECT p.user_id, p.package_id, pkg.duration_hours
+               FROM payments p
+               JOIN packages pkg ON p.package_id = pkg.id
+               WHERE p.id = $1`,
+              [payment.id]
+            );
+            if (payInfo.rows.length > 0) {
+              const info = payInfo.rows[0];
+              await createSession(payment.id, info.user_id, info.package_id, info.duration_hours);
+            }
+          }
         } else if (darajaStatus.ResultCode !== undefined && darajaStatus.ResultCode !== null) {
-          // Only mark as failed for definitive failure codes from Daraja
-          // ResultCode 1032 = Request cancelled by user
-          // ResultCode 1037 = Timeout waiting for user input
-          // ResultCode 1 = Insufficient funds
-          // ResultCode 2001 = Wrong PIN
+          // ... (failure handling stays the same)
           const failureCodes = [1, 1032, 1037, 2001, 1001, 1019, 9999, 17];
           const code = parseInt(darajaStatus.ResultCode);
           if (failureCodes.includes(code)) {
@@ -154,11 +184,9 @@ router.get('/status/:checkoutRequestId', auth, async (req, res, next) => {
             payment.status = 'failed';
             payment.failure_reason = darajaStatus.ResultDesc;
           }
-          // For unknown non-zero codes, keep as pending and wait for callback
         }
       } catch (queryErr) {
-        // Daraja query may fail (429 rate limit, timeout, etc.) — just return DB state
-        console.log('⏳ Daraja query unavailable, relying on callback:', queryErr.message);
+        console.log('⏳ Daraja query unavailable:', queryErr.message);
       }
     }
 
@@ -198,36 +226,23 @@ router.post('/callback', async (req, res, next) => {
     const transDate = getMeta('TransactionDate')?.toString();
     const amount = getMeta('Amount');
 
-    // Mark payment completed
-    await pool.query(
-      `UPDATE payments
+    // Mark payment completed and get necessary info for session
+    const payResult = await pool.query(
+      `UPDATE payments p
        SET status = 'completed',
            mpesa_receipt_number = $1,
            mpesa_transaction_date = $2,
-           amount_kes = COALESCE($3, amount_kes)
-       WHERE mpesa_checkout_request_id = $4`,
+           amount_kes = COALESCE($3, p.amount_kes)
+       FROM packages pkg
+       WHERE p.package_id = pkg.id 
+         AND p.mpesa_checkout_request_id = $4
+       RETURNING p.id, p.user_id, p.package_id, pkg.duration_hours`,
       [receiptNumber, transDate, amount, checkoutRequestId]
-    );
-
-    // Fetch payment to create session
-    const payResult = await pool.query(
-      `SELECT p.id, p.user_id, p.package_id, pkg.duration_hours
-       FROM payments p
-       JOIN packages pkg ON p.package_id = pkg.id
-       WHERE p.mpesa_checkout_request_id = $1`,
-      [checkoutRequestId]
     );
 
     if (payResult.rows.length > 0) {
       const pay = payResult.rows[0];
-      const expiresAt = new Date(Date.now() + pay.duration_hours * 3600 * 1000);
-
-      await pool.query(
-        `INSERT INTO sessions (user_id, package_id, payment_id, expires_at)
-         VALUES ($1, $2, $3, $4)
-         ON CONFLICT DO NOTHING`,
-        [pay.user_id, pay.package_id, pay.id, expiresAt.toISOString()]
-      );
+      await createSession(pay.id, pay.user_id, pay.package_id, pay.duration_hours);
     }
 
     res.status(200).json({ ResultCode: 0, ResultDesc: 'Accepted' });
