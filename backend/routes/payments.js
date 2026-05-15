@@ -124,9 +124,10 @@ router.get('/status/:checkoutRequestId', auth, async (req, res, next) => {
     // First check DB
     const dbResult = await pool.query(
       `SELECT p.id, p.status, p.mpesa_receipt_number, p.amount_kes, p.failure_reason,
-              p.created_at, s.id AS session_id
+              p.created_at, s.id AS session_id, pkg.name AS package_name
        FROM payments p
        LEFT JOIN sessions s ON s.payment_id = p.id
+       LEFT JOIN packages pkg ON p.package_id = pkg.id
        WHERE p.mpesa_checkout_request_id = $1 AND p.user_id = $2`,
       [checkoutRequestId, req.user.id]
     );
