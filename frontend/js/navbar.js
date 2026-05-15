@@ -1,161 +1,166 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// Navbar & Navigation Management
+// Navbar & Navigation Management — Maidanja WiFi
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Initialize navbar on page load
- * Detects if user is logged in and sets up navigation items accordingly
+ * Initialize navbar on page load.
+ * Strips Tailwind's hidden/sm:flex classes from #nav-items so our CSS
+ * controls visibility instead (avoids class conflicts).
  */
 function initNavbar() {
   const isLoggedIn = api.isLoggedIn();
   const user = api.getUser();
-  
-  // Set navbar title dynamically
+
+  // Set navbar title dynamically from page <title>
   updateNavbarTitle();
-  
-  // Update navbar items based on auth state
+
   const navItems = document.getElementById('nav-items');
   if (!navItems) return;
-  
+
+  // ── CRITICAL FIX: Remove Tailwind classes that fight our CSS ──────────────
+  // Without this, 'hidden' keeps the mobile menu invisible regardless of
+  // the .active class being toggled.
+  navItems.classList.remove('hidden', 'sm:flex', 'flex');
+
+  // ── Populate nav links based on auth state ──────────────────────────────
   if (isLoggedIn && user) {
-    // Show logout button and user info
     navItems.innerHTML = `
-      <a href="/packages.html" class="text-on-surface-variant hover:text-primary transition-colors">Packages</a>
-      <a href="/dashboard.html" class="text-on-surface-variant hover:text-primary transition-colors">Dashboard</a>
-      <span class="text-sm text-gray-400 hidden sm:inline ml-2">Welcome, ${user.name || 'User'}</span>
-      <button onclick="api.logout()" class="px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium transition-all ml-2">
+      <a href="/packages.html" class="nav-link">Packages</a>
+      <a href="/dashboard.html" class="nav-link">Dashboard</a>
+      <span class="nav-welcome">Hi, ${(user.name || user.phone_number || 'User').split(' ')[0]}</span>
+      <button onclick="api.logout()" class="btn-logout" style="cursor:pointer;">
         Logout
       </button>
     `;
   } else {
-    // Show login link
     navItems.innerHTML = `
-      <a href="/packages.html" class="text-on-surface-variant hover:text-primary transition-colors">Packages</a>
-      <a href="/dashboard.html" class="text-on-surface-variant hover:text-primary transition-colors">Dashboard</a>
-      <a href="/login.html" class="px-4 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-sm font-medium transition-all ml-2">
-        Login
-      </a>
-      <a href="/packages.html" class="btn-primary-gradient px-4 py-2 rounded-lg text-white text-sm font-medium transition-all ml-2">
+      <a href="/packages.html" class="nav-link">Packages</a>
+      <a href="/login.html" class="btn-login nav-link">Login</a>
+      <a href="/packages.html" class="btn-primary-gradient nav-link" style="padding: 8px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; white-space: nowrap;">
         Connect Now
       </a>
     `;
   }
-  
+
   // Setup mobile menu toggle
   setupMobileMenu();
 }
 
 /**
- * Update navbar title based on current page
+ * Update navbar title text from the page <title> element.
  */
 function updateNavbarTitle() {
   const pageTitle = document.querySelector('.navbar-title');
   if (!pageTitle) return;
-  
+
   let title = document.title.trim();
-  
-  // Extract meaningful part of title (before separator)
+
   if (title.includes('|')) {
-    // Format: "Page | Maidanja WiFi" or "Maidanja WiFi | Page"
     const parts = title.split('|').map(p => p.trim());
-    title = parts[0] === 'Maidanja WiFi' ? parts[1] || parts[0] : parts[0];
+    title = parts[0] === 'Maidanja WiFi' ? (parts[1] || parts[0]) : parts[0];
   } else if (title.includes('-')) {
-    // Format: "Page - Maidanja WiFi"
     const parts = title.split('-').map(p => p.trim());
-    title = parts[0] === 'Maidanja WiFi' ? parts[1] || parts[0] : parts[0];
+    title = parts[0] === 'Maidanja WiFi' ? (parts[1] || parts[0]) : parts[0];
   }
-  
+
   pageTitle.textContent = title || 'Maidanja WiFi';
 }
 
 /**
- * Setup mobile menu toggle functionality
+ * Wire up the hamburger button toggle.
+ * Adds click-outside and link-click close behaviors.
  */
 function setupMobileMenu() {
   const menuBtn = document.getElementById('mobile-menu-btn');
   const navItems = document.getElementById('nav-items');
-  
-  if (!menuBtn || !navItems) return;
-  
-  // Clean up any old tailwind classes that might interfere
-  navItems.classList.remove('hidden', 'sm:flex');
 
-  menuBtn.addEventListener('click', () => {
-    menuBtn.classList.toggle('active');
-    navItems.classList.toggle('active');
+  if (!menuBtn || !navItems) return;
+
+  // Toggle menu on hamburger click
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = navItems.classList.toggle('active');
+    menuBtn.classList.toggle('active', isOpen);
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
-  
-  // Close menu when clicking on items
-  const links = navItems.querySelectorAll('a, button');
-  links.forEach(link => {
-    link.addEventListener('click', () => {
-      menuBtn.classList.remove('active');
-      navItems.classList.remove('active');
-    });
+
+  // Close menu when any nav link/button is clicked
+  navItems.querySelectorAll('a, button').forEach(link => {
+    link.addEventListener('click', closeMenu);
   });
+
+  // Close menu on click outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#navbar')) {
+      closeMenu();
+    }
+  });
+
+  // Close menu on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  function closeMenu() {
+    navItems.classList.remove('active');
+    menuBtn.classList.remove('active');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }
 }
 
 /**
- * Navigate back to previous page using browser history
- * Falls back to homepage if no history available
+ * Navigate back using browser history, fallback to index.
  */
 function goBack() {
-  // Try browser history first
   if (window.history.length > 1) {
     window.history.back();
   } else {
-    // Fallback to index page
     window.location.href = '/index.html';
   }
 }
 
 /**
- * Navigate to a specific page
- * @param {string} path - The path to navigate to
+ * Navigate to a specific path.
+ * @param {string} path
  */
 function navigateTo(path) {
   window.location.href = path;
 }
 
 /**
- * Check if current page should show back button
- * Returns false for login and index pages (entry points)
- */
-function shouldShowBackButton() {
-  const pathname = window.location.pathname;
-  const noBackPages = ['/login.html', '/index.html', '/checkout-success.html'];
-  return !noBackPages.some(page => pathname.endsWith(page));
-}
-
-/**
- * Update navbar visibility based on page
+ * Hide navbar on pages where it's not needed (e.g. login).
  */
 function updateNavbarVisibility() {
   const navbar = document.getElementById('navbar');
   if (!navbar) return;
-  
+
   const pathname = window.location.pathname;
   const hideNavbarPages = ['/login.html'];
-  
+
   if (hideNavbarPages.some(page => pathname.endsWith(page))) {
     navbar.style.display = 'none';
+    // Remove body padding so login page fills from top
+    document.body.style.paddingTop = '0';
   }
 }
 
-// Initialize navbar when DOM is ready
+// ── Init ────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   updateNavbarVisibility();
 });
 
-// Also update title when page fully loads
+// Re-read title after full page load (some pages set it dynamically)
 window.addEventListener('load', () => {
   updateNavbarTitle();
 });
 
-// Re-initialize navbar when user logs in/out
-const originalLogout = api.logout;
-api.logout = function() {
-  originalLogout.call(this);
-  setTimeout(() => initNavbar(), 100);
-};
+// Patch api.logout to also re-init the navbar
+if (typeof api !== 'undefined') {
+  const _origLogout = api.logout.bind(api);
+  api.logout = function () {
+    _origLogout();
+    // Give the redirect a moment, but if still on page, refresh navbar
+    setTimeout(() => initNavbar(), 100);
+  };
+}

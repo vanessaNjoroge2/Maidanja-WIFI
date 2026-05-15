@@ -1,3 +1,360 @@
-<!doctype html> <html class="dark" lang="en"> <head> <meta charset="utf-8" /> <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <title>Maidanja WiFi | User Dashboard</title> <script src="/js/api.js"></script> <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&amp;family=DM+Sans:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" /> <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" /> <script id="tailwind-config"> tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary": "#003642", "surface-tint": "#3cd7ff", "on-surface-variant": "#bbc9cf", "inverse-on-surface": "#303038", "on-secondary-fixed": "#25005a", "on-secondary-container": "#c9aeff", "on-tertiary-fixed-variant": "#454747", "primary-fixed-dim": "#3cd7ff", error: "#ffb4ab", "inverse-primary": "#00677e", "on-primary-fixed-variant": "#004e5f", "outline-variant": "#3c494e", outline: "#859398", "primary-container": "#00d4ff", "surface-container": "#1f1f27", "on-surface": "#e4e1ed", "on-background": "#e4e1ed", "error-container": "#93000a", surface: "#13131b", "on-tertiary-container": "#4f5051", "on-error": "#690005", "surface-bright": "#393841", "surface-container-lowest": "#0d0d15", "surface-container-high": "#292932", "on-tertiary-fixed": "#1a1c1c", "on-error-container": "#ffdad6", "on-tertiary": "#2f3131", "tertiary-container": "#c2c3c3", "on-secondary": "#3f008e", "inverse-surface": "#e4e1ed", tertiary: "#dedfdf", "secondary-fixed-dim": "#d2bbff", "on-secondary-fixed-variant": "#5a00c6", "secondary-container": "#6001d1", primary: "#a8e8ff", "on-primary-fixed": "#001f27", "primary-fixed": "#b4ebff", "on-primary-container": "#00586b", "surface-container-low": "#1b1b23", "secondary-fixed": "#eaddff", secondary: "#d2bbff", "surface-dim": "#13131b", "tertiary-fixed-dim": "#c6c6c7", "surface-container-highest": "#34343d", background: "#13131b", "tertiary-fixed": "#e2e2e2", "surface-variant": "#34343d", }, borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "16px", full: "9999px", }, spacing: { base: "4px", gutter: "16px", xl: "40px", "margin-mobile": "20px", md: "16px", xs: "4px", lg: "24px", sm: "8px", "margin-desktop": "64px", }, fontFamily: { "headline-md": ["Sora"], "body-md": ["DM Sans"], "headline-lg-mobile": ["Sora"], "label-md": ["DM Sans"], "display-lg": ["Sora"], "body-lg": ["DM Sans"], "headline-lg": ["Sora"], }, fontSize: { "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }], "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }], "headline-lg-mobile": [ "28px", { lineHeight: "1.2", fontWeight: "600" }, ], "label-md": [ "14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500", }, ], "display-lg": [ "48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700", }, ], "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }], "headline-lg": [ "32px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600", }, ], }, }, }, }; </script> <style> body { background-color: #0a0a0f; color: #e4e1ed; } .glass-card { background: rgba(18, 18, 26, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); } .primary-gradient { background: linear-gradient(135deg, #00d4ff 0%, #6001d1 100%); } .text-gradient { background: linear-gradient(135deg, #00d4ff 0%, #d2bbff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; } .circular-progress { background: radial-gradient(closest-side, #13131b 79%, transparent 80% 100%), conic-gradient(#00d4ff 65%, rgba(255, 255, 255, 0.05) 0); } </style> <style> body { min-height: max(884px, 100dvh); } </style> <link rel="stylesheet" href="/css/globals.css" /> </head> <link rel="stylesheet" href="/css/navbar.css" /> <body class="font-body-md text-body-md mb-24 md:mb-0 md:pt-20"> <!-- Global Navigation Bar --> <nav id="navbar" class="navbar"> <div class="navbar-container"> <div class="navbar-left"> <button class="back-button" onclick="goBack()" title="Go back to previous page" aria-label="Go back" > ← </button> <a href="/index.html" class="navbar-brand"> <img src="/images/logo.jpg" alt="Maidanja WiFi" /> <span class="hidden sm:inline">Maidanja WiFi</span> </a> </div> <div class="navbar-center"> <h1 class="navbar-title">Loading...</h1> </div> <div class="navbar-right"> <button id="mobile-menu-btn" aria-label="Toggle navigation menu"> <span></span><span></span><span></span> </button> <div id="nav-items" class="hidden sm:flex"></div> </div> </div> </nav> <!-- Top App Bar --> <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10" > <div class="flex justify-between items-center h-20 w-full container-responsive" > <a href="index.html" class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tight" ><img src="/images/logo.jpg" alt="Maidanja WiFi" style="height: 50px; width: auto" /></a> <div class="hidden md:flex gap-lg items-center"> <a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="index.html" >Home</a > <a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="packages.html" >Packages</a > <a class="text-primary font-bold transition-colors duration-300" href="dashboard.html" >Dashboard</a > <button onclick="window.location.href = 'packages.html'" class="primary-gradient text-on-primary font-bold px-lg py-sm rounded-xl active:scale-95 transition-transform" > Connect Now </button> </div> <div class="md:hidden flex items-center gap-md"> <button onclick="goBack()" class="text-on-surface-variant hover:text-primary transition-colors active:scale-95" title="Go Back" > <span class="material-symbols-outlined" data-icon="arrow_back" >arrow_back</span > </button> <button onclick="api.logout()" class="text-error hover:text-error/80 transition-colors active:scale-95" title="Logout" > <span class="material-symbols-outlined" data-icon="logout" >logout</span > </button> </div> </div> </header> <main class="container-responsive pt-24 md:pt-10 space-y-xl" > <!-- Hero: Active Session Banner --> <section class="w-full"> <div class="glass-card rounded-xl p-lg flex flex-col md:flex-row items-center gap-lg relative overflow-hidden" > <!-- Background Glow Decor --> <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px]" ></div> <div class="relative z-10 flex-shrink-0"> <div id="session-timer" class="w-40 h-40 rounded-full circular-progress flex items-center justify-center" > <div class="text-center"> <span id="dash-countdown" class="block font-headline-md text-headline-md text-white" >--:--</span > <span class="text-label-md text-on-surface-variant uppercase tracking-widest" >Remaining</span > </div> </div> </div> <div class="relative z-10 flex-1 space-y-md text-center md:text-left"> <div class="flex flex-wrap items-center justify-center md:justify-start gap-sm" > <span id="session-badge" class="px-md py-xs bg-green-500/10 text-green-400 rounded-full text-label-md flex items-center gap-xs border border-green-500/20 hidden" > <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse" ></span> Active </span> <span class="px-md py-xs bg-white/5 text-on-surface-variant rounded-full text-label-md border border-white/10 flex items-center gap-xs" > <span class="material-symbols-outlined text-sm" data-icon="speed" >speed</span > 10 Mbps </span> </div> <h2 id="session-pkg-name" class="font-headline-lg text-headline-lg text-white" > No Active Session </h2> <p id="session-desc" class="text-on-surface-variant max-w-md"> You don't have an active session. Purchase a package to get connected. </p> <button onclick="window.location.href = '/packages.html'" class="w-full md:w-auto primary-gradient text-white font-bold py-md px-xl rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)] active:scale-95 transition-transform" > Buy More Time </button> </div> </div> </section> <!-- Stats Grid --> <section class="grid-auto-fit gap-md md:gap-lg"> <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors" > <span class="text-label-md text-on-surface-variant uppercase tracking-wider" >Total Sessions</span > <span id="stat-sessions" class="font-headline-md text-headline-md text-primary" >—</span > </div> <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors" > <span class="text-label-md text-on-surface-variant uppercase tracking-wider" >Total Spent</span > <span id="stat-spent" class="font-headline-md text-headline-md text-primary" >—</span > </div> <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors" > <span class="text-label-md text-on-surface-variant uppercase tracking-wider" >Favorite Package</span > <span id="stat-fav" class="font-headline-md text-headline-md text-primary" >—</span > </div> <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors" > <span class="text-label-md text-on-surface-variant uppercase tracking-wider" >Member Since</span > <span id="stat-member" class="font-headline-md text-headline-md text-primary" >—</span > </div> </section> <!-- Weekly Spend Chart & Visual --> <section class="grid-auto-fit gap-lg"> <div class="lg:col-span-2 glass-card p-lg rounded-xl space-y-lg"> <div class="flex justify-between items-center"> <h3 class="font-headline-md text-headline-md text-white"> Weekly Spending </h3> <div class="flex gap-xs"> <span class="w-3 h-3 bg-primary rounded-sm"></span> <span class="text-label-md text-on-surface-variant" >Daily Total (KES)</span > </div> </div> <!-- Dynamic Bar Chart (populated by API data) --> <div id="weekly-chart" class="h-64 flex items-end justify-between gap-md px-md"> <!-- Bars inserted by JS --> <div class="w-full h-full flex items-center justify-center text-on-surface-variant text-label-md">Loading chart...</div> </div> <div id="weekly-labels" class="flex justify-between text-label-md text-on-surface-variant pt-md" > <!-- Day labels inserted by JS --> </div> </div> <!-- Quick Connect Image --> <div class="glass-card rounded-xl overflow-hidden relative group"> <img alt="WiFi Experience" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60" data-alt="A high-tech digital environment featuring vibrant cyan and violet light trails flowing through a dark, futuristic server room. The composition is sleek and minimal, using deep blacks and neon highlights to convey high-speed connectivity and data security. Soft atmospheric glow creates a premium fintech and tech-focused aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiMXiiKLSEPa7boFD8Oz0gES7vtHeCJhKV6ocD_qCMQkVFG5Da3qgRpB841GadJJ3zOlaCXzDThI9zr5yOcFiHwzDMLYHFqtmJFCUVumxTKEZs-h09mh1Mk_tvg7szEXmtpOLutiorokvBJH13-ByLwGSYE0IFBl7BGl6AYLPHDp4_FlPAXfqlm2TlP6LWjsG5t_g6s2iujE7IsarvBVKwGFhBzgAAFmlzxRW3SOx4JM9cDmKg7sdc-vNj3Woc00KW3dW0fXuozA" /> <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent flex flex-col justify-end p-lg space-y-sm" > <h4 class="font-headline-md text-headline-md text-white"> Faster Public WiFi </h4> <p class="text-on-surface-variant"> Our nodes are powered by ultra-low latency fiber optics for the best experience. </p> </div> </div> </section> <!-- Purchase History Table --> <section class="glass-card rounded-xl overflow-hidden mb-20"> <div class="p-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-md border-b border-white/5" > <h3 class="font-headline-md text-headline-md text-white"> Purchase History </h3> <div class="relative w-full md:w-64"> <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-md" data-icon="search" >search</span > <input class="w-full bg-surface-container-low border-white/5 rounded-lg pl-10 text-body-md text-white focus:border-primary focus:ring-0" placeholder="Search orders..." type="text" /> </div> </div> <div class="overflow-x-auto"> <table class="w-full text-left"> <thead class="bg-white/5 text-label-md text-on-surface-variant uppercase tracking-wider" > <tr> <th class="px-lg py-md">Date</th> <th class="px-lg py-md">Package</th> <th class="px-lg py-md">Duration</th> <th class="px-lg py-md">Amount</th> <th class="px-lg py-md">Status</th> </tr> </thead> <tbody id="history-body" class="divide-y divide-white/5"> <tr> <td colspan="5" class="px-lg py-md text-on-surface-variant text-center" > Loading history... </td> </tr> </tbody> </table> </div> <!-- Pagination --> <div class="px-lg py-md border-t border-white/5 flex items-center justify-between" > <span id="pagination-text" class="text-label-md text-on-surface-variant" >Loading...</span > <div class="flex gap-sm"> <button class="p-sm glass-card rounded-lg hover:text-primary transition-colors disabled:opacity-50" disabled="" > <span class="material-symbols-outlined" data-icon="chevron_left" >chevron_left</span > </button> <button class="p-sm glass-card rounded-lg hover:text-primary transition-colors" > <span class="material-symbols-outlined" data-icon="chevron_right" >chevron_right</span > </button> </div> </div> </section> </main> <!-- Footer --> <footer class="hidden md:block w-full mt-xl bg-surface border-t border-white/5" > <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive gap-lg" > <div class="flex flex-col gap-sm items-center md:items-start"> <div class="font-headline-md text-headline-md text-primary"> Maidanja Hotspot WiFi </div> <p class="text-body-md text-on-surface-variant text-center md:text-left"> © 2026 Maidanja WiFi. Powered by M-Pesa. </p> </div> <div class="flex gap-6 text-center text-sm"> <div> <p class="text-on-surface-variant mb-1">📞</p> <a href="tel:0706407084" class="text-primary hover:text-primary/80">0706407084</a> </div> <div> <p class="text-on-surface-variant mb-1">📧</p> <a href="mailto:maidanja31@gmail.com" class="text-primary hover:text-primary/80 text-xs">maidanja31@gmail.com</a> </div> </div> <div class="flex gap-lg"> <a class="text-label-md text-on-surface-variant hover:text-primary-fixed-dim transition-colors" href="packages.html" >Packages</a > <a class="text-label-md text-on-surface-variant hover:text-primary-fixed-dim transition-colors" href="dashboard.html" >Dashboard</a > <a class="text-label-md text-on-surface-variant hover:text-primary-fixed-dim transition-colors" href="admin.html" >Admin</a > </div> </div> </footer> <!-- Bottom Navigation Bar (Mobile) --> <nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-xl border-t border-white/5 px-margin-mobile py-sm z-50" > <div class="flex justify-between items-center max-w-md mx-auto"> <a class="flex flex-col items-center gap-xs text-primary font-bold" href="#" > <span class="material-symbols-outlined" data-icon="home" data-weight="fill" >home</span > <span class="text-[10px]">Home</span> </a> <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#" > <span class="material-symbols-outlined" data-icon="history" >history</span > <span class="text-[10px]">Sessions</span> </a> <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#" > <span class="material-symbols-outlined" data-icon="shopping_bag" >shopping_bag</span > <span class="text-[10px]">History</span> </a> <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#" > <span class="material-symbols-outlined" data-icon="support_agent" >support_agent</span > <span class="text-[10px]">Support</span> </a> <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#" > <span class="material-symbols-outlined" data-icon="logout" >logout</span > <span class="text-[10px]">Logout</span> </a> </div> </nav> <script src="/js/footer.js"></script>
-</body> <script src="/js/navbar.js"></script> <script> if (!api.isLoggedIn()) window.location.href = "/login.html"; const user = api.getUser(); // ── Active Session ──────────────────────────────────────────────────────── (async () => { try { const res = await api.get("/sessions/active"); const session = res.data.session; if (session && session.seconds_remaining > 0) { document.getElementById("session-badge").classList.remove("hidden"); document.getElementById("session-pkg-name").textContent = session.package_name; document.getElementById("session-desc").textContent = `Your connection expires ${new Date(session.expires_at).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}.`; // Countdown in timer widget const tick = () => { const secs = Math.max( 0, (new Date(session.expires_at) - Date.now()) / 1000, ); const h = Math.floor(secs / 3600); const m = Math.floor((secs % 3600) / 60); document.getElementById("dash-countdown").textContent = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`; }; tick(); setInterval(tick, 60000); } } catch (err) { console.warn("Session load error:", err.message); } // ── Stats & History ──────────────────────────────────────────────────── try { const histRes = await api.get("/sessions/history?limit=10"); const sessions = histRes.data.sessions; // Stats const totalSessions = histRes.data.pagination.total; const totalSpent = sessions.reduce( (sum, s) => sum + parseFloat(s.amount_kes || 0), 0, ); const fav = sessions.length > 0 ? sessions[0].package_name : "—"; document.getElementById("stat-sessions").textContent = totalSessions; document.getElementById("stat-spent").textContent = formatKES(totalSpent); document.getElementById("stat-fav").textContent = fav; document.getElementById("stat-member").textContent = user ? new Date(user.created_at || Date.now()).toLocaleDateString( "en-KE", { month: "short", year: "numeric" }, ) : "—"; // Pagination text const showing = Math.min(sessions.length, 10); document.getElementById("pagination-text").textContent = totalSessions > 0 ? `Showing 1 to ${showing} of ${totalSessions} sessions` : "No sessions yet"; // History table const tbody = document.getElementById("history-body"); if (sessions.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="px-lg py-md text-on-surface-variant text-center">No sessions yet. <a href="/packages.html" class="text-primary underline">Buy your first package!</a></td></tr>`; return; } tbody.innerHTML = sessions .map((s, i) => { const statusBadge = s.status === "active" ? `<span class="px-md py-xs bg-green-500/10 text-green-400 rounded-full text-xs font-bold border border-green-500/20">Active</span>` : `<span class="px-md py-xs bg-white/5 text-on-surface-variant rounded-full text-xs font-bold border border-white/10">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span>`; return ` <tr class="${i % 2 === 1 ? "bg-white/[0.02]" : ""} hover:bg-white/5 transition-colors"> <td class="px-lg py-md">${new Date(s.payment_date).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}</td> <td class="px-lg py-md font-bold text-white">${s.package_name}</td> <td class="px-lg py-md text-on-surface-variant">${s.duration_hours < 24 ? s.duration_hours + " Hour" + (s.duration_hours > 1 ? "s" : "") : s.duration_hours / 24 + " Day" + (s.duration_hours > 24 ? "s" : "")}</td> <td class="px-lg py-md font-bold text-primary">${formatKES(s.amount_kes)}</td> <td class="px-lg py-md">${statusBadge}</td> </tr>`; }) .join(""); } catch (err) { console.warn("History load error:", err.message); } // ── Weekly Spending Chart ────────────────────────────────────────────── try { const chartRes = await api.get("/sessions/weekly-spending"); const spending = chartRes.data.spending; const maxSpend = Math.max(...spending.map(d => d.total), 1); // avoid div by 0 const chartEl = document.getElementById("weekly-chart"); const labelsEl = document.getElementById("weekly-labels"); chartEl.innerHTML = spending.map(d => { const pct = Math.max((d.total / maxSpend) * 100, 2); // min 2% so empty days show a sliver const isMax = d.total === maxSpend && d.total > 0; const opacity = d.total === 0 ? 'bg-primary/10' : isMax ? 'bg-primary shadow-[0_0_15px_rgba(0,212,255,0.3)]' : 'bg-primary/50'; return ` <div class="w-full ${opacity} rounded-t-sm relative group transition-all duration-500" style="height: ${pct}%"> <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-container text-primary text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10"> KES ${d.total.toLocaleString()} </div> </div>`; }).join(''); labelsEl.innerHTML = spending.map(d => `<span>${d.day}</span>` ).join(''); } catch (err) { console.warn("Weekly chart error:", err.message); document.getElementById("weekly-chart").innerHTML = '<div class="w-full h-full flex items-center justify-center text-on-surface-variant text-label-md">Unable to load chart data</div>'; } })(); </script>
+<!doctype html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Maidanja WiFi | User Dashboard</title>
+  <script src="/js/api.js"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- Navbar & Global CSS must be in <head> -->
+  <link rel="stylesheet" href="/css/navbar.css" />
+  <link rel="stylesheet" href="/css/globals.css" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-primary": "#003642", "surface-tint": "#3cd7ff",
+            "on-surface-variant": "#bbc9cf", "inverse-on-surface": "#303038",
+            "on-secondary-fixed": "#25005a", "on-secondary-container": "#c9aeff",
+            "on-tertiary-fixed-variant": "#454747", "primary-fixed-dim": "#3cd7ff",
+            error: "#ffb4ab", "inverse-primary": "#00677e",
+            "on-primary-fixed-variant": "#004e5f", "outline-variant": "#3c494e",
+            outline: "#859398", "primary-container": "#00d4ff",
+            "surface-container": "#1f1f27", "on-surface": "#e4e1ed",
+            "on-background": "#e4e1ed", "error-container": "#93000a",
+            surface: "#13131b", "on-tertiary-container": "#4f5051",
+            "on-error": "#690005", "surface-bright": "#393841",
+            "surface-container-lowest": "#0d0d15", "surface-container-high": "#292932",
+            "on-tertiary-fixed": "#1a1c1c", "on-error-container": "#ffdad6",
+            "on-tertiary": "#2f3131", "tertiary-container": "#c2c3c3",
+            "on-secondary": "#3f008e", "inverse-surface": "#e4e1ed",
+            tertiary: "#dedfdf", "secondary-fixed-dim": "#d2bbff",
+            "on-secondary-fixed-variant": "#5a00c6", "secondary-container": "#6001d1",
+            primary: "#a8e8ff", "on-primary-fixed": "#001f27",
+            "primary-fixed": "#b4ebff", "on-primary-container": "#00586b",
+            "surface-container-low": "#1b1b23", "secondary-fixed": "#eaddff",
+            secondary: "#d2bbff", "surface-dim": "#13131b",
+            "tertiary-fixed-dim": "#c6c6c7", "surface-container-highest": "#34343d",
+            background: "#13131b", "tertiary-fixed": "#e2e2e2",
+            "surface-variant": "#34343d",
+          },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "16px", full: "9999px" },
+          spacing: {
+            base: "4px", gutter: "16px", xl: "40px", "margin-mobile": "20px",
+            md: "16px", xs: "4px", lg: "24px", sm: "8px", "margin-desktop": "64px",
+          },
+          fontFamily: {
+            "headline-md": ["Sora"], "body-md": ["DM Sans"],
+            "headline-lg-mobile": ["Sora"], "label-md": ["DM Sans"],
+            "display-lg": ["Sora"], "body-lg": ["DM Sans"], "headline-lg": ["Sora"],
+          },
+          fontSize: {
+            "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+            "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+            "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "600" }],
+            "label-md": ["14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
+            "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+            "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { background-color: #0a0a0f; color: #e4e1ed; min-height: max(884px, 100dvh); }
+    .glass-card { background: rgba(18, 18, 26, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .primary-gradient { background: linear-gradient(135deg, #00d4ff 0%, #6001d1 100%); }
+    .text-gradient { background: linear-gradient(135deg, #00d4ff 0%, #d2bbff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .circular-progress { background: radial-gradient(closest-side, #13131b 79%, transparent 80% 100%), conic-gradient(#00d4ff 65%, rgba(255, 255, 255, 0.05) 0); }
+  </style>
+</head>
+<body class="font-body-md text-body-md mb-24 md:mb-0">
+
+  <!-- Global Navigation Bar -->
+  <nav id="navbar" class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <button class="back-button" onclick="goBack()" title="Go back to previous page" aria-label="Go back">←</button>
+        <a href="/index.html" class="navbar-brand">
+          <img src="/images/logo.jpg" alt="Maidanja WiFi" />
+          <span class="hidden sm:inline">Maidanja WiFi</span>
+        </a>
+      </div>
+      <div class="navbar-center">
+        <h1 class="navbar-title">Loading...</h1>
+      </div>
+      <div class="navbar-right">
+        <button id="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <div id="nav-items" class="hidden sm:flex"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content — padding-top handled by navbar.css body rule -->
+  <main class="container-responsive pt-6 pb-8 space-y-xl">
+
+    <!-- Hero: Active Session Banner -->
+    <section class="w-full">
+      <div class="glass-card rounded-xl p-lg flex flex-col md:flex-row items-center gap-lg relative overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"></div>
+        <div class="relative z-10 flex-shrink-0">
+          <div id="session-timer" class="w-40 h-40 rounded-full circular-progress flex items-center justify-center">
+            <div class="text-center">
+              <span id="dash-countdown" class="block font-headline-md text-headline-md text-white">--:--</span>
+              <span class="text-label-md text-on-surface-variant uppercase tracking-widest">Remaining</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative z-10 flex-1 space-y-md text-center md:text-left">
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-sm">
+            <span id="session-badge" class="px-md py-xs bg-green-500/10 text-green-400 rounded-full text-label-md flex items-center gap-xs border border-green-500/20 hidden">
+              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Active
+            </span>
+            <span class="px-md py-xs bg-white/5 text-on-surface-variant rounded-full text-label-md border border-white/10 flex items-center gap-xs">
+              <span class="material-symbols-outlined text-sm" data-icon="speed">speed</span> 10 Mbps
+            </span>
+          </div>
+          <h2 id="session-pkg-name" class="font-headline-lg text-headline-lg text-white">No Active Session</h2>
+          <p id="session-desc" class="text-on-surface-variant max-w-md">You don't have an active session. Purchase a package to get connected.</p>
+          <button onclick="window.location.href = '/packages.html'" class="w-full md:w-auto primary-gradient text-white font-bold py-md px-xl rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)] active:scale-95 transition-transform">
+            Buy More Time
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Grid -->
+    <section class="grid-auto-fit gap-md">
+      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
+        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Total Sessions</span>
+        <span id="stat-sessions" class="font-headline-md text-headline-md text-primary">—</span>
+      </div>
+      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
+        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Total Spent</span>
+        <span id="stat-spent" class="font-headline-md text-headline-md text-primary">—</span>
+      </div>
+      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
+        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Favorite Package</span>
+        <span id="stat-fav" class="font-headline-md text-headline-md text-primary">—</span>
+      </div>
+      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
+        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Member Since</span>
+        <span id="stat-member" class="font-headline-md text-headline-md text-primary">—</span>
+      </div>
+    </section>
+
+    <!-- Weekly Spend Chart & Visual -->
+    <section class="grid-auto-fit gap-lg">
+      <div class="lg:col-span-2 glass-card p-lg rounded-xl space-y-lg">
+        <div class="flex justify-between items-center">
+          <h3 class="font-headline-md text-headline-md text-white">Weekly Spending</h3>
+          <div class="flex gap-xs">
+            <span class="w-3 h-3 bg-primary rounded-sm"></span>
+            <span class="text-label-md text-on-surface-variant">Daily Total (KES)</span>
+          </div>
+        </div>
+        <div id="weekly-chart" class="h-64 flex items-end justify-between gap-md px-md">
+          <div class="w-full h-full flex items-center justify-center text-on-surface-variant text-label-md">Loading chart...</div>
+        </div>
+        <div id="weekly-labels" class="flex justify-between text-label-md text-on-surface-variant pt-md"></div>
+      </div>
+      <!-- Quick Connect Image -->
+      <div class="glass-card rounded-xl overflow-hidden relative group">
+        <img alt="WiFi Experience" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiMXiiKLSEPa7boFD8Oz0gES7vtHeCJhKV6ocD_qCMQkVFG5Da3qgRpB841GadJJ3zOlaCXzDThI9zr5yOcFiHwzDMLYHFqtmJFCUVumxTKEZs-h09mh1Mk_tvg7szEXmtpOLutiorokvBJH13-ByLwGSYE0IFBl7BGl6AYLPHDp4_FlPAXfqlm2TlP6LWjsG5t_g6s2iujE7IsarvBVKwGFhBzgAAFmlzxRW3SOx4JM9cDmKg7sdc-vNj3Woc00KW3dW0fXuozA" />
+        <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent flex flex-col justify-end p-lg space-y-sm">
+          <h4 class="font-headline-md text-headline-md text-white">Faster Public WiFi</h4>
+          <p class="text-on-surface-variant">Our nodes are powered by ultra-low latency fiber optics for the best experience.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Purchase History Table -->
+    <section class="glass-card rounded-xl overflow-hidden mb-20">
+      <div class="p-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-md border-b border-white/5">
+        <h3 class="font-headline-md text-headline-md text-white">Purchase History</h3>
+        <div class="relative w-full md:w-64">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-md" data-icon="search">search</span>
+          <input class="w-full bg-surface-container-low border-white/5 rounded-lg pl-10 text-body-md text-white focus:border-primary focus:ring-0" placeholder="Search orders..." type="text" />
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-white/5 text-label-md text-on-surface-variant uppercase tracking-wider">
+            <tr>
+              <th class="px-lg py-md">Date</th>
+              <th class="px-lg py-md">Package</th>
+              <th class="px-lg py-md">Duration</th>
+              <th class="px-lg py-md">Amount</th>
+              <th class="px-lg py-md">Status</th>
+            </tr>
+          </thead>
+          <tbody id="history-body" class="divide-y divide-white/5">
+            <tr><td colspan="5" class="px-lg py-md text-on-surface-variant text-center">Loading history...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="px-lg py-md border-t border-white/5 flex items-center justify-between">
+        <span id="pagination-text" class="text-label-md text-on-surface-variant">Loading...</span>
+        <div class="flex gap-sm">
+          <button class="p-sm glass-card rounded-lg hover:text-primary transition-colors disabled:opacity-50" disabled>
+            <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+          </button>
+          <button class="p-sm glass-card rounded-lg hover:text-primary transition-colors">
+            <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="hidden md:block w-full mt-xl bg-surface border-t border-white/5">
+    <div class="flex flex-col md:flex-row justify-between items-center py-lg container-responsive gap-lg">
+      <div class="flex flex-col gap-sm items-center md:items-start">
+        <div class="font-headline-md text-headline-md text-primary">Maidanja Hotspot WiFi</div>
+        <p class="text-body-md text-on-surface-variant text-center md:text-left">© 2026 Maidanja WiFi. Powered by M-Pesa.</p>
+      </div>
+      <div class="flex gap-6 text-center text-sm">
+        <div>
+          <p class="text-on-surface-variant mb-1">📞</p>
+          <a href="tel:0706407084" class="text-primary hover:text-primary/80">0706407084</a>
+        </div>
+        <div>
+          <p class="text-on-surface-variant mb-1">📧</p>
+          <a href="mailto:maidanja31@gmail.com" class="text-primary hover:text-primary/80 text-xs">maidanja31@gmail.com</a>
+        </div>
+      </div>
+      <div class="flex gap-lg">
+        <a class="text-label-md text-on-surface-variant hover:text-primary transition-colors" href="packages.html">Packages</a>
+        <a class="text-label-md text-on-surface-variant hover:text-primary transition-colors" href="dashboard.html">Dashboard</a>
+        <a class="text-label-md text-on-surface-variant hover:text-primary transition-colors" href="admin.html">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bottom Navigation Bar (Mobile only) -->
+  <nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-xl border-t border-white/5 px-4 py-2 z-50">
+    <div class="flex justify-between items-center max-w-md mx-auto">
+      <a class="flex flex-col items-center gap-xs text-primary font-bold" href="#">
+        <span class="material-symbols-outlined" data-icon="home">home</span>
+        <span class="text-[10px]">Home</span>
+      </a>
+      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
+        <span class="material-symbols-outlined" data-icon="history">history</span>
+        <span class="text-[10px]">Sessions</span>
+      </a>
+      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
+        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+        <span class="text-[10px]">History</span>
+      </a>
+      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
+        <span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+        <span class="text-[10px]">Support</span>
+      </a>
+      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#" onclick="api.logout()">
+        <span class="material-symbols-outlined" data-icon="logout">logout</span>
+        <span class="text-[10px]">Logout</span>
+      </a>
+    </div>
+  </nav>
+
+  <script src="/js/navbar.js"></script>
+  <script src="/js/footer.js"></script>
+  <script>
+    if (!api.isLoggedIn()) window.location.href = "/login.html";
+    const user = api.getUser();
+
+    function formatKES(amount) {
+      return 'KES ' + parseFloat(amount || 0).toLocaleString('en-KE', { minimumFractionDigits: 0 });
+    }
+
+    // ── Active Session ────────────────────────────────────────────────────────
+    (async () => {
+      try {
+        const res = await api.get("/sessions/active");
+        const session = res.data.session;
+        if (session && session.seconds_remaining > 0) {
+          document.getElementById("session-badge").classList.remove("hidden");
+          document.getElementById("session-pkg-name").textContent = session.package_name;
+          document.getElementById("session-desc").textContent =
+            `Your connection expires ${new Date(session.expires_at).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}.`;
+          const tick = () => {
+            const secs = Math.max(0, (new Date(session.expires_at) - Date.now()) / 1000);
+            const h = Math.floor(secs / 3600);
+            const m = Math.floor((secs % 3600) / 60);
+            document.getElementById("dash-countdown").textContent =
+              `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+          };
+          tick();
+          setInterval(tick, 60000);
+        }
+      } catch (err) { console.warn("Session load error:", err.message); }
+
+      // ── Stats & History ────────────────────────────────────────────────────
+      try {
+        const histRes = await api.get("/sessions/history?limit=10");
+        const sessions = histRes.data.sessions;
+        const totalSessions = histRes.data.pagination.total;
+        const totalSpent = sessions.reduce((sum, s) => sum + parseFloat(s.amount_kes || 0), 0);
+        const fav = sessions.length > 0 ? sessions[0].package_name : "—";
+        document.getElementById("stat-sessions").textContent = totalSessions;
+        document.getElementById("stat-spent").textContent = formatKES(totalSpent);
+        document.getElementById("stat-fav").textContent = fav;
+        document.getElementById("stat-member").textContent = user
+          ? new Date(user.created_at || Date.now()).toLocaleDateString("en-KE", { month: "short", year: "numeric" })
+          : "—";
+        const showing = Math.min(sessions.length, 10);
+        document.getElementById("pagination-text").textContent =
+          totalSessions > 0 ? `Showing 1 to ${showing} of ${totalSessions} sessions` : "No sessions yet";
+        const tbody = document.getElementById("history-body");
+        if (sessions.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="px-lg py-md text-on-surface-variant text-center">No sessions yet. <a href="/packages.html" class="text-primary underline">Buy your first package!</a></td></tr>`;
+          return;
+        }
+        tbody.innerHTML = sessions.map((s, i) => {
+          const statusBadge = s.status === "active"
+            ? `<span class="px-md py-xs bg-green-500/10 text-green-400 rounded-full text-xs font-bold border border-green-500/20">Active</span>`
+            : `<span class="px-md py-xs bg-white/5 text-on-surface-variant rounded-full text-xs font-bold border border-white/10">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span>`;
+          return `
+            <tr class="${i % 2 === 1 ? "bg-white/[0.02]" : ""} hover:bg-white/5 transition-colors">
+              <td class="px-lg py-md">${new Date(s.payment_date).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}</td>
+              <td class="px-lg py-md font-bold text-white">${s.package_name}</td>
+              <td class="px-lg py-md text-on-surface-variant">${s.duration_hours < 24 ? s.duration_hours + " Hour" + (s.duration_hours > 1 ? "s" : "") : s.duration_hours / 24 + " Day" + (s.duration_hours > 24 ? "s" : "")}</td>
+              <td class="px-lg py-md font-bold text-primary">${formatKES(s.amount_kes)}</td>
+              <td class="px-lg py-md">${statusBadge}</td>
+            </tr>`;
+        }).join("");
+      } catch (err) { console.warn("History load error:", err.message); }
+
+      // ── Weekly Spending Chart ─────────────────────────────────────────────
+      try {
+        const chartRes = await api.get("/sessions/weekly-spending");
+        const spending = chartRes.data.spending;
+        const maxSpend = Math.max(...spending.map(d => d.total), 1);
+        const chartEl = document.getElementById("weekly-chart");
+        const labelsEl = document.getElementById("weekly-labels");
+        chartEl.innerHTML = spending.map(d => {
+          const pct = Math.max((d.total / maxSpend) * 100, 2);
+          const isMax = d.total === maxSpend && d.total > 0;
+          const cls = d.total === 0 ? 'bg-primary/10' : isMax ? 'bg-primary shadow-[0_0_15px_rgba(0,212,255,0.3)]' : 'bg-primary/50';
+          return `<div class="w-full ${cls} rounded-t-sm relative group transition-all duration-500" style="height:${pct}%">
+            <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-container text-primary text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10">KES ${d.total.toLocaleString()}</div>
+          </div>`;
+        }).join('');
+        labelsEl.innerHTML = spending.map(d => `<span>${d.day}</span>`).join('');
+      } catch (err) {
+        console.warn("Weekly chart error:", err.message);
+        document.getElementById("weekly-chart").innerHTML = '<div class="w-full h-full flex items-center justify-center text-on-surface-variant text-label-md">Unable to load chart data</div>';
+      }
+    })();
+  </script>
+</body>
 </html>

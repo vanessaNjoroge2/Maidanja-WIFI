@@ -1,9 +1,18 @@
-// frontend/js/api.js
-// Shared API helper used by all pages
+// ── API base URL resolution ────────────────────────────────────────────────
+//  localhost (dev server on port 3000)  → /api  (proxied by vite/serve)
+//  localhost (any other port, e.g. live-server 5500) → Render backend directly
+//  Vercel (maidanja-wifi.vercel.app or any custom domain) → Render backend
+const RENDER_BACKEND = 'https://maidanja-wifi.onrender.com';
 
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? (window.location.port === '3000' ? '/api' : 'https://maidanja-wifi.onrender.com')
-  : '/api';
+const API_BASE = (() => {
+  const { hostname, port } = window.location;
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    // Dev: port 3000 = backend is proxying /api, otherwise hit Render directly
+    return port === '3000' ? '/api' : RENDER_BACKEND;
+  }
+  // Production (Vercel, custom domain, etc.) → always use Render backend
+  return RENDER_BACKEND;
+})();
 
 const api = {
   // ── Auth helpers ──────────────────────────────────────────────────────────

@@ -1,42 +1,63 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Navbar Styles - Responsive & Consistent
+   Navbar Styles — Maidanja WiFi
+   Fully responsive: desktop inline, tablet/mobile hamburger sidebar/dropdown
    ═════════════════════════════════════════════════════════════════════════════ */
 
 :root {
   --navbar-height: 72px;
-  --navbar-height-mobile: 64px;
+  --navbar-height-mobile: 60px;
 }
 
-/* Navbar Global Fixed Wrapper */
+/* ── Utility nav classes injected by navbar.js ────────────────────────────── */
+.nav-link {
+  color: #bbc9cf;
+  text-decoration: none;
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+.nav-link:hover { color: #a8e8ff; }
+
+.nav-welcome {
+  font-size: 0.8rem;
+  color: #859398;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+/* ── Navbar Fixed Wrapper ─────────────────────────────────────────────────── */
 #navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 9999; /* Z-index management to stay above all content */
+  z-index: 1000; /* Above all content */
   background: rgba(10, 10, 15, 0.95);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  height: var(--navbar-height);
 }
 
-/* Navbar Flexbox Container */
+/* ── Navbar Flex Container ────────────────────────────────────────────────── */
 .navbar-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
-  height: var(--navbar-height);
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
-/* Left Section - Logo & Back Button */
+/* ── Left: Logo & Back Button ─────────────────────────────────────────────── */
 .navbar-left {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0; /* Logo container must not shrink */
+  gap: 10px;
+  flex-shrink: 0; /* Never squish the logo area */
+  min-width: 0;
 }
 
 /* Back Button */
@@ -44,15 +65,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px; /* Touch target min 44px */
+  width: 44px; /* Min 44px touch target */
   height: 44px;
   border-radius: 8px;
   background: rgba(60, 215, 255, 0.1);
   border: 1px solid rgba(60, 215, 255, 0.2);
   color: #a8e8ff;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 20px;
+  transition: all 0.25s ease;
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
 .back-button:hover {
@@ -69,8 +91,11 @@
   text-decoration: none;
   color: #e4e1ed;
   font-weight: 700;
-  font-size: 1.125rem;
-  transition: color 0.3s ease;
+  /* clamp so brand name never overflows */
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+  min-width: 0;
 }
 
 .navbar-brand:hover {
@@ -78,79 +103,92 @@
 }
 
 .navbar-brand img {
-  max-height: 40px; /* Logo image max-height requirement */
-  width: auto;      /* Logo image width auto requirement */
+  max-height: 40px; /* Required constraint */
+  width: auto;
   border-radius: 4px;
+  flex-shrink: 0; /* Logo image never shrinks */
+  display: block;
 }
 
-/* Center Section - Title */
+/* ── Center: Page Title ───────────────────────────────────────────────────── */
 .navbar-center {
   flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 1rem;
-  min-width: 0; /* allows text truncation if needed, preventing overflow */
+  padding: 0 0.5rem;
+  min-width: 0; /* Allows text truncation */
+  overflow: hidden;
 }
 
 .navbar-title {
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 2vw, 1rem);
   font-weight: 600;
   color: #e4e1ed;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-/* Right Section - Navigation Items */
+/* ── Right: Nav Items & Hamburger ─────────────────────────────────────────── */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0; /* Nav links container must not shrink */
+  gap: 10px;
+  flex-shrink: 0; /* Nav right section never squishes */
 }
 
+/* Desktop nav items container */
 #nav-items {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   flex-direction: row;
 }
 
 #nav-items a,
 #nav-items button {
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   font-weight: 500;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px; /* Touch target min 44px */
+  min-height: 44px; /* Min tap target */
+  white-space: nowrap;
+  color: #bbc9cf;
 }
 
-/* Mobile Menu Button */
+#nav-items a:hover {
+  color: #a8e8ff;
+}
+
+/* ── Mobile Hamburger Button ──────────────────────────────────────────────── */
 #mobile-menu-btn {
-  display: none;
+  display: none; /* Hidden on desktop */
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  width: 44px;  /* Touch target min 44px */
+  width: 44px;  /* Min 44px touch target */
   height: 44px;
   padding: 10px;
-  z-index: 10000; /* Ensure button is clickable when menu opens */
+  z-index: 1001;
+  flex-shrink: 0;
 }
 
 #mobile-menu-btn span {
-  width: 24px;
+  width: 22px;
   height: 2px;
   background: #a8e8ff;
   border-radius: 2px;
@@ -158,102 +196,127 @@
   display: block;
 }
 
+/* Hamburger → X animation */
 #mobile-menu-btn.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
 
 #mobile-menu-btn.active span:nth-child(2) {
   opacity: 0;
+  transform: scaleX(0);
 }
 
 #mobile-menu-btn.active span:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+/* ── Body padding to account for fixed navbar ─────────────────────────────── */
+body {
+  padding-top: var(--navbar-height);
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
-   Responsive Breakpoints
+   RESPONSIVE BREAKPOINTS
    ═════════════════════════════════════════════════════════════════════════════ */
 
-/* Tablet Breakpoint (768px and below) */
+/* ── Tablet: 768px and below ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  :root {
-    --navbar-height: var(--navbar-height-mobile);
-  }
-
-  .navbar-container {
+  #navbar {
     height: var(--navbar-height-mobile);
   }
 
-  .navbar-center {
-    display: none; /* Hide page title on tablet/mobile to save space */
+  body {
+    padding-top: var(--navbar-height-mobile);
   }
 
+  /* Hide the center title to free up space */
+  .navbar-center {
+    display: none;
+  }
+
+  /* Show hamburger */
   #mobile-menu-btn {
     display: flex;
   }
 
+  /* Slide-in sidebar for tablets */
   #nav-items {
     position: fixed;
     top: 0;
-    right: -100%; /* Slide-in sidebar off-screen by default */
-    width: 250px;
-    height: 100vh;
+    right: -280px; /* Off-screen to the right */
+    width: 260px;
+    height: 100dvh;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
     background: rgba(10, 10, 15, 0.98);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-left: 1px solid rgba(255, 255, 255, 0.08);
-    padding: calc(var(--navbar-height-mobile) + 16px) 16px 16px 16px;
+    padding: calc(var(--navbar-height-mobile) + 20px) 16px 24px 16px;
     box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
-    transition: right 0.3s ease-in-out;
-    z-index: 9998; /* Just below the navbar container so logo/btn stay above */
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999; /* Below navbar but above page content */
     overflow-y: auto;
+    gap: 4px;
   }
 
+  /* Slide in when active */
   #nav-items.active {
-    right: 0; /* Slide in */
-  }
-  
-  /* Reset tailwind inline flex for the wrapper inside nav-items */
-  #nav-items > div {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: stretch;
+    right: 0;
   }
 
+  /* Mobile nav links — full width, stacked */
   #nav-items a,
   #nav-items button {
     width: 100%;
     text-align: left;
     justify-content: flex-start;
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    min-height: 44px; /* Touch target min 44px */
+    padding: 14px 16px;
+    min-height: 48px; /* Larger touch targets on mobile */
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #bbc9cf;
+  }
+
+  #nav-items a:hover,
+  #nav-items button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #a8e8ff;
+  }
+
+  /* Overlay backdrop when menu is open */
+  #nav-items::before {
+    content: '';
+    display: none;
   }
 }
 
-/* Mobile Breakpoint (480px and below) */
+/* ── Mobile: 480px and below ──────────────────────────────────────────────── */
 @media (max-width: 480px) {
+  /* Hide brand text, keep logo only */
   .navbar-brand span {
-    display: none; /* Hide brand text on very small screens to ensure no overlap */
+    display: none;
   }
 
   .navbar-brand img {
     max-height: 36px;
   }
 
+  /* Full-width dropdown on phones instead of sidebar */
   #nav-items {
-    width: 100%; /* Full width dropdown on mobile */
+    right: auto;
+    left: 0;
+    top: var(--navbar-height-mobile);
+    width: 100%;
+    height: calc(100dvh - var(--navbar-height-mobile));
     border-left: none;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    top: var(--navbar-height-mobile); /* Slide down from navbar instead of side */
-    height: calc(100vh - var(--navbar-height-mobile));
-    right: 0;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease-in-out;
     padding: 16px;
+    /* Override right-slide with top transform */
+    transform: translateY(-110%);
+    right: 0; /* Reset right so it stays full-width */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
     pointer-events: none;
   }
@@ -262,21 +325,24 @@
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+    right: 0;
   }
 }
 
-/* Utilities */
-body {
-  padding-top: var(--navbar-height);
-}
+/* ── Very small screens: 320px ────────────────────────────────────────────── */
+@media (max-width: 360px) {
+  .back-button {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+  }
 
-@media (max-width: 768px) {
-  body {
-    padding-top: var(--navbar-height-mobile);
+  .navbar-brand img {
+    max-height: 32px;
   }
 }
 
-/* Buttons */
+/* ── Button variants ──────────────────────────────────────────────────────── */
 .btn-logout {
   background: rgba(255, 107, 107, 0.15) !important;
   color: #ffb4ab !important;
@@ -297,4 +363,16 @@ body {
 .btn-login:hover {
   background: rgba(60, 215, 255, 0.25) !important;
   border-color: rgba(60, 215, 255, 0.5) !important;
+}
+
+.btn-primary-gradient {
+  background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 600;
+}
+
+.btn-primary-gradient:hover {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  transform: translateY(-1px);
 }

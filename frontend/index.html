@@ -229,6 +229,7 @@
       }
     </style>
     <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/globals.css" />
   </head>
 
   <body class="antialiased font-body-md text-on-surface overflow-x-hidden">
@@ -266,42 +267,9 @@
       <div class="orb orb-cyan"></div>
       <div class="orb orb-violet"></div>
     </div>
-    <!-- Navigation Bar -->
-    <header class="fixed top-0 w-full z-50 glass-card border-b-0">
-      <div
-        class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 w-full max-w-7xl mx-auto"
-      >
-        <div class="flex items-center gap-2">
-          <img
-            src="/images/logo.jpg"
-            alt="Maidanja WiFi"
-            style="height: 50px; width: auto"
-          />
-        </div>
-        <nav class="hidden md:flex items-center gap-8">
-          <a
-            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
-            href="packages.html"
-            >Packages</a
-          >
-          <a
-            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
-            href="dashboard.html"
-            >Dashboard</a
-          >
-        </nav>
-        <div class="flex items-center">
-          <a
-            href="packages.html"
-            class="btn-primary-gradient px-6 py-2.5 rounded-xl text-white font-label-md text-label-md active:scale-95 transition-transform text-center"
-          >
-            Connect Now
-          </a>
-        </div>
-      </div>
-    </header>
+    <!-- Duplicate header removed — the #navbar component above handles navigation -->
     <main
-      class="relative pt-32 pb-20 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto min-h-screen flex flex-col justify-center items-center"
+      class="relative pt-8 pb-20 section-padding container-responsive min-h-screen flex flex-col justify-center items-center"
     >
       <!-- Hero Section -->
       <section class="w-full text-center mb-xl">
@@ -347,7 +315,7 @@
         </div>
       </section>
       <!-- Stats Bento Row -->
-      <section class="w-full grid grid-cols-1 md:grid-cols-3 gap-gutter mt-12">
+      <section class="w-full grid-auto-fit mt-12">
         <!-- Stat Card 1 -->
         <div
           class="glass-card p-6 rounded-card text-center flex flex-col items-center justify-center gap-3 group hover:border-primary-container/30 transition-colors"
@@ -464,8 +432,8 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <!-- PACKAGES PREVIEW SECTION -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section class="w-full py-20 px-margin-mobile md:px-margin-desktop bg-gradient-to-b from-transparent to-surface-container/30">
-      <div class="max-w-7xl mx-auto">
+    <section class="w-full section-padding bg-gradient-to-b from-transparent to-surface-container/30">
+      <div class="container-responsive">
         <!-- Section Header -->
         <div class="text-center mb-12">
           <h2 class="font-display-lg text-display-lg md:text-5xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -480,7 +448,7 @@
         </div>
 
         <!-- Featured Packages Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mt-12">
+        <div class="grid-auto-fit mt-12">
           <!-- Student Package -->
           <div class="glass-card rounded-xl p-lg flex flex-col h-full border-blue-500/50 ring-2 ring-blue-500/30 bg-blue-500/5">
             <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white font-bold px-4 py-1 rounded-full text-xs shadow-lg tracking-widest">
@@ -586,8 +554,8 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <!-- CTA BANNER: THIKA INSTALLATION OFFER -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section class="w-full py-16 px-margin-mobile md:px-margin-desktop bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 border-y border-primary/20">
-      <div class="max-w-7xl mx-auto">
+    <section class="w-full section-padding bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 border-y border-primary/20">
+      <div class="container-responsive">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-lg items-center">
           <!-- Left: Installation Offer -->
           <div class="flex flex-col gap-md">
@@ -640,7 +608,7 @@
     <!-- Footer -->
     <footer class="w-full glass-card border-t border-white/5 mt-20">
       <div
-        class="flex flex-col md:flex-row justify-between items-center py-lg px-margin-mobile md:px-margin-desktop w-full max-w-7xl mx-auto gap-lg md:gap-0"
+        class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive gap-lg md:gap-0"
       >
         <!-- Left: Brand & Info -->
         <div class="flex flex-col gap-sm items-center md:items-start mb-4 md:mb-0">
