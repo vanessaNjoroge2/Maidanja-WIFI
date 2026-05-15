@@ -58,7 +58,7 @@ const api = {
       if (res.status === 401) {
         this.clearSession();
         window.location.href = '/login.html';
-        return;
+        return Promise.reject(new Error('Unauthorized')); // Explicitly reject
       }
 
       if (!data.success) {
