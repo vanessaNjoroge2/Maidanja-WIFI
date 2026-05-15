@@ -1,0 +1,703 @@
+<!doctype html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Maidanja WiFi | Blazing Fast Internet</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=DM+Sans:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #0a0a0f;
+        color: #e4e1ed;
+        overflow-x: hidden;
+      }
+
+      .glass-card {
+        background: rgba(18, 18, 26, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      }
+
+      .mesh-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: #0a0a0f;
+        overflow: hidden;
+      }
+
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.15;
+        animation: move 25s infinite alternate ease-in-out;
+      }
+
+      .orb-cyan {
+        width: 500px;
+        height: 500px;
+        background: #00d4ff;
+        top: -100px;
+        left: -100px;
+      }
+
+      .orb-violet {
+        width: 600px;
+        height: 600px;
+        background: #7c3aed;
+        bottom: -150px;
+        right: -100px;
+        animation-delay: -5s;
+      }
+
+      @keyframes move {
+        from {
+          transform: translate(0, 0) scale(1);
+        }
+
+        to {
+          transform: translate(100px, 100px) scale(1.2);
+        }
+      }
+
+      .text-gradient-cyan {
+        background: linear-gradient(135deg, #00d4ff 0%, #a8e8ff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .btn-primary-gradient {
+        background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary-gradient:hover {
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        transform: translateY(-1px);
+      }
+
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-variant": "#34343d",
+              "tertiary-container": "#c2c3c3",
+              tertiary: "#dedfdf",
+              "tertiary-fixed-dim": "#c6c6c7",
+              "on-primary": "#003642",
+              outline: "#859398",
+              "surface-tint": "#3cd7ff",
+              "surface-container-high": "#292932",
+              "tertiary-fixed": "#e2e2e2",
+              primary: "#a8e8ff",
+              "surface-bright": "#393841",
+              surface: "#13131b",
+              "on-primary-fixed": "#001f27",
+              "on-background": "#e4e1ed",
+              "secondary-fixed": "#eaddff",
+              "on-secondary": "#3f008e",
+              "inverse-surface": "#e4e1ed",
+              "surface-container-highest": "#34343d",
+              "on-primary-container": "#00586b",
+              "primary-fixed": "#b4ebff",
+              background: "#13131b",
+              "on-surface": "#e4e1ed",
+              error: "#ffb4ab",
+              "on-tertiary-fixed-variant": "#454747",
+              "error-container": "#93000a",
+              "on-secondary-fixed-variant": "#5a00c6",
+              "on-tertiary-container": "#4f5051",
+              "primary-container": "#00d4ff",
+              "outline-variant": "#3c494e",
+              "on-surface-variant": "#bbc9cf",
+              "on-tertiary": "#2f3131",
+              "on-primary-fixed-variant": "#004e5f",
+              "secondary-container": "#6001d1",
+              "inverse-on-surface": "#303038",
+              "on-secondary-container": "#c9aeff",
+              "secondary-fixed-dim": "#d2bbff",
+              "surface-dim": "#13131b",
+              "primary-fixed-dim": "#3cd7ff",
+              "on-error-container": "#ffdad6",
+              "on-tertiary-fixed": "#1a1c1c",
+              "surface-container-low": "#1b1b23",
+              "inverse-primary": "#00677e",
+              "surface-container": "#1f1f27",
+              "surface-container-lowest": "#0d0d15",
+              "on-secondary-fixed": "#25005a",
+              secondary: "#d2bbff",
+              "on-error": "#690005",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "12px",
+              card: "16px",
+              full: "9999px",
+            },
+            spacing: {
+              sm: "8px",
+              xs: "4px",
+              lg: "24px",
+              base: "4px",
+              gutter: "16px",
+              "margin-mobile": "20px",
+              md: "16px",
+              "margin-desktop": "64px",
+              xl: "40px",
+            },
+            fontFamily: {
+              "headline-md": ["Sora"],
+              "body-lg": ["DM Sans"],
+              "label-md": ["DM Sans"],
+              "body-md": ["DM Sans"],
+              "display-lg": ["Sora"],
+              "headline-lg": ["Sora"],
+              "headline-lg-mobile": ["Sora"],
+            },
+            fontSize: {
+              "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "1.4",
+                  letterSpacing: "0.05em",
+                  fontWeight: "500",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "headline-lg-mobile": [
+                "28px",
+                { lineHeight: "1.2", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+    <link rel="stylesheet" href="/css/navbar.css" />
+  </head>
+
+  <body class="antialiased font-body-md text-on-surface overflow-x-hidden">
+    <!-- Global Navigation Bar -->
+    <nav id="navbar" class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-left">
+          <button
+            class="back-button"
+            onclick="goBack()"
+            title="Go back to previous page"
+            aria-label="Go back"
+          >
+            ←
+          </button>
+          <a href="/index.html" class="navbar-brand">
+            <img src="/images/logo.jpg" alt="Maidanja WiFi" />
+            <span class="hidden sm:inline">Maidanja WiFi</span>
+          </a>
+        </div>
+        <div class="navbar-center">
+          <h1 class="navbar-title">Loading...</h1>
+        </div>
+        <div class="navbar-right">
+          <button id="mobile-menu-btn" aria-label="Toggle navigation menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div id="nav-items" class="hidden sm:flex"></div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Animated Mesh Background -->
+    <div class="mesh-gradient">
+      <div class="orb orb-cyan"></div>
+      <div class="orb orb-violet"></div>
+    </div>
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 w-full z-50 glass-card border-b-0">
+      <div
+        class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 w-full max-w-7xl mx-auto"
+      >
+        <div class="flex items-center gap-2">
+          <img
+            src="/images/logo.jpg"
+            alt="Maidanja WiFi"
+            style="height: 50px; width: auto"
+          />
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+          <a
+            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
+            href="packages.html"
+            >Packages</a
+          >
+          <a
+            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
+            href="dashboard.html"
+            >Dashboard</a
+          >
+        </nav>
+        <div class="flex items-center">
+          <a
+            href="packages.html"
+            class="btn-primary-gradient px-6 py-2.5 rounded-xl text-white font-label-md text-label-md active:scale-95 transition-transform text-center"
+          >
+            Connect Now
+          </a>
+        </div>
+      </div>
+    </header>
+    <main
+      class="relative pt-32 pb-20 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto min-h-screen flex flex-col justify-center items-center"
+    >
+      <!-- Hero Section -->
+      <section class="w-full text-center mb-xl">
+        <div
+          class="inline-flex items-center px-4 py-1.5 mb-8 rounded-full glass-card border-white/10 gap-2"
+        >
+          <span
+            class="w-2 h-2 rounded-full bg-primary-container animate-pulse"
+          ></span>
+          <span
+            class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest"
+            >Network Live in Kenya</span
+          >
+        </div>
+        <h1
+          class="font-display-lg text-display-lg md:text-[64px] mb-6 max-w-4xl mx-auto leading-[1.1]"
+        >
+          <span class="text-gradient-cyan">Blazing Fast</span> Wi-Fi,
+          <br class="hidden md:block" />
+          Pay as You Go
+        </h1>
+        <p
+          class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10"
+        >
+          Affordable internet access, powered by M-Pesa. Connect in seconds with
+          zero contracts and instant activation.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        >
+          <a
+            href="packages.html"
+            class="btn-primary-gradient w-full sm:w-auto px-10 py-4 rounded-xl text-white font-headline-md text-body-lg font-bold text-center"
+          >
+            Get Connected
+          </a>
+          <a
+            href="packages.html"
+            class="w-full sm:w-auto px-10 py-4 rounded-xl border border-white/10 glass-card hover:bg-white/5 transition-colors font-headline-md text-body-lg text-center"
+          >
+            View Packages
+          </a>
+        </div>
+      </section>
+      <!-- Stats Bento Row -->
+      <section class="w-full grid grid-cols-1 md:grid-cols-3 gap-gutter mt-12">
+        <!-- Stat Card 1 -->
+        <div
+          class="glass-card p-6 rounded-card text-center flex flex-col items-center justify-center gap-3 group hover:border-primary-container/30 transition-colors"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform"
+          >
+            <span
+              class="material-symbols-outlined text-primary-container"
+              data-icon="group"
+              >group</span
+            >
+          </div>
+          <div>
+            <h3 class="font-headline-lg text-headline-lg text-on-surface">
+              500+
+            </h3>
+            <p class="text-label-md font-label-md text-on-surface-variant">
+              Active Users
+            </p>
+          </div>
+        </div>
+        <!-- Stat Card 2 -->
+        <div
+          class="glass-card p-6 rounded-card text-center flex flex-col items-center justify-center gap-3 group hover:border-primary-container/30 transition-colors"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform"
+          >
+            <span
+              class="material-symbols-outlined text-primary-container"
+              data-icon="bolt"
+              >bolt</span
+            >
+          </div>
+          <div>
+            <h3 class="font-headline-lg text-headline-lg text-on-surface">
+              99.9%
+            </h3>
+            <p class="text-label-md font-label-md text-on-surface-variant">
+              Uptime
+            </p>
+          </div>
+        </div>
+        <!-- Stat Card 3 -->
+        <div
+          class="glass-card p-6 rounded-card text-center flex flex-col items-center justify-center gap-3 group hover:border-primary-container/30 transition-colors"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform"
+          >
+            <span
+              class="material-symbols-outlined text-primary-container"
+              data-icon="speed"
+              >speed</span
+            >
+          </div>
+          <div>
+            <h3 class="font-headline-lg text-headline-lg text-on-surface">
+              5 Mbps+
+            </h3>
+            <p class="text-label-md font-label-md text-on-surface-variant">
+              Speed
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- Scroll Indicator -->
+      <div class="mt-20 flex flex-col items-center gap-2 animate-bounce">
+        <span
+          class="text-label-md font-label-md text-outline uppercase tracking-widest"
+          >Scroll to explore</span
+        >
+        <span
+          class="material-symbols-outlined text-primary-container"
+          data-icon="expand_more"
+          >expand_more</span
+        >
+      </div>
+      <!-- Featured Image Context -->
+      <div
+        class="mt-24 w-full glass-card rounded-card overflow-hidden h-[400px] relative"
+      >
+        <img
+          alt="High-speed data visualization"
+          class="w-full h-full object-cover opacity-60 mix-blend-overlay"
+          data-alt="A sophisticated data visualization with glowing circuit lines and digital streams of information flowing through a dark, three-dimensional space. The color palette is dominated by electric cyan and deep violet neon lights against a midnight black background. The style is ultra-modern and cinematic, suggesting high-speed connectivity and advanced financial technology infrastructure. Subtle light glares and soft blurs create a premium glassmorphic atmosphere."
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuACy0MuBp1USoCZ-fbjhWA7m0GrkeFo9ytYQ77FVi75aqKNbIOFxsDu0zek59kYaUJ2p5lRF__S5HEwl-KB3x-ylWPFwzKRkufKXrQxaKDzlIEb4fI6qWb5eGgVeQSSv-zgRsOX7VUdjG1QPNFQWzVNg8xSKV4VwVAZn_TCDXLxIpJCp0O-B4Mix1hGMo6MYTImwKMvAHeeXHiDd3kWB_3ntstfe92ykNkm1TIG7NP_hgaYe4b_RYy9MiIQmU6KyTDdPm8umwoZgQ"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-background to-transparent"
+        ></div>
+        <div
+          class="absolute bottom-8 left-8 right-8 flex justify-between items-end"
+        >
+          <div>
+            <h2 class="font-headline-lg text-headline-lg mb-2">
+              Powered by M-Pesa
+            </h2>
+            <p class="text-on-surface-variant max-w-md">
+              Seamlessly top up your connection using the most trusted payment
+              system in Kenya.
+            </p>
+          </div>
+          <div class="hidden md:block">
+            <div
+              class="w-16 h-1 bg-primary-container rounded-full shadow-[0_0_10px_#00d4ff]"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- PACKAGES PREVIEW SECTION -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="w-full py-20 px-margin-mobile md:px-margin-desktop bg-gradient-to-b from-transparent to-surface-container/30">
+      <div class="max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+          <h2 class="font-display-lg text-display-lg md:text-5xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Flexible Packages for Everyone
+          </h2>
+          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8">
+            From students to professionals, we have the perfect plan for you. Pay only for what you use.
+          </p>
+          <a href="packages.html" class="btn-primary-gradient px-10 py-4 rounded-xl text-white font-headline-md text-body-lg font-bold inline-block">
+            View All Plans
+          </a>
+        </div>
+
+        <!-- Featured Packages Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mt-12">
+          <!-- Student Package -->
+          <div class="glass-card rounded-xl p-lg flex flex-col h-full border-blue-500/50 ring-2 ring-blue-500/30 bg-blue-500/5">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white font-bold px-4 py-1 rounded-full text-xs shadow-lg tracking-widest">
+              STUDENT PLAN
+            </div>
+            <div class="flex justify-between items-start mb-md pt-4">
+              <span class="px-sm py-xs bg-blue-500/20 text-blue-300 rounded text-xs font-bold tracking-widest uppercase">Data Package</span>
+              <span class="material-symbols-outlined text-blue-300 text-2xl">school</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md mb-sm">Student Package</h3>
+            <div class="flex items-baseline gap-xs mb-lg">
+              <span class="font-display-lg text-display-lg text-white font-bold">KES 20</span>
+              <span class="text-on-surface-variant text-sm">/24 hours</span>
+            </div>
+            <p class="text-on-surface-variant text-body-md mb-lg flex-grow">2GB high-speed data perfect for students. Get studying with reliable internet.</p>
+            <ul class="space-y-sm mb-lg">
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-blue-300 text-sm">check_circle</span> 2GB Data
+              </li>
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-blue-300 text-sm">check_circle</span> Valid 24 Hours
+              </li>
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-blue-300 text-sm">check_circle</span> Instant M-Pesa
+              </li>
+            </ul>
+            <a href="packages.html" class="w-full py-md rounded-lg bg-blue-600/30 text-blue-300 border border-blue-400/50 hover:bg-blue-600/40 transition-all font-bold text-label-md text-center">
+              Get Started
+            </a>
+          </div>
+
+          <!-- 1 Day Unlimited -->
+          <div class="glass-card rounded-xl p-lg flex flex-col h-full border-primary/50 ring-2 ring-primary/30 scale-105 z-10 bg-primary/5">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary-container font-bold px-4 py-1 rounded-full text-xs shadow-lg tracking-widest">
+              POPULAR
+            </div>
+            <div class="flex justify-between items-start mb-md pt-4">
+              <span class="px-sm py-xs bg-primary/20 text-primary rounded text-xs font-bold tracking-widest uppercase">24 Hours</span>
+              <span class="material-symbols-outlined text-primary text-2xl">rocket_launch</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md mb-sm">Full Day</h3>
+            <div class="flex items-baseline gap-xs mb-lg">
+              <span class="font-display-lg text-display-lg text-white font-bold">KES 80</span>
+              <span class="text-on-surface-variant text-sm">/day</span>
+            </div>
+            <p class="text-on-surface-variant text-body-md mb-lg flex-grow">Unlimited high-speed internet for a full 24 hours. Perfect for streaming and browsing.</p>
+            <ul class="space-y-sm mb-lg">
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Unlimited Data
+              </li>
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> 24-Hour Access
+              </li>
+              <li class="flex items-center gap-sm text-primary font-bold text-label-md">
+                <span class="material-symbols-outlined text-primary text-sm">stars</span> Most Popular
+              </li>
+            </ul>
+            <a href="packages.html" class="w-full py-md rounded-lg bg-gradient-to-r from-primary to-secondary text-white shadow-xl hover:shadow-primary/50 transition-all font-bold text-label-md text-center">
+              Buy Now
+            </a>
+          </div>
+
+          <!-- 1 Month Unlimited -->
+          <div class="glass-card rounded-xl p-lg flex flex-col h-full border-primary/40">
+            <div class="flex justify-between items-start mb-md">
+              <span class="px-sm py-xs bg-surface-container-high text-on-surface-variant rounded text-xs font-bold tracking-widest uppercase">30 Days</span>
+              <span class="material-symbols-outlined text-primary text-2xl">calendar_month</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md mb-sm">Monthly</h3>
+            <div class="flex items-baseline gap-xs mb-lg">
+              <span class="font-display-lg text-display-lg text-white font-bold">KES 600</span>
+              <span class="text-on-surface-variant text-sm">/month</span>
+            </div>
+            <p class="text-on-surface-variant text-body-md mb-lg flex-grow">Unlimited data for a full month. Best value for regular internet users.</p>
+            <ul class="space-y-sm mb-lg">
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Unlimited Data
+              </li>
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Full Month Access
+              </li>
+              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Best Value
+              </li>
+            </ul>
+            <a href="packages.html" class="w-full py-md rounded-lg border border-primary text-primary hover:bg-primary/10 transition-all font-bold text-label-md text-center">
+              Get Connected
+            </a>
+          </div>
+        </div>
+
+        <!-- View All Link -->
+        <div class="text-center mt-12">
+          <p class="text-on-surface-variant text-body-md mb-4">More than 10 packages available</p>
+          <a href="packages.html" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-bold text-label-md">
+            View All Packages
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- CTA BANNER: THIKA INSTALLATION OFFER -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="w-full py-16 px-margin-mobile md:px-margin-desktop bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 border-y border-primary/20">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-lg items-center">
+          <!-- Left: Installation Offer -->
+          <div class="flex flex-col gap-md">
+            <div class="flex items-start gap-md">
+              <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-primary text-3xl">home_repair_service</span>
+              </div>
+              <div>
+                <h3 class="font-headline-lg text-headline-lg mb-2">Full Installation in Thika</h3>
+                <p class="text-on-surface text-body-lg leading-relaxed">
+                  Anyone in need within <span class="font-bold text-primary">Thika</span>, call us today. We provide <span class="font-bold text-primary">complete installation within 72 hours</span>.
+                </p>
+                <a href="tel:0706407084" class="inline-flex items-center gap-2 mt-4 px-lg py-sm rounded-lg bg-primary/20 hover:bg-primary/30 text-primary font-bold transition-all">
+                  <span class="material-symbols-outlined text-sm">call</span>
+                  Call: 0706407084
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Hotspot Zone Offer -->
+          <div class="flex flex-col gap-md">
+            <div class="flex items-start gap-md">
+              <div class="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-secondary text-3xl">hub</span>
+              </div>
+              <div>
+                <h3 class="font-headline-lg text-headline-lg mb-2">Become a WiFi Hub</h3>
+                <p class="text-on-surface text-body-lg leading-relaxed">
+                  Not yet part of Maidanja? <span class="font-bold text-primary">Make your region or apartment a WiFi hotspot zone</span> and earn while sharing fast internet.
+                </p>
+                <a href="mailto:maidanja31@gmail.com" class="inline-flex items-center gap-2 mt-4 px-lg py-sm rounded-lg bg-secondary/20 hover:bg-secondary/30 text-secondary font-bold transition-all">
+                  <span class="material-symbols-outlined text-sm">mail</span>
+                  Email: maidanja31@gmail.com
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Tagline -->
+        <div class="mt-lg pt-lg border-t border-white/10 text-center">
+          <p class="text-on-surface font-body-lg leading-relaxed">
+            <span class="text-primary font-bold text-headline-md">✓ Free Connection</span> <br class="md:hidden" />
+            to <span class="font-bold">flexible, reliable, affordable, and stable internet</span> across Thika.
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- Footer -->
+    <footer class="w-full glass-card border-t border-white/5 mt-20">
+      <div
+        class="flex flex-col md:flex-row justify-between items-center py-lg px-margin-mobile md:px-margin-desktop w-full max-w-7xl mx-auto gap-lg md:gap-0"
+      >
+        <!-- Left: Brand & Info -->
+        <div class="flex flex-col gap-sm items-center md:items-start mb-4 md:mb-0">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-2xl">wifi</span>
+            <span class="font-headline-md text-headline-md text-primary font-bold"
+              >Maidanja Hotspot WiFi</span
+            >
+          </div>
+          <p class="text-on-surface-variant text-label-md font-label-md">
+            Fast, Reliable, Affordable Internet in Thika
+          </p>
+          <p class="text-on-surface-variant text-xs mt-1">
+            © 2026 Maidanja WiFi. Powered by M-Pesa.
+          </p>
+        </div>
+
+        <!-- Center: Contact Info -->
+        <div class="flex flex-col gap-sm items-center">
+          <div class="flex gap-6 text-center flex-wrap justify-center">
+            <div>
+              <p class="font-label-md text-label-md text-on-surface-variant mb-1">📍 Location</p>
+              <p class="font-headline-md text-headline-md text-on-surface">Thika</p>
+            </div>
+            <div class="border-l border-white/10"></div>
+            <div>
+              <p class="font-label-md text-label-md text-on-surface-variant mb-1">📞 Phone</p>
+              <a href="tel:0706407084" class="font-headline-md text-headline-md text-primary hover:text-primary/80 transition-colors">0706407084</a>
+            </div>
+            <div class="border-l border-white/10"></div>
+            <div>
+              <p class="font-label-md text-label-md text-on-surface-variant mb-1">📧 Email</p>
+              <a href="mailto:maidanja31@gmail.com" class="font-headline-md text-headline-md text-primary hover:text-primary/80 transition-colors text-sm">maidanja31@gmail.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Links -->
+        <div class="flex gap-8">
+          <a
+            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
+            href="packages.html"
+            >Packages</a
+          >
+          <a
+            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
+            href="dashboard.html"
+            >Dashboard</a
+          >
+          <a
+            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
+            href="login.html"
+            >Login</a
+          >
+        </div>
+      </div>
+    </footer>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>
