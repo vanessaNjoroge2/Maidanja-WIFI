@@ -2,7 +2,7 @@
 //  localhost (dev server on port 3000)  → /api  (proxied by vite/serve)
 //  localhost (any other port, e.g. live-server 5500) → Render backend directly
 //  Vercel (maidanja-wifi.vercel.app or any custom domain) → Render backend
-const RENDER_BACKEND = 'https://maidanja-wifi.onrender.com';
+const RENDER_BACKEND = 'https://maidanja-wifi.onrender.com/api';
 
 const API_BASE = (() => {
   const { hostname, port } = window.location;
