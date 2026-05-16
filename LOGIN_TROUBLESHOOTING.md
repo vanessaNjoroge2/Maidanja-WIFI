@@ -105,7 +105,7 @@ INSERT INTO users (phone_number, name, password_hash, role)
 VALUES (
   '254712345678',
   'Demo User',
-  '$2b$12$X7kfS6H0kF6TlZ5lT9mN0OcV4i9zH9sQwB3U6mZgN.3k0aG0Xnpiy',
+  '$2a$12$0ffNzAS5P6RRlCEmGC4Y8ebXCEXhWCQBjUiF1.VIA2yHI21ktoHl2',
   'user'
 )
 ON CONFLICT (phone_number) DO NOTHING;
