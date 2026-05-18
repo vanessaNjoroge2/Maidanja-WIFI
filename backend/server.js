@@ -29,6 +29,33 @@ if (global.__serverStarted) {
 // ── CONFIG ─────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 
+// ══════════════════════════════════════════════════════════
+// ✅ MOVED TO TOP: Startup Environment Validation
+// Must run BEFORE app.listen — server should never start
+// with missing or invalid environment variables.
+// ══════════════════════════════════════════════════════════
+const requiredEnvVars = [
+  'JWT_SECRET',
+  'DATABASE_URL',
+  'MPESA_CONSUMER_KEY',
+  'MPESA_CONSUMER_SECRET',
+  'MPESA_SHORTCODE',
+];
+for (const key of requiredEnvVars) {
+  if (!process.env[key]) {
+    console.error(`FATAL: Required environment variable '${key}' is not set. Exiting.`);
+    process.exit(1);
+  }
+}
+if (process.env.JWT_SECRET.length < 32) {
+  console.error('FATAL: JWT_SECRET must be at least 32 characters long. Exiting.');
+  process.exit(1);
+}
+if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
+  console.error('FATAL: NODE_ENV must be "development", "production", or "test". Exiting.');
+  process.exit(1);
+}
+
 // ── SECURITY: CORS ─────────────────────────────────────────
 const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',').map(o => o.trim());
 
@@ -53,8 +80,8 @@ app.use(cors({
 
 // ── SECURITY: RATE LIMITING ────────────────────────────────
 const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 100, 
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: { success: false, message: 'Too many requests, please try again later.' }
 });
 
@@ -62,7 +89,6 @@ const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   keyGenerator: (req) => {
-    // Key by phone number if present, fall back to IP
     return req.body?.phone_number
       ? `phone:${req.body.phone_number}`
       : `ip:${req.ip}`;
@@ -80,12 +106,13 @@ const paymentLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-app.use('/api/', generalLimiter); 
+app.use('/api/', generalLimiter);
 app.use('/api/auth/login', loginLimiter);
 app.use('/api/payments/initiate', paymentLimiter);
 
-// ── MIDDLEWARE ─────────────────────────────────────────
+// ── SECURITY: HELMET HEADERS ───────────────────────────────
 app.use(helmet({
+  // ✅ Content Security Policy
   contentSecurityPolicy: {
     directives: {
       defaultSrc:  ["'self'"],
@@ -101,22 +128,51 @@ app.use(helmet({
       formAction:  ["'self'"],
     },
   },
+
+  // ✅ Referrer Policy
+  // Only sends origin (no path/query) on cross-origin requests
+  referrerPolicy: {
+    policy: "strict-origin-when-cross-origin",
+  },
+
   crossOriginEmbedderPolicy: false,
 }));
+
+// ✅ Permissions Policy (Helmet doesn't include this yet — added manually)
+// Disables browser features your app doesn't need
+app.use((req, res, next) => {
+  res.setHeader(
+    'Permissions-Policy',
+    [
+      'camera=()',           // No camera access
+      'microphone=()',       // No microphone access
+      'geolocation=()',      // No GPS access
+      'payment=()',          // No Payment Request API
+      'usb=()',              // No USB access
+      'interest-cohort=()', // Opt out of FLoC tracking
+    ].join(', ')
+  );
+  next();
+});
+
+// ── LOGGING ────────────────────────────────────────────────
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+
+// ── BODY PARSING ───────────────────────────────────────────
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// ── SECURITY: Guard admin.html — require authentication + admin role ────────────────
+// ── SECURITY: Guard admin.html ─────────────────────────────
 const auth = require('./middleware/auth');
 const adminOnly = require('./middleware/adminOnly');
 app.get('/admin.html', auth, adminOnly, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin.html'));
 });
 
+// ── STATIC FILES ───────────────────────────────────────────
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// ── API ROUTES ─────────────────────────────────────────
+// ── API ROUTES ─────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/payments', paymentRoutes);
@@ -124,7 +180,7 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/hotspot', hotspotRoutes);
 app.use('/api/admin', adminRoutes);
 
-// ── HEALTH CHECK ───────────────────────────────────────
+// ── HEALTH CHECK ───────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -134,50 +190,29 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ── ERROR HANDLER ──────────────────────────────────────
+// ── ERROR HANDLER ──────────────────────────────────────────
 app.use(errorHandler);
 
-// ── SESSION CLEANUP & HOTSPOT MANAGEMENT ──────────────
+// ── SESSION CLEANUP & HOTSPOT MANAGEMENT ──────────────────
 setInterval(async () => {
   try {
-    // Expire old sessions
     expireSessions();
-    // Expire hotspot sessions
     await mikrotikService.expireSessionsScheduled();
   } catch (err) {
     console.error("Session cleanup error:", err.message);
   }
-}, 60 * 1000); // Run every 60 seconds
+}, 60 * 1000);
 
-// === Startup Environment Validation ===
-const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL', 'MPESA_CONSUMER_KEY',
-                          'MPESA_CONSUMER_SECRET', 'MPESA_SHORTCODE'];
-for (const key of requiredEnvVars) {
-  if (!process.env[key]) {
-    console.error(`FATAL: Required environment variable '${key}' is not set. Exiting.`);
-    process.exit(1);
-  }
-}
-if (process.env.JWT_SECRET.length < 32) {
-  console.error('FATAL: JWT_SECRET must be at least 32 characters long. Exiting.');
-  process.exit(1);
-}
-if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
-  console.error('FATAL: NODE_ENV must be "development", "production", or "test". Exiting.');
-  process.exit(1);
-}
-
-// ── START SERVER (SAFE VERSION) ────────────────────────
+// ── START SERVER ───────────────────────────────────────────
 const server = app.listen(PORT, async () => {
   console.log(`\n🚀 Maidanja WiFi API running on http://localhost:${PORT}`);
-  console.log(`🔌 Environment: ${process.env.NODE_ENV || 'development'}\n`);
-  
-  // Initialize MikroTik service
+  console.log(`🔌 Environment: ${process.env.NODE_ENV}\n`);
+
   await mikrotikService.connectToMikroTik();
   console.log(`📡 Hotspot Mode: ${mikrotikService.getMode()}\n`);
 });
 
-// ✅ FIX: handle EADDRINUSE gracefully
+// ✅ Handle port conflict gracefully
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`❌ Port ${PORT} is already in use. Kill existing Node process.`);
