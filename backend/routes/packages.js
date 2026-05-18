@@ -3,9 +3,18 @@ const express = require('express');
 const pool    = require('../config/database');
 const auth    = require('../middleware/auth');
 const adminOnly = require('../middleware/adminOnly');
-const { body, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 
 const router = express.Router();
+
+// ── Validation middleware ────────────────────────────────
+const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+  }
+  next();
+};
 
 // ── GET /api/packages ────────────────────────────────────────────────────────
 // Public — no auth required
@@ -24,7 +33,10 @@ router.get('/', async (req, res, next) => {
 });
 
 // ── GET /api/packages/:id ────────────────────────────────────────────────────
-router.get('/:id', async (req, res, next) => {
+router.get('/:id',
+  param('id').isUUID().withMessage('Invalid package ID format'),
+  validateRequest,
+  async (req, res, next) => {
   try {
     const result = await pool.query(
       `SELECT id, name, duration_hours, price_kes, speed_mbps, description
@@ -70,7 +82,11 @@ router.post(
 );
 
 // ── PUT /api/packages/:id (Admin only) ───────────────────────────────────────
-router.put('/:id', auth, adminOnly, async (req, res, next) => {
+router.put('/:id',
+  auth, adminOnly,
+  param('id').isUUID().withMessage('Invalid package ID format'),
+  validateRequest,
+  async (req, res, next) => {
   try {
     const { name, duration_hours, price_kes, speed_mbps, description, is_active, sort_order } = req.body;
     const result = await pool.query(

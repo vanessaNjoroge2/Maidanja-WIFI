@@ -8,6 +8,10 @@ node_modules/
 database/seed.sql
 backend/seed-database.js
 
+# Test payloads and body.json (may contain sensitive data)
+body.json
+*.test-payload.json
+
 # OS junk
 .DS_Store
 Thumbs.db

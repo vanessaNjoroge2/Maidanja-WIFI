@@ -75,6 +75,22 @@ CREATE TABLE payments (
 );
 
 -- ============================================================
+-- HOTSPOT USERS
+-- ============================================================
+
+CREATE TABLE hotspot_users (
+    id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    phone_number            VARCHAR(15) NOT NULL,
+    username                VARCHAR(100) NOT NULL UNIQUE,
+    password_hash           VARCHAR(255) NOT NULL,
+    uplink_max_limit_mbps   INTEGER,
+    downlink_max_limit_mbps INTEGER,
+    mikrotik_synced         BOOLEAN NOT NULL DEFAULT FALSE,
+    synced_at               TIMESTAMP WITH TIME ZONE,
+    created_at              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
 -- SESSIONS
 -- ============================================================
 
@@ -82,7 +98,9 @@ CREATE TABLE sessions (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id         UUID NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
     package_id      UUID NOT NULL REFERENCES packages(id) ON DELETE RESTRICT,
-    payment_id      UUID NOT NULL REFERENCES payments(id) ON DELETE RESTRICT,
+    payment_id      UUID REFERENCES payments(id) ON DELETE RESTRICT, -- can be NULL for manual sessions
+    hotspot_user_id UUID REFERENCES hotspot_users(id) ON DELETE SET NULL,
+    phone_number    VARCHAR(15),
     mac_address     VARCHAR(17),
     ip_address      VARCHAR(45),
     started_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),

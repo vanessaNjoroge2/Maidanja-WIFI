@@ -9,8 +9,8 @@ const auth    = require('../middleware/auth');
 const router  = express.Router();
 
 // ── Helper ───────────────────────────────────────────────────────────────────
-const signToken = (userId) =>
-  jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback_secret_for_dev_only', {
+const signToken = (userId, tokenVersion = 0) =>
+  jwt.sign({ userId, tokenVersion }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   });
 
@@ -38,8 +38,10 @@ router.post(
       }),
     body('password')
       .notEmpty().withMessage('Password is required')
-      .isLength({ min: 6 })
-      .withMessage('Password must be at least 6 characters'),
+      .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+      .matches(/[A-Z]/).withMessage('Password must include at least one uppercase letter')
+      .matches(/[0-9]/).withMessage('Password must include at least one number')
+      .matches(/[^A-Za-z0-9]/).withMessage('Password must include at least one special character'),
     body('name').optional().trim().isLength({ max: 100 }),
   ],
   async (req, res, next) => {
@@ -77,7 +79,7 @@ router.post(
       const user  = result.rows[0];
       console.log(`✅ New user registered: ${user.phone_number} (ID: ${user.id})`);
       
-      const token = signToken(user.id);
+      const token = signToken(user.id, 0); // New users start with token_version 0
 
       res.status(201).json({
         success: true,
@@ -121,7 +123,7 @@ router.post(
       const { password } = req.body;
 
       const result = await pool.query(
-        'SELECT id, phone_number, name, role, password_hash, is_active FROM users WHERE phone_number = $1',
+        'SELECT id, phone_number, name, role, password_hash, is_active, token_version FROM users WHERE phone_number = $1',
         [normalizedPhone]
       );
 
@@ -144,8 +146,8 @@ router.post(
       
       console.log(`✅ User login successful: ${user.phone_number}`);
 
-      const token = signToken(user.id);
-      const { password_hash, ...safeUser } = user;
+      const token = signToken(user.id, user.token_version);
+      const { password_hash, token_version, ...safeUser } = user;
 
       const responsePayload = {
         success: true,
@@ -169,6 +171,26 @@ router.get('/me', auth, async (req, res) => {
     success: true,
     data: { user: req.user },
   });
+});
+
+// ── POST /api/auth/logout ────────────────────────────────────────────────────
+router.post('/logout', auth, async (req, res, next) => {
+  try {
+    // Increment token_version to invalidate all existing tokens for this user
+    await pool.query(
+      'UPDATE users SET token_version = token_version + 1 WHERE id = $1',
+      [req.user.id]
+    );
+    
+    console.log(`✅ User logout successful: ${req.user.phone_number}`);
+
+    res.json({
+      success: true,
+      message: 'Logged out successfully',
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

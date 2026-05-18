@@ -86,7 +86,12 @@ const api = {
   get(endpoint, auth = true) { return this.request('GET', endpoint, null, auth); },
   post(endpoint, body, auth = true) { return this.request('POST', endpoint, body, auth); },
   put(endpoint, body, auth = true) { return this.request('PUT', endpoint, body, auth); },
-  logout() {
+  async logout() {
+    try {
+      await this.post('/api/auth/logout');
+    } catch (_) {
+      // Ignore errors, proceed with local cleanup anyway
+    }
     this.clearSession();
     window.location.href = '/login.html';
   }

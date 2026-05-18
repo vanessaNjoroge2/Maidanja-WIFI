@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/auth');
@@ -18,7 +19,7 @@ const mikrotikService = require('./services/mikrotikService');
 
 const app = express();
 
-// ✅ FIX: prevent double server start (important for nodemon issues)
+// ✅ FIX: prevent double server start
 if (global.__serverStarted) {
   console.log("⚠️ Server already running, skipping duplicate start");
 } else {
@@ -28,24 +29,91 @@ if (global.__serverStarted) {
 // ── CONFIG ─────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 
-// ── SECURITY ───────────────────────────────────────────
-app.use(helmet({ contentSecurityPolicy: false }));
+// ── SECURITY: CORS ─────────────────────────────────────────
+const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',').map(o => o.trim());
 
-// ── LOGGING ────────────────────────────────────────────
-app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+if (allowedOrigins.length === 0 || allowedOrigins[0] === '') {
+  console.error('❌ CRITICAL: CORS_ORIGIN is not set in .env or is empty.');
+  process.exit(1);
+}
 
-// ── CORS ───────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: (origin, callback) => {
+    // Allow server-to-server requests (no origin) and whitelisted origins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: Origin '${origin}' is not allowed`));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
 
-// ── BODY PARSERS ───────────────────────────────────────
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// ── SECURITY: RATE LIMITING ────────────────────────────────
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 100, 
+  message: { success: false, message: 'Too many requests, please try again later.' }
+});
 
-// ── SERVE FRONTEND STATIC FILES ────────────────────────
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  keyGenerator: (req) => {
+    // Key by phone number if present, fall back to IP
+    return req.body?.phone_number
+      ? `phone:${req.body.phone_number}`
+      : `ip:${req.ip}`;
+  },
+  message: { success: false, message: 'Too many login attempts. Please try again after 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const paymentLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 10,
+  message: { success: false, message: 'Payment initiation limit reached. Please wait a minute.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use('/api/', generalLimiter); 
+app.use('/api/auth/login', loginLimiter);
+app.use('/api/payments/initiate', paymentLimiter);
+
+// ── MIDDLEWARE ─────────────────────────────────────────
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc:  ["'self'"],
+      scriptSrc:   ["'self'", "https://cdn.tailwindcss.com", "https://fonts.googleapis.com"],
+      styleSrc:    ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com",
+                    "https://fonts.gstatic.com"],
+      fontSrc:     ["'self'", "https://fonts.gstatic.com"],
+      imgSrc:      ["'self'", "data:", "https:"],
+      connectSrc:  ["'self'", "https://maidanja-wifi.onrender.com"],
+      frameSrc:    ["'none'"],
+      objectSrc:   ["'none'"],
+      baseUri:     ["'self'"],
+      formAction:  ["'self'"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// ── SECURITY: Guard admin.html — require authentication + admin role ────────────────
+const auth = require('./middleware/auth');
+const adminOnly = require('./middleware/adminOnly');
+app.get('/admin.html', auth, adminOnly, (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/admin.html'));
+});
+
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ── API ROUTES ─────────────────────────────────────────
@@ -62,7 +130,7 @@ app.get('/api/health', (req, res) => {
     success: true,
     message: 'Maidanja WiFi API is running',
     timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV,
+    uptime: process.uptime(),
   });
 });
 
@@ -80,6 +148,24 @@ setInterval(async () => {
     console.error("Session cleanup error:", err.message);
   }
 }, 60 * 1000); // Run every 60 seconds
+
+// === Startup Environment Validation ===
+const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL', 'MPESA_CONSUMER_KEY',
+                          'MPESA_CONSUMER_SECRET', 'MPESA_SHORTCODE'];
+for (const key of requiredEnvVars) {
+  if (!process.env[key]) {
+    console.error(`FATAL: Required environment variable '${key}' is not set. Exiting.`);
+    process.exit(1);
+  }
+}
+if (process.env.JWT_SECRET.length < 32) {
+  console.error('FATAL: JWT_SECRET must be at least 32 characters long. Exiting.');
+  process.exit(1);
+}
+if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
+  console.error('FATAL: NODE_ENV must be "development", "production", or "test". Exiting.');
+  process.exit(1);
+}
 
 // ── START SERVER (SAFE VERSION) ────────────────────────
 const server = app.listen(PORT, async () => {

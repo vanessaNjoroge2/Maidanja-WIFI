@@ -1,11 +1,21 @@
 // backend/routes/admin.js
 const express   = require('express');
+const { param, validationResult } = require('express-validator');
 const pool      = require('../config/database');
 const auth      = require('../middleware/auth');
 const adminOnly = require('../middleware/adminOnly');
 const mikrotikService = require('../services/mikrotikService');
 
 const router = express.Router();
+
+// ── Validation middleware for common checks ──────────────
+const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+  }
+  next();
+};
 
 // All admin routes require JWT + admin role
 router.use(auth, adminOnly);
@@ -38,7 +48,9 @@ router.get('/stats', async (req, res, next) => {
 // ── GET /api/admin/sessions ──────────────────────────────────────────────────
 router.get('/sessions', async (req, res, next) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status } = req.query;
+    const page  = Math.max(1, parseInt(req.query.page, 10)  || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
     const offset = (page - 1) * limit;
     const params = [];
     let where = '';
@@ -89,7 +101,9 @@ router.get('/sessions', async (req, res, next) => {
 // ── GET /api/admin/users ─────────────────────────────────────────────────────
 router.get('/users', async (req, res, next) => {
   try {
-    const { search, page = 1, limit = 20 } = req.query;
+    const { search } = req.query;
+    const page  = Math.max(1, parseInt(req.query.page, 10)  || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
     const offset = (page - 1) * limit;
     const params = [];
     let where = '';
@@ -124,7 +138,9 @@ router.get('/users', async (req, res, next) => {
 // ── GET /api/admin/transactions ──────────────────────────────────────────────
 router.get('/transactions', async (req, res, next) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status } = req.query;
+    const page  = Math.max(1, parseInt(req.query.page, 10)  || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
     const offset = (page - 1) * limit;
     const params = [];
     let where = '';
@@ -157,7 +173,10 @@ router.get('/transactions', async (req, res, next) => {
 });
 
 // ── POST /api/admin/disconnect/:sessionId ────────────────────────────────────
-router.post('/disconnect/:sessionId', async (req, res, next) => {
+router.post('/disconnect/:sessionId',
+  param('sessionId').isUUID().withMessage('Invalid session ID format'),
+  validateRequest,
+  async (req, res, next) => {
   try {
     // Get session details
     const sessionResult = await pool.query(
@@ -200,7 +219,9 @@ router.post('/disconnect/:sessionId', async (req, res, next) => {
 // ── GET /api/admin/hotspot/sessions ──────────────────────────────────────────
 router.get('/hotspot/sessions', async (req, res, next) => {
   try {
-    const { status = 'active', page = 1, limit = 20 } = req.query;
+    const { status = 'active' } = req.query;
+    const page  = Math.max(1, parseInt(req.query.page, 10)  || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
     const offset = (page - 1) * limit;
 
     const sessionsResult = await pool.query(
@@ -354,7 +375,10 @@ router.get('/hotspot/health', async (req, res, next) => {
 });
 
 // ── POST /api/admin/hotspot/disconnect/:userId ──────────────────────────────
-router.post('/hotspot/disconnect/:userId', async (req, res, next) => {
+router.post('/hotspot/disconnect/:userId',
+  param('userId').isUUID().withMessage('Invalid user ID format'),
+  validateRequest,
+  async (req, res, next) => {
   try {
     const { userId } = req.params;
 

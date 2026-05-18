@@ -228,7 +228,7 @@ router.post('/disconnect', auth, async (req, res, next) => {
  * GET /api/hotspot/health
  * Check hotspot system health
  */
-router.get('/health', async (req, res, next) => {
+router.get('/health', auth, async (req, res, next) => {
   try {
     const mode = mikrotikService.getMode();
     const activeSessions = await mikrotikService.getActiveSessionCount();

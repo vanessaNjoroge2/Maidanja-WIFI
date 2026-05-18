@@ -52,9 +52,9 @@
 <span class="font-label-md text-label-md">Back</span>
 </button>
 <div class="glass-card rounded-xl p-md flex items-center gap-md">
-<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold"> JD </div>
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold"> M </div>
 <div>
-<p class="font-label-md text-label-md text-on-surface">John Doe</p>
+<p class="font-label-md text-label-md text-on-surface">Maidanja</p>
 <span class="text-[10px] px-2 py-0.5 rounded-full bg-primary-container/20 text-primary-fixed border border-primary-container/30">ADMIN</span>
 </div>
 <button onclick="api.logout()" class="ml-auto text-on-surface-variant hover:text-error transition-colors" title="Logout">
@@ -281,7 +281,7 @@
 <h4 class="font-headline-md text-headline-md">Package Manager</h4>
 <p class="text-on-surface-variant text-sm mt-1">Configure your Wi-Fi monetization tiers</p>
 </div>
-<button class="flex items-center gap-sm px-lg py-md rounded-xl border border-primary/30 hover:border-primary text-primary transition-all active:scale-95 bg-primary/5">
+<button onclick="openAddPackageModal()" class="flex items-center gap-sm px-lg py-md rounded-xl border border-primary/30 hover:border-primary text-primary transition-all active:scale-95 bg-primary/5">
 <span class="material-symbols-outlined">add</span>
 <span class="font-label-md">Add Package</span>
 </button>
@@ -361,6 +361,48 @@
 </div>
 </div>
 </div>
+</div>
+
+<!-- Add Package Modal -->
+<div id="add-package-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="glass-card rounded-xl p-xl w-full max-w-md border border-white/10 shadow-2xl">
+    <div class="flex justify-between items-center mb-lg border-b border-white/10 pb-md">
+      <h3 class="font-headline-md text-headline-md">Add New Package</h3>
+      <button onclick="closeAddPackageModal()" class="text-on-surface-variant hover:text-error transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="add-package-form" class="space-y-md">
+      <div>
+        <label class="block text-label-md text-on-surface-variant mb-xs">Package Name</label>
+        <input type="text" id="pkg-name" required class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 2 Hours Pass">
+      </div>
+      <div class="grid grid-cols-2 gap-md">
+        <div>
+          <label class="block text-label-md text-on-surface-variant mb-xs">Duration (Hours)</label>
+          <input type="number" id="pkg-duration" required min="1" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 2">
+        </div>
+        <div>
+          <label class="block text-label-md text-on-surface-variant mb-xs">Speed (Mbps)</label>
+          <input type="number" id="pkg-speed" required min="1" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 5">
+        </div>
+      </div>
+      <div>
+        <label class="block text-label-md text-on-surface-variant mb-xs">Price (KES)</label>
+        <input type="number" id="pkg-price" required min="1" step="0.01" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 20">
+      </div>
+      <div>
+        <label class="block text-label-md text-on-surface-variant mb-xs">Description (Optional)</label>
+        <textarea id="pkg-desc" rows="2" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="Brief description..."></textarea>
+      </div>
+      <div class="pt-md flex justify-end gap-md border-t border-white/10 mt-lg">
+        <button type="button" onclick="closeAddPackageModal()" class="px-lg py-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+        <button type="submit" id="add-pkg-btn" class="primary-gradient text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md active:scale-95 transition-transform flex items-center gap-sm">Save Package</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Footer -->
 <footer class="mt-xl py-xl px-xl border-t border-white/5 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest">
 <p class="text-on-surface-variant text-label-md">© 2024 Maidanja WiFi. Powered by M-Pesa.</p>
@@ -372,6 +414,24 @@
 </footer>
 </main>
 <script>
+/* ── Security: Admin Role Check (must be first) ──────────────────────────────── */
+(async () => {
+  const user = api.getUser();
+  if (!user || user.role !== 'admin') {
+    window.location.href = '/login.html';
+    return;
+  }
+})();
+
+/* ── Security: HTML Escape Utility ──────────────────────────────────────────────── */
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 /* ── Navigation Logic ────────────────────────────────────────────────────────────── */
 function initNavigation() {
   const links = document.querySelectorAll('.nav-link');
@@ -438,11 +498,11 @@ async function loadUsers() {
     tbody.innerHTML = users.map(u => `
       <tr class="hover:bg-white/5 transition-colors">
         <td class="px-lg py-lg">
-          <div class="font-bold">${u.name || 'N/A'}</div>
-          <div class="text-xs text-on-surface-variant">${u.phone_number}</div>
+          <div class="font-bold">${escapeHtml(u.name || 'N/A')}</div>
+          <div class="text-xs text-on-surface-variant">${escapeHtml(u.phone_number)}</div>
         </td>
         <td class="px-lg py-lg">
-          <span class="px-2 py-0.5 rounded bg-surface-container text-xs capitalize">${u.role}</span>
+          <span class="px-2 py-0.5 rounded bg-surface-container text-xs capitalize">${escapeHtml(u.role)}</span>
         </td>
         <td class="px-lg py-lg font-bold text-primary">KES ${parseFloat(u.total_spent).toLocaleString()}</td>
         <td class="px-lg py-lg text-xs text-on-surface-variant">${new Date(u.created_at).toLocaleDateString()}</td>
@@ -470,7 +530,7 @@ async function loadSessions() {
       const secsLeft = Math.max(0, (new Date(s.expires_at) - Date.now()) / 1000); 
       const pct = Math.min(100, (secsLeft / (24 * 3600)) * 100); // simplified pct
       const timeLabel = secsLeft > 3600 ? `${Math.floor(secsLeft/3600)}h ${Math.floor((secsLeft%3600)/60)}m remaining` : `${Math.floor(secsLeft/60)}m remaining`; 
-      return ` <tr class="hover:bg-white/5 transition-colors"> <td class="px-lg py-lg font-mono text-primary">${s.phone_number}</td> <td class="px-lg py-lg"> <span class="px-3 py-1 rounded-full bg-secondary-container/20 text-secondary text-xs">${s.package_name}</span> </td> <td class="px-lg py-lg w-48"> <div class="flex flex-col gap-xs"> <div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden"> <div class="h-full primary-gradient" style="width:${pct}%"></div> </div> <span class="text-[10px] text-on-surface-variant">${timeLabel}</span> </div> </td> <td class="px-lg py-lg">${s.speed_mbps} Mbps</td> <td class="px-lg py-lg text-on-surface-variant text-sm"> ${new Date(s.started_at).toLocaleTimeString()} </td> <td class="px-lg py-lg text-right"> <button onclick="disconnectUser('${s.id}', this)" class="text-error hover:bg-error/10 p-2 rounded-lg transition-colors"> <span class="material-symbols-outlined">power_settings_new</span> </button> </td> </tr>`; 
+      return ` <tr class="hover:bg-white/5 transition-colors"> <td class="px-lg py-lg font-mono text-primary">${escapeHtml(s.phone_number)}</td> <td class="px-lg py-lg"> <span class="px-3 py-1 rounded-full bg-secondary-container/20 text-secondary text-xs">${escapeHtml(s.package_name)}</span> </td> <td class="px-lg py-lg w-48"> <div class="flex flex-col gap-xs"> <div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden"> <div class="h-full primary-gradient" style="width:${pct}%"></div> </div> <span class="text-[10px] text-on-surface-variant">${timeLabel}</span> </div> </td> <td class="px-lg py-lg">${parseFloat(s.speed_mbps)} Mbps</td> <td class="px-lg py-lg text-on-surface-variant text-sm"> ${new Date(s.started_at).toLocaleTimeString()} </td> <td class="px-lg py-lg text-right"> <button onclick="disconnectUser('${escapeHtml(s.id)}', this)" class="text-error hover:bg-error/10 p-2 rounded-lg transition-colors"> <span class="material-symbols-outlined">power_settings_new</span> </button> </td> </tr>`; 
     }).join(''); 
   } catch (err) { console.error('Sessions error:', err.message); }
 } 
@@ -486,16 +546,16 @@ async function loadRevenue() {
     }
     tbody.innerHTML = txs.map(t => `
       <tr class="hover:bg-white/5 transition-colors">
-        <td class="px-lg py-lg font-mono text-xs">${t.mpesa_receipt_number || 'PENDING'}</td>
+        <td class="px-lg py-lg font-mono text-xs">${escapeHtml(t.mpesa_receipt_number || 'PENDING')}</td>
         <td class="px-lg py-lg">
-          <div class="text-sm">${t.name || 'Guest'}</div>
-          <div class="text-[10px] text-on-surface-variant">${t.phone_number}</div>
+          <div class="text-sm">${escapeHtml(t.name || 'Guest')}</div>
+          <div class="text-[10px] text-on-surface-variant">${escapeHtml(t.phone_number)}</div>
         </td>
-        <td class="px-lg py-lg text-sm">${t.package_name}</td>
-        <td class="px-lg py-lg font-bold">KES ${t.amount_kes}</td>
+        <td class="px-lg py-lg text-sm">${escapeHtml(t.package_name)}</td>
+        <td class="px-lg py-lg font-bold">KES ${parseFloat(t.amount_kes).toLocaleString()}</td>
         <td class="px-lg py-lg text-xs text-on-surface-variant">${new Date(t.created_at).toLocaleString()}</td>
         <td class="px-lg py-lg text-right">
-          <span class="px-2 py-0.5 rounded text-[10px] ${t.status === 'completed' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${t.status.toUpperCase()}</span>
+          <span class="px-2 py-0.5 rounded text-[10px] ${t.status === 'completed' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${escapeHtml((t.status || '').toUpperCase())}</span>
         </td>
       </tr>
     `).join('');
@@ -509,10 +569,10 @@ async function loadPackages() {
     const tbody = document.getElementById('packages-tbody');
     tbody.innerHTML = packages.map(p => `
       <tr class="hover:bg-white/5 transition-colors">
-        <td class="px-lg py-lg font-bold">${p.name}</td>
-        <td class="px-lg py-lg text-on-surface-variant">${p.duration_hours} Hours</td>
-        <td class="px-lg py-lg">${p.speed_mbps} Mbps</td>
-        <td class="px-lg py-lg font-bold text-primary-container">KES ${p.price_kes}</td>
+        <td class="px-lg py-lg font-bold">${escapeHtml(p.name)}</td>
+        <td class="px-lg py-lg text-on-surface-variant">${parseInt(p.duration_hours)} Hours</td>
+        <td class="px-lg py-lg">${parseInt(p.speed_mbps)} Mbps</td>
+        <td class="px-lg py-lg font-bold text-primary-container">KES ${parseFloat(p.price_kes).toLocaleString()}</td>
         <td class="px-lg py-lg text-right space-x-md">
           <button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
           <button class="text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
@@ -543,6 +603,45 @@ async function disconnectUser(sessionId, btn) {
     loadSessions(); loadStats();
   } catch (err) { alert('Failed to disconnect: ' + err.message); btn.disabled = false; }
 } 
+
+/* ── Modal Logic ──────────────────────────────────────────────────────────── */
+function openAddPackageModal() {
+  document.getElementById('add-package-modal').classList.remove('hidden');
+}
+
+function closeAddPackageModal() {
+  document.getElementById('add-package-modal').classList.add('hidden');
+  document.getElementById('add-package-form').reset();
+}
+
+document.getElementById('add-package-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('add-pkg-btn');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> Saving...`;
+  btn.disabled = true;
+
+  const data = {
+    name: document.getElementById('pkg-name').value,
+    duration_hours: parseInt(document.getElementById('pkg-duration').value),
+    speed_mbps: parseInt(document.getElementById('pkg-speed').value),
+    price_kes: parseFloat(document.getElementById('pkg-price').value),
+    description: document.getElementById('pkg-desc').value
+  };
+
+  try {
+    await api.post('/packages', data);
+    closeAddPackageModal();
+    loadPackages(); // Refresh the list
+    alert('Package added successfully!');
+  } catch (err) {
+    console.error('Error adding package:', err);
+    alert('Failed to add package: ' + err.message);
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+});
 
 /* ── Init ─────────────────────────────────────────────────────────────────── */
 initNavigation();

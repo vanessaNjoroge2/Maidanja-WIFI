@@ -197,9 +197,36 @@ router.get('/status/:checkoutRequestId', auth, async (req, res, next) => {
   }
 });
 
-// ── POST /api/payments/callback  (Safaricom webhook — no auth) ───────────────
+// ── POST /api/payments/callback  (Safaricom webhook — SECURED) ───────────────
 router.post('/callback', async (req, res, next) => {
   try {
+    // 1. Verify Secret Token (Primary Defense)
+    const secret = req.query.secret;
+    const expectedSecret = process.env.MPESA_CALLBACK_SECRET;
+    
+    if (!secret || secret !== expectedSecret) {
+      console.warn(`[SECURITY] Unauthorized callback attempt from IP: ${req.ip}`);
+      return res.status(403).json({ success: false, message: 'Forbidden: Invalid secret token' });
+    }
+
+    // 2. IP Whitelisting (Secondary Defense - Enforced in production)
+    if (process.env.NODE_ENV === 'production') {
+      const rawIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+      const clientIP = rawIP.split(',')[0].trim();
+
+      const safaricomIPs = [
+        '196.201.214.200', '196.201.214.206', '196.201.213.114',
+        '196.201.214.207', '196.201.214.208', '196.201.213.44',
+        '196.201.212.127', '196.201.212.138', '196.201.212.129',
+        '196.201.212.136', '196.201.212.74',  '196.201.212.69'
+      ];
+
+      if (!safaricomIPs.includes(clientIP)) {
+        console.warn(`[SECURITY] Blocked M-Pesa callback from unauthorized IP: ${clientIP}`);
+        return res.status(403).json({ ResultCode: 1, ResultDesc: 'Forbidden' });
+      }
+    }
+
     const body = req.body?.Body?.stkCallback;
     if (!body) {
       return res.status(200).json({ ResultCode: 0, ResultDesc: 'Accepted' });

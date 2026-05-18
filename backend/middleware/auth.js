@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
 
     // Fetch fresh user from DB to ensure they still exist and are active
     const result = await pool.query(
-      'SELECT id, phone_number, name, role, is_active FROM users WHERE id = $1',
+      'SELECT id, phone_number, name, role, is_active, token_version FROM users WHERE id = $1',
       [decoded.userId]
     );
 
@@ -33,6 +33,14 @@ const auth = async (req, res, next) => {
       return res.status(403).json({
         success: false,
         message: 'Account is deactivated.',
+      });
+    }
+
+    // ── Verify token version (check for logout invalidation)
+    if (decoded.tokenVersion !== user.token_version) {
+      return res.status(401).json({
+        success: false,
+        message: 'Session expired. Please log in again.',
       });
     }
 

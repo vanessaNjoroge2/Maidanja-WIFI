@@ -7,6 +7,8 @@
  */
 
 const { v4: uuid } = require('uuid');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const pool = require('../config/database');
 
 // Configuration
@@ -111,10 +113,11 @@ async function createHotspotUserReal(username, password, speedMbps, durationHour
     }
 
     // Log to database
+    const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query(
       `INSERT INTO hotspot_users (id, phone_number, username, password_hash, uplink_max_limit_mbps, downlink_max_limit_mbps, mikrotik_synced, synced_at)
        VALUES ($1, $2, $3, $4, $5, $6, true, NOW())`,
-      [hotspotUserId, username, username, password, speedMbps, speedMbps]
+      [hotspotUserId, username, username, hashedPassword, speedMbps, speedMbps]
     );
 
     return {
@@ -445,12 +448,9 @@ function getUserStatsSimulation(username) {
  */
 
 function generateRandomPassword(length = 12) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
-  let password = '';
-  for (let i = 0; i < length; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return password;
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  const bytes = crypto.randomBytes(length);
+  return Array.from(bytes, b => chars[b % chars.length]).join('');
 }
 
 /**
