@@ -1,12 +1,14 @@
 // backend/config/database.js
 const { Pool } = require('pg');
 
-const isProduction = process.env.NODE_ENV === 'production';
-
 const poolConfig = process.env.DATABASE_URL
   ? {
       connectionString: process.env.DATABASE_URL,
-      ssl: isProduction ? { rejectUnauthorized: false } : false
+      ssl: (process.env.DATABASE_URL.includes('localhost') || 
+            process.env.DATABASE_URL.includes('127.0.0.1') || 
+            process.env.DATABASE_URL.includes('db'))
+        ? false
+        : { rejectUnauthorized: false }
     }
   : {
       host:     process.env.DB_HOST     || 'localhost',
