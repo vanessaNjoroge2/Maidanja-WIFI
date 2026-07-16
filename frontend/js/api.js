@@ -14,10 +14,14 @@ const API_BASE = (() => {
                   hostname.startsWith('10.') || 
                   /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
 
-  if (isLocal) {
-    // If the frontend is served on port 3000 (Express static), use relative path
+  const isTunnel = hostname.includes('ngrok') || 
+                   hostname.includes('cloudflare') || 
+                   hostname.includes('localtunnel');
+
+  if (isLocal || isTunnel) {
+    // If the frontend is served on port 3000 (Express static) or via a tunnel, use relative path
     // If served on any other port (like Live Server on 5000), use absolute local URL to backend on 3000
-    return port === '3000' ? '/api' : `http://${hostname}:3000/api`;
+    return (port === '3000' || isTunnel) ? '/api' : `http://${hostname}:3000/api`;
   }
   
   // Production (Vercel, custom domain, etc.) → always use Render backend
@@ -64,8 +68,9 @@ const api = {
       if (!data.success) {
         // Extract detailed validation errors if available
         let errorMsg = data.message || 'Request failed';
-        if (data.error && Array.isArray(data.error) && data.error.length > 0) {
-          errorMsg = data.error.map(e => e.message || e.msg || e).join('. ');
+        const errs = data.error || data.errors;
+        if (errs && Array.isArray(errs) && errs.length > 0) {
+          errorMsg = errs.map(e => e.message || e.msg || e).join('. ');
         }
         throw new Error(errorMsg);
       }
@@ -88,7 +93,7 @@ const api = {
   put(endpoint, body, auth = true) { return this.request('PUT', endpoint, body, auth); },
   async logout() {
     try {
-      await this.post('/api/auth/logout');
+      await this.post('/auth/logout');
     } catch (_) {
       // Ignore errors, proceed with local cleanup anyway
     }

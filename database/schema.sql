@@ -34,8 +34,11 @@ CREATE TABLE users (
     is_active       BOOLEAN NOT NULL DEFAULT TRUE,
     last_login_at   TIMESTAMP WITH TIME ZONE,
     created_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+    updated_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    token_version   INTEGER NOT NULL DEFAULT 0
 );
+
+CREATE INDEX IF NOT EXISTS idx_users_token_version ON users(id, token_version);
 
 -- ============================================================
 -- PACKAGES
@@ -98,7 +101,7 @@ CREATE TABLE sessions (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id         UUID NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
     package_id      UUID NOT NULL REFERENCES packages(id) ON DELETE RESTRICT,
-    payment_id      UUID REFERENCES payments(id) ON DELETE RESTRICT, -- can be NULL for manual sessions
+    payment_id      UUID UNIQUE REFERENCES payments(id) ON DELETE RESTRICT, -- can be NULL for manual sessions
     hotspot_user_id UUID REFERENCES hotspot_users(id) ON DELETE SET NULL,
     phone_number    VARCHAR(15),
     mac_address     VARCHAR(17),

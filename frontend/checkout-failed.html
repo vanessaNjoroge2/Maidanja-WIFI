@@ -1,2 +1,304 @@
-<!doctype html> <html class="dark" lang="en"> <head> <meta charset="utf-8" /> <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <title>Payment Failed - Maidanja WiFi</title> <script src="/js/api.js"></script> <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" /> <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" /> <script id="tailwind-config"> tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary-fixed-variant": "#454747", "secondary-fixed-dim": "#d2bbff", "error-container": "#93000a", "on-tertiary": "#2f3131", "surface-container-lowest": "#0d0d15", "on-surface-variant": "#bbc9cf", "on-error-container": "#ffdad6", "on-tertiary-container": "#4f5051", "outline-variant": "#3c494e", background: "#13131b", "tertiary-container": "#c2c3c3", "primary-container": "#00d4ff", "on-secondary-container": "#c9aeff", "surface-container-low": "#1b1b23", "tertiary-fixed": "#e2e2e2", error: "#ffb4ab", "on-error": "#690005", outline: "#859398", "surface-tint": "#3cd7ff", "surface-dim": "#13131b", "on-secondary-fixed-variant": "#5a00c6", "on-surface": "#e4e1ed", "secondary-container": "#6001d1", "on-background": "#e4e1ed", secondary: "#d2bbff", "secondary-fixed": "#eaddff", "inverse-on-surface": "#303038", "on-secondary-fixed": "#25005a", "inverse-primary": "#00677e", "on-primary-container": "#00586b", primary: "#a8e8ff", "on-primary-fixed": "#001f27", "on-tertiary-fixed": "#1a1c1c", "on-secondary": "#3f008e", "surface-container": "#1f1f27", "surface-bright": "#393841", tertiary: "#dedfdf", "surface-variant": "#34343d", "surface-container-highest": "#34343d", "primary-fixed": "#b4ebff", "inverse-surface": "#e4e1ed", surface: "#13131b", "on-primary": "#003642", "on-primary-fixed-variant": "#004e5f", "surface-container-high": "#292932", "tertiary-fixed-dim": "#c6c6c7", "primary-fixed-dim": "#3cd7ff", }, borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px", }, spacing: { xs: "4px", sm: "8px", lg: "24px", "margin-mobile": "20px", md: "16px", gutter: "16px", "margin-desktop": "64px", xl: "40px", base: "4px", }, fontFamily: { "body-lg": ["DM Sans"], "display-lg": ["Sora"], "label-md": ["DM Sans"], "headline-lg-mobile": ["Sora"], "body-md": ["DM Sans"], "headline-md": ["Sora"], "headline-lg": ["Sora"], }, fontSize: { "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }], "display-lg": [ "48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700", }, ], "label-md": [ "14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500", }, ], "headline-lg-mobile": [ "28px", { lineHeight: "1.2", fontWeight: "600" }, ], "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }], "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }], "headline-lg": [ "32px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600", }, ], }, }, }, }; </script> <style> .glass-card { background: rgba(18, 18, 26, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); } .mesh-bg { background-color: #0a0a0f; background-image: radial-gradient( at 0% 0%, rgba(0, 212, 255, 0.15) 0px, transparent 50% ), radial-gradient( at 100% 0%, rgba(96, 1, 209, 0.15) 0px, transparent 50% ), radial-gradient( at 50% 100%, rgba(0, 212, 255, 0.1) 0px, transparent 50% ); } .error-glow { box-shadow: 0 0 40px rgba(255, 180, 171, 0.2); } </style> <style> body { min-height: max(884px, 100dvh); } </style> <link rel="stylesheet" href="/css/globals.css" /> </head> <link rel="stylesheet" href="/css/navbar.css" /> <body class="bg-background text-on-background font-body-md mesh-bg min-h-screen flex flex-col" > <!-- Global Navigation Bar --> <nav id="navbar" class="navbar"> <div class="navbar-container"> <div class="navbar-left"> <button class="back-button" onclick="goBack()" title="Go back to previous page" aria-label="Go back" > ← </button> <a href="/index.html" class="navbar-brand"> <img src="/images/logo.jpg" alt="Maidanja WiFi" /> <span class="hidden sm:inline">Maidanja WiFi</span> </a> </div> <div class="navbar-center"> <h1 class="navbar-title">Loading...</h1> </div> <div class="navbar-right"> <button id="mobile-menu-btn" aria-label="Toggle navigation menu"> <span></span><span></span><span></span> </button> <div id="nav-items" class="hidden sm:flex"></div> </div> </div> </nav> <!-- TopAppBar --> <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-white/10" > <div class="flex justify-between items-center h-20 w-full container-responsive" > <a href="index.html" class="flex items-center gap-sm"> <img src="/images/logo.jpg" alt="Maidanja WiFi" style="height: 50px; width: auto" /> </a> <div class="hidden md:flex gap-lg items-center"> <a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="packages.html" >Packages</a > <a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="dashboard.html" >Dashboard</a > <button onclick="window.location.href = 'dashboard.html'" class="bg-primary-container text-on-primary-container px-lg py-sm rounded-full font-label-md text-label-md font-bold active:scale-95 transition-transform" > My Account </button> </div> </div> </header> <!-- Main Content: Error State --> <main class="flex-grow flex items-center justify-center px-margin-mobile pt-24 pb-12" > <div class="glass-card w-full max-w-md rounded-xl p-xl flex flex-col items-center text-center error-glow relative" > <!-- Back Button --> <button onclick="goBack()" class="absolute top-6 left-6 flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-300" > <span class="material-symbols-outlined text-sm" data-icon="arrow_back" >arrow_back</span > <span class="font-label-md text-label-md text-sm">Back</span> </button> <!-- Error Icon --> <div class="w-24 h-24 rounded-full bg-error/20 flex items-center justify-center mb-lg border border-error/30" > <span class="material-symbols-outlined text-[64px] text-error" data-icon="cancel" style="font-variation-settings: &quot;FILL&quot; 1" >cancel</span > </div> <h1 class="font-headline-lg text-headline-lg mb-sm text-error"> Payment Failed </h1> <p class="font-body-lg text-body-lg text-on-surface-variant mb-xl"> Unfortunately, your payment could not be processed. Please try again. </p> <!-- Error Details Card --> <div class="w-full bg-surface-container-lowest/50 rounded-lg p-md border border-error/20 mb-xl text-left" > <div class="flex justify-between mb-sm"> <span class="text-on-surface-variant font-label-md text-label-md" >Transaction ID</span > <span id="failed-tx-id" class="text-on-surface font-label-md text-label-md font-mono" >—</span > </div> <div class="flex justify-between mb-sm"> <span class="text-on-surface-variant font-label-md text-label-md" >Plan</span > <span id="failed-plan" class="text-on-surface font-label-md text-label-md" >—</span > </div> <div class="flex justify-between mb-sm"> <span class="text-on-surface-variant font-label-md text-label-md" >Amount</span > <span id="failed-amount" class="text-on-surface font-label-md text-label-md" >—</span > </div> <div class="flex justify-between"> <span class="text-on-surface-variant font-label-md text-label-md" >Error</span > <span id="failed-reason" class="text-error font-label-md text-label-md text-right" >Invalid M-Pesa response</span > </div> </div> <!-- Action Buttons --> <div class="flex flex-col w-full gap-md"> <button onclick="retryPayment()" class="w-full bg-primary text-on-primary px-lg py-md rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform hover:bg-primary/90" > <span class="material-symbols-outlined inline text-[20px] mr-sm" >refresh</span > Try Again </button> <button onclick="goBack()" class="w-full bg-surface-container-high text-on-surface px-lg py-md rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform hover:bg-surface-container-highest" > <span class="material-symbols-outlined inline text-[20px] mr-sm" >arrow_back</span > Go Back </button> </div> <!-- Support Link --> <p class="text-on-surface-variant text-label-md mt-xl"> Need help? <a href="mailto:support@maidanja.com" class="text-primary hover:underline" >Contact support</a > </p> </div> </main> <!-- Footer --> <footer class="bg-surface border-t border-white/5 mt-auto"> <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive" > <div class="flex flex-col items-center md:items-start gap-xs mb-lg md:mb-0" > <span class="font-headline-md text-headline-md text-primary font-bold" >Maidanja</span > <p class="font-body-md text-body-md text-on-surface-variant"> © 2024 Maidanja WiFi. Powered by M-Pesa. </p> </div> <div class="flex gap-xl text-on-surface-variant font-label-md text-label-md" > <a class="hover:text-primary-fixed-dim transition-colors" href="packages.html" >Packages</a > <a class="hover:text-primary-fixed-dim transition-colors" href="dashboard.html" >Dashboard</a > <a class="hover:text-primary-fixed-dim transition-colors" href="admin.html" >Admin</a > </div> </div> </footer> <script> if (!api.isLoggedIn()) window.location.href = "/login.html"; // ── Populate error details from payment result ──────────────────────── const result = JSON.parse( localStorage.getItem("maidanja_payment_result") || "null", ); const payment = JSON.parse( localStorage.getItem("maidanja_payment") || "null", ); if (result) { document.getElementById("failed-tx-id").textContent = result.checkout_request_id || "Unknown"; document.getElementById("failed-reason").textContent = result.error_message || "Payment declined by M-Pesa"; document.getElementById("failed-amount").textContent = result.amount_kes ? `KES ${parseFloat(result.amount_kes).toLocaleString()}` : "—"; } if (payment) { document.getElementById("failed-plan").textContent = payment.package_name || "—"; } // ── Retry payment handler ────────────────────────────────────────────── async function retryPayment() { if (!payment) { goBack(); return; } // Go back to checkout to retry localStorage.removeItem("maidanja_payment_result"); localStorage.removeItem("maidanja_payment"); window.location.href = "/checkout.html"; } </script> <script src="/js/navbar.js"></script> <script src="/js/footer.js"></script>
-</body> </html> 
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Failed | Maidanja WiFi</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/css/navbar.css" />
+  <link rel="stylesheet" href="/css/globals.css" />
+  <script src="/js/api.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'mn-navy': '#1B3A6B', 'mn-blue': '#1E88C7', 'mn-orange': '#F4901E',
+            'mn-amber': '#FDB912', 'mn-paper': '#FAFBFC', 'mn-ink': '#2B3245', 'mn-grey': '#6B7280',
+          },
+          fontFamily: { sans: ['Manrope', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #FAFBFC;
+      color: #2B3245;
+    }
+
+    .mi {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-6px);
+      }
+
+      40% {
+        transform: translateX(6px);
+      }
+
+      60% {
+        transform: translateX(-4px);
+      }
+
+      80% {
+        transform: translateX(4px);
+      }
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .shake {
+      animation: shake 0.5s ease 0.2s both;
+    }
+
+    .fade-up {
+      animation: fade-up 0.45s ease both;
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.35s;
+    }
+
+    .failed-card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(27, 58, 107, 0.1);
+      border: 1px solid #E8EDF2;
+      max-width: 440px;
+      width: 100%;
+    }
+
+    .reason-box {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .tip-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #6B7280;
+      padding: 4px 0;
+    }
+
+    .tip-icon {
+      flex-shrink: 0;
+      color: #1E88C7;
+      font-size: 1rem;
+      margin-top: 1px;
+    }
+
+    .btn-retry {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #1E88C7 0%, #F4901E 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      font-family: 'Manrope', sans-serif;
+      transition: opacity 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-retry:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      background: transparent;
+      border: 2px solid #D1D9E0;
+      color: #2B3245;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: 'Manrope', sans-serif;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      border-color: #1B3A6B;
+      background: rgba(27, 58, 107, 0.04);
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="navbar" class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <button class="back-button" onclick="window.location.href='/packages.html'"
+          aria-label="Back to packages">←</button>
+        <a href="/index.html" class="navbar-brand">
+          <img src="/images/logo.png" alt="Maidanja WiFi" />
+          <span class="hidden sm:inline">Maidanja WiFi</span>
+        </a>
+      </div>
+      <div class="navbar-center">
+        <h1 class="navbar-title">Payment Failed</h1>
+      </div>
+      <div class="navbar-right">
+        <button id="mobile-menu-btn" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        <div id="nav-items" class="hidden sm:flex"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="min-h-screen flex items-center justify-center px-5 py-12">
+    <div class="failed-card p-8 text-center">
+
+      <!-- Failure icon -->
+      <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6 shake">
+        <span class="mi text-red-500" style="font-size:2.8rem;">cancel</span>
+      </div>
+
+      <h1 class="font-800 text-mn-navy mb-2 fade-up delay-1" style="font-size:1.5rem;">
+        Payment Not Completed
+      </h1>
+      <p class="text-mn-grey mb-6 fade-up delay-2" style="font-size:0.95rem;">
+        Don't worry — no money was taken. Your account is safe.
+      </p>
+
+      <!-- Reason box -->
+      <div id="reason-container" class="reason-box mb-6 fade-up delay-2">
+        <span class="mi text-red-400 flex-shrink-0 mt-0.5" style="font-size:1.3rem;">error</span>
+        <div>
+          <p class="font-700 text-red-700 text-sm mb-0.5">What happened</p>
+          <p id="failure-reason" class="text-red-600 text-sm leading-relaxed">The payment was not confirmed in time.</p>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="bg-mn-paper rounded-2xl p-5 mb-7 text-left fade-up delay-3">
+        <p class="text-xs font-700 text-mn-grey uppercase tracking-wider mb-3">Things to check</p>
+        <div class="space-y-1">
+          <div class="tip-item">
+            <span class="mi tip-icon">account_balance_wallet</span>
+            Ensure you have enough M-Pesa balance for the full amount.
+          </div>
+          <div class="tip-item">
+            <span class="mi tip-icon">phone_iphone</span>
+            Check that your phone has network signal and M-Pesa is active.
+          </div>
+          <div class="tip-item">
+            <span class="mi tip-icon">timer</span>
+            Enter your PIN within 60 seconds of the STK Push appearing.
+          </div>
+          <div class="tip-item">
+            <span class="mi tip-icon">lock</span>
+            Make sure your M-Pesa PIN is correct — 3 wrong attempts locks your wallet.
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="space-y-3 fade-up delay-3">
+        <button class="btn-retry" onclick="window.location.href='/checkout.html'">
+          <span class="mi" style="font-size:1.1rem;">refresh</span>
+          Try Again
+        </button>
+        <button class="btn-secondary" onclick="window.location.href='/packages.html'">
+          <span class="mi" style="font-size:1.1rem;">arrow_back</span>
+          Choose a Different Plan
+        </button>
+      </div>
+
+      <!-- Support -->
+      <p class="text-mn-grey mt-6" style="font-size:0.82rem;">
+        Still stuck?
+        <a href="tel:0706407084" class="text-mn-blue font-600 hover:underline">Call 0706407084</a>
+        or
+        <a href="mailto:maidanja31@gmail.com" class="text-mn-blue font-600 hover:underline">email us</a>
+      </p>
+
+    </div>
+  </main>
+
+  <script src="/js/navbar.js"></script>
+
+  <script>
+    /* ════════════════════════════════════════════════════════
+       FAILED PAGE LOGIC
+       Data source: localStorage['maidanja_payment_result']
+       ════════════════════════════════════════════════════════ */
+
+    if (!api.isLoggedIn()) { window.location.href = '/login.html'; }
+
+    const result = JSON.parse(localStorage.getItem('maidanja_payment_result') || 'null');
+
+    /* ── Show reason if available ── */
+    if (result) {
+      const reason = result.error_message
+        || result.failure_reason
+        || result.result_description
+        || 'The payment was cancelled or not confirmed in time.';
+      document.getElementById('failure-reason').textContent = reason;
+    }
+
+    /* ── Clean up stale payment data ── */
+    localStorage.removeItem('maidanja_payment_result');
+  </script>
+</body>
+
+</html>

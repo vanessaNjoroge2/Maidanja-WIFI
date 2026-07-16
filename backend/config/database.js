@@ -4,7 +4,7 @@ const { Pool } = require('pg');
 const poolConfig = process.env.DATABASE_URL
   ? {
       connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }
+      ssl: false
     }
   : {
       host:     process.env.DB_HOST     || 'localhost',
@@ -16,6 +16,7 @@ const poolConfig = process.env.DATABASE_URL
 
 const pool = new Pool({
   ...poolConfig,
+  ssl: false,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,

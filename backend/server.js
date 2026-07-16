@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
+const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/auth');
@@ -19,9 +19,12 @@ const mikrotikService = require('./services/mikrotikService');
 
 const app = express();
 
-// ✅ FIX: prevent double server start
+// Enable trust proxy for reverse proxy environments (Render, Vercel, ngrok)
+app.set('trust proxy', 1);
+
+// Prevent double server start
 if (global.__serverStarted) {
-  console.log("⚠️ Server already running, skipping duplicate start");
+  console.log('⚠️ Server already running, skipping duplicate start');
 } else {
   global.__serverStarted = true;
 }
@@ -29,17 +32,16 @@ if (global.__serverStarted) {
 // ── CONFIG ─────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 
-// ══════════════════════════════════════════════════════════
-// ✅ MOVED TO TOP: Startup Environment Validation
-// Must run BEFORE app.listen — server should never start
-// with missing or invalid environment variables.
-// ══════════════════════════════════════════════════════════
+// ── ENVIRONMENT VALIDATION ────────────────────────
 const requiredEnvVars = [
   'JWT_SECRET',
   'DATABASE_URL',
   'MPESA_CONSUMER_KEY',
   'MPESA_CONSUMER_SECRET',
   'MPESA_SHORTCODE',
+  'MPESA_PASSKEY',
+  'MPESA_CALLBACK_URL',
+  'MPESA_CALLBACK_SECRET',
 ];
 for (const key of requiredEnvVars) {
   if (!process.env[key]) {
@@ -56,42 +58,44 @@ if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
   process.exit(1);
 }
 
-// ── SECURITY: CORS ─────────────────────────────────────────
-const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',').map(o => o.trim());
-
-if (allowedOrigins.length === 0 || allowedOrigins[0] === '') {
-  console.error('❌ CRITICAL: CORS_ORIGIN is not set in .env or is empty.');
+// ── CORS ─────────────────────────────────────────────
+const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',').map(o => o.trim()).filter(Boolean);
+if (!allowedOrigins.length) {
+  console.error('❌ CRITICAL: CORS_ORIGIN is not set or empty.');
   process.exit(1);
 }
-
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
-    // Allow server-to-server requests (no origin) and whitelisted origins
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS: Origin '${origin}' is not allowed`));
-    }
+    // Allow requests with no origin (e.g. server-to-server, curl)
+    if (!origin) return callback(null, true);
+    // Wildcard allows all origins
+    if (allowedOrigins.includes('*')) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS: Origin '${origin}' is not allowed`));
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-}));
+};
+// Handle preflight OPTIONS requests globally before any other middleware
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 
-// ── SECURITY: RATE LIMITING ────────────────────────────────
+// ── RATE LIMITING ───────────────────────────────────────
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  message: { success: false, message: 'Too many requests, please try again later.' }
+  message: { success: false, message: 'Too many requests, please try again later.' },
 });
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   keyGenerator: (req) => {
-    return req.body?.phone_number
-      ? `phone:${req.body.phone_number}`
-      : `ip:${req.ip}`;
+    if (req.body?.phone_number) {
+      return `phone:${req.body.phone_number}`;
+    }
+    return ipKeyGenerator(req);
   },
   message: { success: false, message: 'Too many login attempts. Please try again after 15 minutes.' },
   standardHeaders: true,
@@ -110,69 +114,57 @@ app.use('/api/', generalLimiter);
 app.use('/api/auth/login', loginLimiter);
 app.use('/api/payments/initiate', paymentLimiter);
 
-// ── SECURITY: HELMET HEADERS ───────────────────────────────
+// ── SECURITY HEADERS (Helmet) ────────────────────────
 app.use(helmet({
-  // ✅ Content Security Policy
   contentSecurityPolicy: {
     directives: {
-      defaultSrc:  ["'self'"],
-      scriptSrc:   ["'self'", "https://cdn.tailwindcss.com", "https://fonts.googleapis.com"],
-      styleSrc:    ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com",
-                    "https://fonts.gstatic.com"],
-      fontSrc:     ["'self'", "https://fonts.gstatic.com"],
-      imgSrc:      ["'self'", "data:", "https:"],
-      connectSrc:  ["'self'", "https://maidanja-wifi.onrender.com"],
-      frameSrc:    ["'none'"],
-      objectSrc:   ["'none'"],
-      baseUri:     ["'self'"],
-      formAction:  ["'self'"],
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://cdn.tailwindcss.com", "https://fonts.googleapis.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://maidanja-wifi.onrender.com"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
     },
   },
-
-  // ✅ Referrer Policy
-  // Only sends origin (no path/query) on cross-origin requests
-  referrerPolicy: {
-    policy: "strict-origin-when-cross-origin",
-  },
-
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   crossOriginEmbedderPolicy: false,
 }));
 
-// ✅ Permissions Policy (Helmet doesn't include this yet — added manually)
-// Disables browser features your app doesn't need
+// Permissions Policy
 app.use((req, res, next) => {
-  res.setHeader(
-    'Permissions-Policy',
-    [
-      'camera=()',           // No camera access
-      'microphone=()',       // No microphone access
-      'geolocation=()',      // No GPS access
-      'payment=()',          // No Payment Request API
-      'usb=()',              // No USB access
-      'interest-cohort=()', // Opt out of FLoC tracking
-    ].join(', ')
-  );
+  res.setHeader('Permissions-Policy', [
+    'camera=()',
+    'microphone=()',
+    'geolocation=()',
+    'payment=()',
+    'usb=()',
+    'interest-cohort=()',
+  ].join(', '));
   next();
 });
 
-// ── LOGGING ────────────────────────────────────────────────
+// Logging
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
-// ── BODY PARSING ───────────────────────────────────────────
+// Body parsing
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// ── SECURITY: Guard admin.html ─────────────────────────────
+// Admin guard
 const auth = require('./middleware/auth');
 const adminOnly = require('./middleware/adminOnly');
 app.get('/admin.html', auth, adminOnly, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin.html'));
 });
 
-// ── STATIC FILES ───────────────────────────────────────────
+// Static files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// ── API ROUTES ─────────────────────────────────────────────
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/payments', paymentRoutes);
@@ -180,7 +172,7 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/hotspot', hotspotRoutes);
 app.use('/api/admin', adminRoutes);
 
-// ── HEALTH CHECK ───────────────────────────────────────────
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -190,35 +182,64 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ── ERROR HANDLER ──────────────────────────────────────────
+// Error handler
 app.use(errorHandler);
 
-// ── SESSION CLEANUP & HOTSPOT MANAGEMENT ──────────────────
+// Session cleanup & hotspot management
 setInterval(async () => {
   try {
     expireSessions();
     await mikrotikService.expireSessionsScheduled();
   } catch (err) {
-    console.error("Session cleanup error:", err.message);
+    console.error('Session cleanup error:', err.message);
   }
 }, 60 * 1000);
 
-// ── START SERVER ───────────────────────────────────────────
+// ── SERVER START ──────────────────────────────────────
 const server = app.listen(PORT, async () => {
-  console.log(`\n🚀 Maidanja WiFi API running on http://localhost:${PORT}`);
-  console.log(`🔌 Environment: ${process.env.NODE_ENV}\n`);
-
-  await mikrotikService.connectToMikroTik();
-  console.log(`📡 Hotspot Mode: ${mikrotikService.getMode()}\n`);
-});
-
-// ✅ Handle port conflict gracefully
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`❌ Port ${PORT} is already in use. Kill existing Node process.`);
-  } else {
-    console.error(err);
+  console.log(`🚀 Maidanja WiFi Server running on port ${PORT}`);
+  console.log(`🔌 Current Environment Mode: ${process.env.NODE_ENV || 'development'}`);
+  
+  // Connect to database
+  try {
+    const res = await pool.query('SELECT NOW()');
+    console.log(`💾 PostgreSQL Connected: ${res.rows[0].now}`);
+  } catch (err) {
+    console.error('❌ Database Connection Failed:', err.message);
   }
+
+  // Connect to MikroTik Router
+  await mikrotikService.connectToMikroTik();
 });
+
+// ── EXCEPTION & REJECTION HANDLERS ────────────────────
+process.on('uncaughtException', (err) => {
+  console.error('💥 UNCAUGHT EXCEPTION! Shutting down...', err.name, err.message, err.stack);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('💥 UNHANDLED REJECTION! Shutting down...', err.name, err.message, err.stack);
+  process.exit(1);
+});
+
+// ── GRACEFUL SHUTDOWN ─────────────────────────────────
+const gracefulShutdown = () => {
+  console.log('👋 SIGTERM/SIGINT received. Shutting down gracefully...');
+  server.close(async () => {
+    console.log('🚪 Express server closed.');
+    try {
+      await pool.end();
+      console.log('💾 Database pool closed.');
+      process.exit(0);
+    } catch (err) {
+      console.error('❌ Error during database pool close:', err.message);
+      process.exit(1);
+    }
+  });
+};
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
 
 module.exports = app;

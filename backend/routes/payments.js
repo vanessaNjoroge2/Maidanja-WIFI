@@ -33,8 +33,8 @@ router.post(
   [
     body('package_id').isUUID().withMessage('Valid package_id required'),
     body('phone_number')
-      .matches(/^2547\d{8}$/)
-      .withMessage('Phone must be in format 2547XXXXXXXX'),
+      .matches(/^254(7|1)\d{8}$/)
+      .withMessage('Phone must be in format 2547XXXXXXXX or 2541XXXXXXXX'),
   ],
   async (req, res, next) => {
     try {
@@ -204,15 +204,14 @@ router.post('/callback', async (req, res, next) => {
     const secret = req.query.secret;
     const expectedSecret = process.env.MPESA_CALLBACK_SECRET;
     
-    if (!secret || secret !== expectedSecret) {
+    if (!expectedSecret || !secret || secret !== expectedSecret) {
       console.warn(`[SECURITY] Unauthorized callback attempt from IP: ${req.ip}`);
       return res.status(403).json({ success: false, message: 'Forbidden: Invalid secret token' });
     }
 
     // 2. IP Whitelisting (Secondary Defense - Enforced in production)
     if (process.env.NODE_ENV === 'production') {
-      const rawIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
-      const clientIP = rawIP.split(',')[0].trim();
+      const clientIP = req.ip;
 
       const safaricomIPs = [
         '196.201.214.200', '196.201.214.206', '196.201.213.114',
@@ -235,6 +234,19 @@ router.post('/callback', async (req, res, next) => {
     const checkoutRequestId = body.CheckoutRequestID;
     const resultCode = body.ResultCode;
     const resultDesc = body.ResultDesc;
+
+    // Check idempotency: Verify if payment status is already completed or failed
+    const existingPaymentResult = await pool.query(
+      `SELECT status FROM payments WHERE mpesa_checkout_request_id = $1`,
+      [checkoutRequestId]
+    );
+    if (existingPaymentResult.rows.length > 0) {
+      const currentStatus = existingPaymentResult.rows[0].status;
+      if (currentStatus === 'completed' || currentStatus === 'failed') {
+        console.log(`[Callback] Payment ${checkoutRequestId} is already ${currentStatus}. Skipping.`);
+        return res.status(200).json({ ResultCode: 0, ResultDesc: 'Accepted' });
+      }
+    }
 
     if (resultCode !== 0) {
       // Payment failed — update DB

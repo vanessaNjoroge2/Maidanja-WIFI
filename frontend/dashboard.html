@@ -1,95 +1,245 @@
 <!doctype html>
-<html class="dark" lang="en">
+<html lang="en">
+
 <head>
   <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Maidanja WiFi | User Dashboard</title>
-  <script src="/js/api.js"></script>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <!-- Navbar & Global CSS must be in <head> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Dashboard | Maidanja WiFi</title>
+  <meta name="description" content="View your active WiFi session, data usage, and payment history on Maidanja WiFi." />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="/css/navbar.css" />
   <link rel="stylesheet" href="/css/globals.css" />
-  <script id="tailwind-config">
+  <script src="/js/api.js"></script>
+
+  <script>
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            "on-primary": "#003642", "surface-tint": "#3cd7ff",
-            "on-surface-variant": "#bbc9cf", "inverse-on-surface": "#303038",
-            "on-secondary-fixed": "#25005a", "on-secondary-container": "#c9aeff",
-            "on-tertiary-fixed-variant": "#454747", "primary-fixed-dim": "#3cd7ff",
-            error: "#ffb4ab", "inverse-primary": "#00677e",
-            "on-primary-fixed-variant": "#004e5f", "outline-variant": "#3c494e",
-            outline: "#859398", "primary-container": "#00d4ff",
-            "surface-container": "#1f1f27", "on-surface": "#e4e1ed",
-            "on-background": "#e4e1ed", "error-container": "#93000a",
-            surface: "#13131b", "on-tertiary-container": "#4f5051",
-            "on-error": "#690005", "surface-bright": "#393841",
-            "surface-container-lowest": "#0d0d15", "surface-container-high": "#292932",
-            "on-tertiary-fixed": "#1a1c1c", "on-error-container": "#ffdad6",
-            "on-tertiary": "#2f3131", "tertiary-container": "#c2c3c3",
-            "on-secondary": "#3f008e", "inverse-surface": "#e4e1ed",
-            tertiary: "#dedfdf", "secondary-fixed-dim": "#d2bbff",
-            "on-secondary-fixed-variant": "#5a00c6", "secondary-container": "#6001d1",
-            primary: "#a8e8ff", "on-primary-fixed": "#001f27",
-            "primary-fixed": "#b4ebff", "on-primary-container": "#00586b",
-            "surface-container-low": "#1b1b23", "secondary-fixed": "#eaddff",
-            secondary: "#d2bbff", "surface-dim": "#13131b",
-            "tertiary-fixed-dim": "#c6c6c7", "surface-container-highest": "#34343d",
-            background: "#13131b", "tertiary-fixed": "#e2e2e2",
-            "surface-variant": "#34343d",
+            'mn-navy': '#1B3A6B', 'mn-blue': '#1E88C7', 'mn-orange': '#F4901E',
+            'mn-amber': '#FDB912', 'mn-paper': '#FAFBFC', 'mn-ink': '#2B3245', 'mn-grey': '#6B7280',
           },
-          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "16px", full: "9999px" },
-          spacing: {
-            base: "4px", gutter: "16px", xl: "40px", "margin-mobile": "20px",
-            md: "16px", xs: "4px", lg: "24px", sm: "8px", "margin-desktop": "64px",
-          },
-          fontFamily: {
-            "headline-md": ["Sora"], "body-md": ["DM Sans"],
-            "headline-lg-mobile": ["Sora"], "label-md": ["DM Sans"],
-            "display-lg": ["Sora"], "body-lg": ["DM Sans"], "headline-lg": ["Sora"],
-          },
-          fontSize: {
-            "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
-            "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
-            "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "600" }],
-            "label-md": ["14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
-            "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
-            "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
-            "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }],
-          },
-        },
-      },
+          fontFamily: { sans: ['Manrope', 'sans-serif'] }
+        }
+      }
     };
   </script>
+
   <style>
-    body { background-color: #0a0a0f; color: #e4e1ed; min-height: max(884px, 100dvh); }
-    .glass-card { background: rgba(18, 18, 26, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    .primary-gradient { background: linear-gradient(135deg, #00d4ff 0%, #6001d1 100%); }
-    .text-gradient { background: linear-gradient(135deg, #00d4ff 0%, #d2bbff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    .circular-progress { background: radial-gradient(closest-side, #13131b 79%, transparent 80% 100%), conic-gradient(#00d4ff 65%, rgba(255, 255, 255, 0.05) 0); }
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #FAFBFC;
+      color: #2B3245;
+    }
+
+    .mi {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Session banner */
+    .session-banner {
+      background: linear-gradient(135deg, #1B3A6B 0%, #1E88C7 100%);
+      border-radius: 20px;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .session-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(244, 144, 30, 0.15), transparent);
+      pointer-events: none;
+    }
+
+    /* Circular timer */
+    .timer-ring {
+      transform: rotate(-90deg);
+    }
+
+    .timer-track {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.15);
+      stroke-width: 8;
+    }
+
+    .timer-progress {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke: url(#timerGrad);
+      transition: stroke-dashoffset 1s linear;
+    }
+
+    /* KPI card */
+    .kpi-card {
+      background: #fff;
+      border: 1px solid #E8EDF2;
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(27, 58, 107, 0.06);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .kpi-card:hover {
+      box-shadow: 0 6px 24px rgba(27, 58, 107, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .kpi-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Chart bar */
+    .chart-bar {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bar-fill {
+      width: 100%;
+      max-width: 36px;
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, #1E88C7 0%, #1B3A6B 100%);
+      transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      min-height: 4px;
+    }
+
+    .bar-fill:hover {
+      background: linear-gradient(180deg, #F4901E 0%, #1E88C7 100%);
+    }
+
+    .bar-label {
+      font-size: 0.62rem;
+      color: #9CA3AF;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* History table */
+    .hist-row {
+      border-bottom: 1px solid #F0F3F7;
+      transition: background 0.15s;
+    }
+
+    .hist-row:hover {
+      background: #F8FAFC;
+    }
+
+    .hist-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Status badge */
+    .badge-completed {
+      background: #dcfce7;
+      color: #15803d;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .badge-pending {
+      background: #fef9c3;
+      color: #854d0e;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .badge-failed {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    /* Warning banner (session < 30min) */
+    .warn-banner {
+      background: linear-gradient(135deg, rgba(253, 185, 18, 0.12) 0%, rgba(244, 144, 30, 0.12) 100%);
+      border: 1px solid rgba(253, 185, 18, 0.4);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .fade-in {
+      animation: fade-in 0.4s ease both;
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.3s;
+    }
   </style>
 </head>
-<body class="font-body-md text-body-md mb-24 md:mb-0">
 
-  <!-- Global Navigation Bar -->
+<body>
+  <!-- Shared nav -->
   <nav id="navbar" class="navbar">
     <div class="navbar-container">
       <div class="navbar-left">
-        <button class="back-button" onclick="goBack()" title="Go back to previous page" aria-label="Go back">←</button>
         <a href="/index.html" class="navbar-brand">
-          <img src="/images/logo.jpg" alt="Maidanja WiFi" />
+          <img src="/images/logo.png" alt="Maidanja WiFi" />
           <span class="hidden sm:inline">Maidanja WiFi</span>
         </a>
       </div>
       <div class="navbar-center">
-        <h1 class="navbar-title">Loading...</h1>
+        <h1 class="navbar-title">My Dashboard</h1>
       </div>
       <div class="navbar-right">
-        <button id="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <button id="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
         <div id="nav-items" class="hidden sm:flex"></div>
@@ -97,264 +247,457 @@
     </div>
   </nav>
 
-  <!-- Main Content — padding-top handled by navbar.css body rule -->
-  <main class="container-responsive pt-6 pb-8 space-y-xl">
+  <!-- Page content -->
+  <div class="mn-section pb-16">
+    <div class="mn-max mx-auto">
 
-    <!-- Hero: Active Session Banner -->
-    <section class="w-full">
-      <div class="glass-card rounded-xl p-lg flex flex-col md:flex-row items-center gap-lg relative overflow-hidden">
-        <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"></div>
-        <div class="relative z-10 flex-shrink-0">
-          <div id="session-timer" class="w-40 h-40 rounded-full circular-progress flex items-center justify-center">
-            <div class="text-center">
-              <span id="dash-countdown" class="block font-headline-md text-headline-md text-white">--:--</span>
-              <span class="text-label-md text-on-surface-variant uppercase tracking-widest">Remaining</span>
+      <!-- ── EXPIRY WARNING BANNER ── -->
+      <div id="warn-banner" class="hidden warn-banner mb-5">
+        <span class="mi text-mn-amber flex-shrink-0" style="font-size:1.4rem;">warning</span>
+        <div>
+          <p class="font-700 text-mn-orange text-sm">Session Expiring Soon</p>
+          <p class="text-mn-grey text-xs" id="warn-text">Your session expires in less than 30 minutes.</p>
+        </div>
+        <a href="/packages.html" class="ml-auto btn-brand text-xs px-4 py-2 rounded-xl whitespace-nowrap flex-shrink-0">
+          Renew Now
+        </a>
+      </div>
+
+      <!-- ── SESSION BANNER ── -->
+      <div id="session-section" class="hidden session-banner p-6 md:p-8 mb-6 fade-in">
+        <!-- SVG Gradient def -->
+        <svg width="0" height="0" style="position:absolute;">
+          <defs>
+            <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FDB912" />
+              <stop offset="100%" stop-color="#F4901E" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+
+          <!-- Timer ring -->
+          <div class="relative flex-shrink-0">
+            <svg width="110" height="110" viewBox="0 0 110 110">
+              <circle class="timer-track" cx="55" cy="55" r="46" />
+              <circle class="timer-progress" id="timer-progress" cx="55" cy="55" r="46" stroke-dasharray="289"
+                stroke-dashoffset="289" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="timer-display" class="font-800 text-white" style="font-size:1.2rem;line-height:1;">—</span>
+              <span class="text-white/60 text-xs mt-1">left</span>
             </div>
           </div>
-        </div>
-        <div class="relative z-10 flex-1 space-y-md text-center md:text-left">
-          <div class="flex flex-wrap items-center justify-center md:justify-start gap-sm">
-            <span id="session-badge" class="px-md py-xs bg-green-500/10 text-green-400 rounded-full text-label-md flex items-center gap-xs border border-green-500/20 hidden">
-              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Active
-            </span>
-            <span class="px-md py-xs bg-white/5 text-on-surface-variant rounded-full text-label-md border border-white/10 flex items-center gap-xs">
-              <span class="material-symbols-outlined text-sm" data-icon="speed">speed</span> 10 Mbps
-            </span>
+
+          <!-- Session info -->
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2 flex-wrap">
+              <h2 id="session-pkg" class="font-800 text-white" style="font-size:1.25rem;">Loading…</h2>
+              <span class="badge-active text-xs">● LIVE</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+              <div>
+                <p class="text-white/50 text-xs font-600 mb-0.5">Speed</p>
+                <p id="session-speed" class="text-white font-700 text-sm">—</p>
+              </div>
+              <div>
+                <p class="text-white/50 text-xs font-600 mb-0.5">Data Used</p>
+                <p id="session-data" class="text-white font-700 text-sm">—</p>
+              </div>
+              <div>
+                <p class="text-white/50 text-xs font-600 mb-0.5">Started</p>
+                <p id="session-started" class="text-white font-700 text-sm">—</p>
+              </div>
+              <div>
+                <p class="text-white/50 text-xs font-600 mb-0.5">Receipt</p>
+                <p id="session-receipt" class="text-white font-700 text-sm font-mono">—</p>
+              </div>
+            </div>
           </div>
-          <h2 id="session-pkg-name" class="font-headline-lg text-headline-lg text-white">No Active Session</h2>
-          <p id="session-desc" class="text-on-surface-variant max-w-md">You don't have an active session. Purchase a package to get connected.</p>
-          <button onclick="window.location.href = '/packages.html'" class="w-full md:w-auto primary-gradient text-white font-bold py-md px-xl rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)] active:scale-95 transition-transform">
-            Buy More Time
-          </button>
+
+          <!-- Renew CTA -->
+          <div class="flex-shrink-0">
+            <a href="/packages.html"
+              class="bg-white text-mn-navy font-700 px-5 py-2.5 rounded-xl hover:bg-white/90 transition-colors text-sm flex items-center gap-2">
+              <span class="mi" style="font-size:1rem;-webkit-text-fill-color:initial;">add_circle</span>
+              Top Up
+            </a>
+          </div>
+
         </div>
       </div>
-    </section>
 
-    <!-- Stats Grid -->
-    <section class="grid-auto-fit gap-md">
-      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
-        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Total Sessions</span>
-        <span id="stat-sessions" class="font-headline-md text-headline-md text-primary">—</span>
+      <!-- ── NO SESSION BANNER ── -->
+      <div id="no-session-section"
+        class="hidden bg-white border-2 border-dashed border-mn-blue/25 rounded-2xl p-8 mb-6 text-center fade-in delay-1">
+        <span class="mi text-mn-grey mb-3" style="font-size:2.5rem;">wifi_off</span>
+        <h2 class="font-800 text-mn-navy mb-2">No Active Session</h2>
+        <p class="text-mn-grey mb-5 text-sm">You're not connected right now. Buy a package to get online instantly.</p>
+        <a href="/packages.html" class="btn-brand inline-flex items-center gap-2 px-7 py-3 rounded-xl">
+          <span class="mi" style="font-size:1.1rem;">wifi</span>
+          Browse Packages
+        </a>
       </div>
-      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
-        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Total Spent</span>
-        <span id="stat-spent" class="font-headline-md text-headline-md text-primary">—</span>
-      </div>
-      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
-        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Favorite Package</span>
-        <span id="stat-fav" class="font-headline-md text-headline-md text-primary">—</span>
-      </div>
-      <div class="glass-card p-lg rounded-xl flex flex-col items-center md:items-start space-y-sm hover:border-primary/40 transition-colors">
-        <span class="text-label-md text-on-surface-variant uppercase tracking-wider">Member Since</span>
-        <span id="stat-member" class="font-headline-md text-headline-md text-primary">—</span>
-      </div>
-    </section>
 
-    <!-- Weekly Spend Chart & Visual -->
-    <section class="grid-auto-fit gap-lg">
-      <div class="lg:col-span-2 glass-card p-lg rounded-xl space-y-lg">
-        <div class="flex justify-between items-center">
-          <h3 class="font-headline-md text-headline-md text-white">Weekly Spending</h3>
-          <div class="flex gap-xs">
-            <span class="w-3 h-3 bg-primary rounded-sm"></span>
-            <span class="text-label-md text-on-surface-variant">Daily Total (KES)</span>
+      <!-- ── KPI CARDS ── -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 fade-in delay-1">
+        <!-- Total Sessions -->
+        <div class="kpi-card">
+          <div class="kpi-icon mb-3" style="background:rgba(30,136,199,0.1);">
+            <span class="mi text-mn-blue" style="font-size:1.2rem;">history</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Total Sessions</p>
+          <p id="kpi-sessions" class="font-800 text-mn-navy" style="font-size:1.6rem;">—</p>
+        </div>
+        <!-- Total Spent -->
+        <div class="kpi-card">
+          <div class="kpi-icon mb-3" style="background:rgba(244,144,30,0.1);">
+            <span class="mi text-mn-orange" style="font-size:1.2rem;">payments</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Total Spent</p>
+          <p id="kpi-spent" class="font-800 text-mn-navy" style="font-size:1.4rem;">—</p>
+        </div>
+        <!-- Favourite Package -->
+        <div class="kpi-card">
+          <div class="kpi-icon mb-3" style="background:rgba(253,185,18,0.15);">
+            <span class="mi text-mn-amber" style="font-size:1.2rem;">star</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Favourite Plan</p>
+          <p id="kpi-fav" class="font-700 text-mn-navy text-sm leading-tight">—</p>
+        </div>
+        <!-- Member Since -->
+        <div class="kpi-card">
+          <div class="kpi-icon mb-3" style="background:rgba(27,58,107,0.08);">
+            <span class="mi text-mn-navy" style="font-size:1.2rem;">calendar_month</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Member Since</p>
+          <p id="kpi-since" class="font-700 text-mn-navy text-sm">—</p>
+        </div>
+      </div>
+
+      <!-- ── WEEKLY SPENDING CHART ── -->
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 mb-6 fade-in delay-2">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="font-800 text-mn-navy" style="font-size:1.05rem;">Weekly Spending</h3>
+            <p class="text-mn-grey text-xs mt-0.5">Your M-Pesa payments over the past 7 days</p>
+          </div>
+          <span id="weekly-total" class="font-800 text-mn-blue text-sm">KES —</span>
+        </div>
+
+        <!-- Bar chart container -->
+        <div id="chart-bars" class="flex items-end gap-2 h-32 px-1">
+          <!-- Populated by JS from /api/sessions/weekly-spending -->
+          <div class="flex-1 flex items-center justify-center text-mn-grey">
+            <span class="mi" style="font-size:1.5rem;animation:spin 1s linear infinite;">progress_activity</span>
           </div>
         </div>
-        <div id="weekly-chart" class="h-64 flex items-end justify-between gap-md px-md">
-          <div class="w-full h-full flex items-center justify-center text-on-surface-variant text-label-md">Loading chart...</div>
-        </div>
-        <div id="weekly-labels" class="flex justify-between text-label-md text-on-surface-variant pt-md"></div>
-      </div>
-      <!-- Quick Connect Image -->
-      <div class="glass-card rounded-xl overflow-hidden relative group">
-        <img alt="WiFi Experience" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiMXiiKLSEPa7boFD8Oz0gES7vtHeCJhKV6ocD_qCMQkVFG5Da3qgRpB841GadJJ3zOlaCXzDThI9zr5yOcFiHwzDMLYHFqtmJFCUVumxTKEZs-h09mh1Mk_tvg7szEXmtpOLutiorokvBJH13-ByLwGSYE0IFBl7BGl6AYLPHDp4_FlPAXfqlm2TlP6LWjsG5t_g6s2iujE7IsarvBVKwGFhBzgAAFmlzxRW3SOx4JM9cDmKg7sdc-vNj3Woc00KW3dW0fXuozA" />
-        <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent flex flex-col justify-end p-lg space-y-sm">
-          <h4 class="font-headline-md text-headline-md text-white">Faster Public WiFi</h4>
-          <p class="text-on-surface-variant">Our nodes are powered by ultra-low latency fiber optics for the best experience.</p>
-        </div>
-      </div>
-    </section>
 
-    <!-- Purchase History Table -->
-    <section class="glass-card rounded-xl overflow-hidden mb-20">
-      <div class="p-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-md border-b border-white/5">
-        <h3 class="font-headline-md text-headline-md text-white">Purchase History</h3>
-        <div class="relative w-full md:w-64">
-          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-md" data-icon="search">search</span>
-          <input class="w-full bg-surface-container-low border-white/5 rounded-lg pl-10 text-body-md text-white focus:border-primary focus:ring-0" placeholder="Search orders..." type="text" />
+        <div id="chart-labels" class="flex gap-2 mt-2 px-1">
+          <!-- Day labels below bars -->
         </div>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
-          <thead class="bg-white/5 text-label-md text-on-surface-variant uppercase tracking-wider">
-            <tr>
-              <th class="px-lg py-md">Date</th>
-              <th class="px-lg py-md">Package</th>
-              <th class="px-lg py-md">Duration</th>
-              <th class="px-lg py-md">Amount</th>
-              <th class="px-lg py-md">Status</th>
-            </tr>
-          </thead>
-          <tbody id="history-body" class="divide-y divide-white/5">
-            <tr><td colspan="5" class="px-lg py-md text-on-surface-variant text-center">Loading history...</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="px-lg py-md border-t border-white/5 flex items-center justify-between">
-        <span id="pagination-text" class="text-label-md text-on-surface-variant">Loading...</span>
-        <div class="flex gap-sm">
-          <button class="p-sm glass-card rounded-lg hover:text-primary transition-colors disabled:opacity-50" disabled>
-            <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
-          </button>
-          <button class="p-sm glass-card rounded-lg hover:text-primary transition-colors">
-            <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
-          </button>
+
+      <!-- ── PAYMENT HISTORY TABLE ── -->
+      <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden fade-in delay-3">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h3 class="font-800 text-mn-navy" style="font-size:1.05rem;">Payment History</h3>
+          <span id="history-count" class="text-xs text-mn-grey font-600">Loading…</span>
         </div>
+
+        <!-- Desktop table -->
+        <div class="hidden md:block overflow-x-auto">
+          <table class="mn-table">
+            <thead>
+              <tr>
+                <th>Package</th>
+                <th>Amount</th>
+                <th>M-Pesa Receipt</th>
+                <th>Date</th>
+                <th class="text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+              <tr>
+                <td colspan="5" class="text-center py-8 text-mn-grey">Loading history…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile cards -->
+        <div id="history-mobile" class="md:hidden divide-y divide-gray-100">
+          <div class="px-5 py-4 text-mn-grey text-sm text-center">Loading…</div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="history-empty" class="hidden px-6 py-12 text-center">
+          <span class="mi text-mn-grey" style="font-size:2.5rem;">receipt_long</span>
+          <p class="text-mn-grey font-600 mt-3">No payment history yet.</p>
+          <a href="/packages.html" class="text-mn-blue font-700 text-sm hover:underline mt-2 inline-block">Buy your
+            first package</a>
+        </div>
+
       </div>
-    </section>
-  </main>
+
+    </div>
+  </div>
 
   <!-- Footer -->
-  <footer class="hidden md:block w-full mt-xl bg-surface border-t border-white/5">
-    <div class="flex flex-col md:flex-row justify-between items-center py-lg container-responsive gap-lg">
-      <div class="flex flex-col gap-sm items-center md:items-start">
-        <div class="font-headline-md text-headline-md text-primary">Maidanja Hotspot WiFi</div>
-        <p class="text-body-md text-on-surface-variant text-center md:text-left">© 2026 Maidanja WiFi. Powered by M-Pesa.</p>
-      </div>
-      <div class="flex gap-6 text-center text-sm">
-        <div>
-          <p class="text-on-surface-variant mb-1">📞</p>
-          <a href="tel:0706407084" class="text-primary hover:text-primary/80">0706407084</a>
-        </div>
-        <div>
-          <p class="text-on-surface-variant mb-1">📧</p>
-          <a href="mailto:maidanja31@gmail.com" class="text-primary hover:text-primary/80 text-xs">maidanja31@gmail.com</a>
-        </div>
-      </div>
-      <div class="flex gap-lg">
-        <a class="text-label-md text-on-surface-variant hover:text-primary transition-colors" href="packages.html">Packages</a>
-        <a class="text-label-md text-on-surface-variant hover:text-primary transition-colors" href="dashboard.html">Dashboard</a>
-        <a class="text-label-md text-on-surface-variant hover:text-primary transition-colors" href="admin.html">Admin</a>
-      </div>
+  <footer class="bg-mn-navy text-white py-8 px-5 md:px-8">
+    <div class="mn-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <a href="/index.html" class="flex items-center gap-2.5">
+        <img src="/images/logo.png" alt="" class="h-8 w-auto rounded-lg" />
+        <span class="font-700">Maidanja WiFi</span>
+      </a>
+      <p class="text-white/50 text-sm">© 2026 Maidanja WiFi. Powered by M-Pesa.</p>
     </div>
   </footer>
 
-  <!-- Bottom Navigation Bar (Mobile only) -->
-  <nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-xl border-t border-white/5 px-4 py-2 z-50">
-    <div class="flex justify-between items-center max-w-md mx-auto">
-      <a class="flex flex-col items-center gap-xs text-primary font-bold" href="#">
-        <span class="material-symbols-outlined" data-icon="home">home</span>
-        <span class="text-[10px]">Home</span>
-      </a>
-      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
-        <span class="material-symbols-outlined" data-icon="history">history</span>
-        <span class="text-[10px]">Sessions</span>
-      </a>
-      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
-        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
-        <span class="text-[10px]">History</span>
-      </a>
-      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
-        <span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
-        <span class="text-[10px]">Support</span>
-      </a>
-      <a class="flex flex-col items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#" onclick="api.logout()">
-        <span class="material-symbols-outlined" data-icon="logout">logout</span>
-        <span class="text-[10px]">Logout</span>
-      </a>
-    </div>
-  </nav>
-
   <script src="/js/navbar.js"></script>
-  <script src="/js/footer.js"></script>
+
   <script>
-    if (!api.isLoggedIn()) window.location.href = "/login.html";
+    /* ════════════════════════════════════════════════════════
+       DASHBOARD LOGIC
+       Endpoints (all require JWT):
+         GET /api/sessions/active
+         GET /api/sessions/history
+         GET /api/sessions/weekly-spending
+       ════════════════════════════════════════════════════════ */
+
+    if (!api.isLoggedIn()) { window.location.href = '/login.html'; }
+
     const user = api.getUser();
 
-    function formatKES(amount) {
-      return 'KES ' + parseFloat(amount || 0).toLocaleString('en-KE', { minimumFractionDigits: 0 });
+    /* ── Utility: format time countdown ── */
+    function fmtCountdown(secs) {
+      if (secs <= 0) return '0m';
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      if (h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
     }
 
-    /* ── Active Session ──────────────────────────────────────────────────────── */
-    (async () => {
-      try {
-        const res = await api.get("/sessions/active");
-        const session = res.data.session;
-        if (session && session.seconds_remaining > 0) {
-          document.getElementById("session-badge").classList.remove("hidden");
-          document.getElementById("session-pkg-name").textContent = session.package_name;
-          document.getElementById("session-desc").textContent =
-            `Your connection expires ${new Date(session.expires_at).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}.`;
-          const tick = () => {
-            const secs = Math.max(0, (new Date(session.expires_at) - Date.now()) / 1000);
-            const h = Math.floor(secs / 3600);
-            const m = Math.floor((secs % 3600) / 60);
-            document.getElementById("dash-countdown").textContent =
-              `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-          };
-          tick();
-          setInterval(tick, 60000);
-        }
-      } catch (err) { console.warn("Session load error:", err.message); }
+    /* ── Utility: escape HTML ── */
+    function esc(str) {
+      return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
-      /* ── Stats & History ──────────────────────────────────────────────────── */
+    /* ── Load active session ── */
+    let timerInterval;
+    async function loadActiveSession() {
       try {
-        const histRes = await api.get("/sessions/history?limit=10");
-        const sessions = histRes.data.sessions;
-        const totalSessions = histRes.data.pagination.total;
-        const totalSpent = sessions.reduce((sum, s) => sum + parseFloat(s.amount_kes || 0), 0);
-        const fav = sessions.length > 0 ? sessions[0].package_name : "—";
-        document.getElementById("stat-sessions").textContent = totalSessions;
-        document.getElementById("stat-spent").textContent = formatKES(totalSpent);
-        document.getElementById("stat-fav").textContent = fav;
-        document.getElementById("stat-member").textContent = user
-          ? new Date(user.created_at || Date.now()).toLocaleDateString("en-KE", { month: "short", year: "numeric" })
-          : "—";
-        const showing = Math.min(sessions.length, 10);
-        document.getElementById("pagination-text").textContent =
-          totalSessions > 0 ? `Showing 1 to ${showing} of ${totalSessions} sessions` : "No sessions yet";
-        const tbody = document.getElementById("history-body");
-        if (sessions.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="px-lg py-md text-on-surface-variant text-center">No sessions yet. <a href="/packages.html" class="text-primary underline">Buy your first package!</a></td></tr>`;
+        const res = await api.get('/sessions/active');
+        const session = res?.data?.session;
+
+        if (session) {
+          document.getElementById('session-section').classList.remove('hidden');
+          document.getElementById('no-session-section').classList.add('hidden');
+
+          /* Populate fields */
+          document.getElementById('session-pkg').textContent =
+            session.package_name || 'Package';
+          document.getElementById('session-speed').textContent =
+            `${session.speed_mbps} Mbps`;
+          document.getElementById('session-data').textContent =
+            session.data_used_mb != null ? `${parseFloat(session.data_used_mb).toFixed(1)} MB` : '—';
+          document.getElementById('session-started').textContent =
+            session.started_at
+              ? new Date(session.started_at).toLocaleTimeString('en-KE', { hour: '2-digit', minute: '2-digit' })
+              : '—';
+          document.getElementById('session-receipt').textContent =
+            session.mpesa_receipt_number || '—';
+
+          /* Timer ring */
+          const totalSecs = (Number(session.duration_hours) || 1) * 3600;
+          let secsLeft = session.seconds_remaining || 0;
+
+          /* Expiry warning */
+          if (secsLeft < 1800) {
+            const warnEl = document.getElementById('warn-banner');
+            warnEl.classList.remove('hidden');
+            document.getElementById('warn-text').textContent =
+              `Session expires in ${fmtCountdown(secsLeft)}. Top up to stay connected.`;
+          }
+
+          function updateTimer() {
+            const pct = Math.max(0, secsLeft / totalSecs);
+            const circum = 2 * Math.PI * 46; // 289
+            const offset = circum * (1 - pct);
+            document.getElementById('timer-progress').style.strokeDashoffset = offset;
+            document.getElementById('timer-display').textContent = fmtCountdown(secsLeft);
+            if (secsLeft > 0) secsLeft--;
+          }
+          updateTimer();
+          if (timerInterval) clearInterval(timerInterval);
+          timerInterval = setInterval(updateTimer, 1000);
+
+        } else {
+          document.getElementById('session-section').classList.add('hidden');
+          document.getElementById('no-session-section').classList.remove('hidden');
+        }
+      } catch (_) {
+        document.getElementById('session-section').classList.add('hidden');
+        document.getElementById('no-session-section').classList.remove('hidden');
+      }
+    }
+
+    /* ── Load payment history ── */
+    async function loadHistory() {
+      try {
+        const res = await api.get('/sessions/history');
+        const hist = res?.data?.sessions || res?.data?.history || [];
+
+        const tbody = document.getElementById('history-tbody');
+        const mobile = document.getElementById('history-mobile');
+        const empty = document.getElementById('history-empty');
+        const count = document.getElementById('history-count');
+
+        count.textContent = `${hist.length} transaction${hist.length !== 1 ? 's' : ''}`;
+
+        if (hist.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5"></td></tr>';
+          mobile.innerHTML = '';
+          empty.classList.remove('hidden');
+
+          /* KPI defaults */
+          document.getElementById('kpi-sessions').textContent = '0';
+          document.getElementById('kpi-spent').textContent = 'KES 0';
+          document.getElementById('kpi-fav').textContent = '—';
           return;
         }
-        tbody.innerHTML = sessions.map((s, i) => {
-          const statusBadge = s.status === "active"
-            ? `<span class="px-md py-xs bg-green-500/10 text-green-400 rounded-full text-xs font-bold border border-green-500/20">Active</span>`
-            : `<span class="px-md py-xs bg-white/5 text-on-surface-variant rounded-full text-xs font-bold border border-white/10">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span>`;
-          return `
-            <tr class="${i % 2 === 1 ? "bg-white/[0.02]" : ""} hover:bg-white/5 transition-colors">
-              <td class="px-lg py-md">${new Date(s.payment_date).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}</td>
-              <td class="px-lg py-md font-bold text-white">${s.package_name}</td>
-              <td class="px-lg py-md text-on-surface-variant">${s.duration_hours < 24 ? s.duration_hours + " Hour" + (s.duration_hours > 1 ? "s" : "") : s.duration_hours / 24 + " Day" + (s.duration_hours > 24 ? "s" : "")}</td>
-              <td class="px-lg py-md font-bold text-primary">${formatKES(s.amount_kes)}</td>
-              <td class="px-lg py-md">${statusBadge}</td>
-            </tr>`;
-        }).join("");
-      } catch (err) { console.warn("History load error:", err.message); }
 
-      /* ── Weekly Spending Chart ───────────────────────────────────────────── */
-      try {
-        const chartRes = await api.get("/sessions/weekly-spending");
-        const spending = chartRes.data.spending;
-        const maxSpend = Math.max(...spending.map(d => d.total), 1);
-        const chartEl = document.getElementById("weekly-chart");
-        const labelsEl = document.getElementById("weekly-labels");
-        chartEl.innerHTML = spending.map(d => {
-          const pct = Math.max((d.total / maxSpend) * 100, 2);
-          const isMax = d.total === maxSpend && d.total > 0;
-          const cls = d.total === 0 ? 'bg-primary/10' : isMax ? 'bg-primary shadow-[0_0_15px_rgba(0,212,255,0.3)]' : 'bg-primary/50';
-          return `<div class="w-full ${cls} rounded-t-sm relative group transition-all duration-500" style="height:${pct}%">
-            <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-container text-primary text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10">KES ${d.total.toLocaleString()}</div>
-          </div>`;
-        }).join('');
-        labelsEl.innerHTML = spending.map(d => `<span>${d.day}</span>`).join('');
+        empty.classList.add('hidden');
+
+        /* ── KPI calculations from history ── */
+        const completedPayments = hist.filter(h => h.status === 'completed' || h.amount_kes > 0);
+        const totalSpent = completedPayments.reduce((s, h) => s + parseFloat(h.amount_kes || 0), 0);
+
+        /* Favourite plan = most frequently bought */
+        const pkgCounts = {};
+        hist.forEach(h => { if (h.package_name) pkgCounts[h.package_name] = (pkgCounts[h.package_name] || 0) + 1; });
+        const favPkg = Object.entries(pkgCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '—';
+
+        document.getElementById('kpi-sessions').textContent = hist.length;
+        document.getElementById('kpi-spent').textContent = `KES ${totalSpent.toLocaleString('en-KE')}`;
+        document.getElementById('kpi-fav').textContent = favPkg;
+        if (user?.created_at) {
+          document.getElementById('kpi-since').textContent =
+            new Date(user.created_at).toLocaleDateString('en-KE', { month: 'short', year: 'numeric' });
+        }
+
+        /* ── Desktop rows ── */
+        function statusBadge(s) {
+          if (s === 'completed') return `<span class="badge-completed">Completed</span>`;
+          if (s === 'failed') return `<span class="badge-failed">Failed</span>`;
+          return `<span class="badge-pending">${esc(s || 'Pending')}</span>`;
+        }
+
+        tbody.innerHTML = hist.map(h => `
+      <tr class="hist-row">
+        <td class="px-4 py-3">
+          <p class="font-700 text-mn-navy text-sm">${esc(h.package_name || '—')}</p>
+          <p class="text-xs text-mn-grey">${h.speed_mbps ? `${h.speed_mbps} Mbps` : ''}</p>
+        </td>
+        <td class="px-4 py-3 font-800 text-mn-ink text-sm">
+          KES ${parseFloat(h.amount_kes || 0).toLocaleString('en-KE')}
+        </td>
+        <td class="px-4 py-3 font-mono text-xs text-mn-grey">
+          ${esc(h.mpesa_receipt_number || 'PENDING')}
+        </td>
+        <td class="px-4 py-3 text-xs text-mn-grey">
+          ${h.started_at
+            ? new Date(h.started_at).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+            : '—'}
+        </td>
+        <td class="px-4 py-3 text-right">${statusBadge(h.status)}</td>
+      </tr>`).join('');
+
+        /* ── Mobile cards ── */
+        mobile.innerHTML = hist.map(h => `
+      <div class="px-5 py-4">
+        <div class="flex items-start justify-between mb-1">
+          <p class="font-700 text-mn-navy text-sm">${esc(h.package_name || '—')}</p>
+          ${statusBadge(h.status)}
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="font-800 text-mn-ink text-sm">KES ${parseFloat(h.amount_kes || 0).toLocaleString('en-KE')}</p>
+          <p class="text-xs text-mn-grey">
+            ${h.started_at ? new Date(h.started_at).toLocaleDateString('en-KE', { day: 'numeric', month: 'short' }) : '—'}
+          </p>
+        </div>
+      </div>`).join('');
+
       } catch (err) {
-        console.warn("Weekly chart error:", err.message);
-        document.getElementById("weekly-chart").innerHTML = '<div class="w-full h-full flex items-center justify-center text-on-surface-variant text-label-md">Unable to load chart data</div>';
+        console.error('History load error:', err.message);
+        document.getElementById('history-tbody').innerHTML =
+          '<tr><td colspan="5" class="text-center py-6 text-mn-grey">Could not load history.</td></tr>';
       }
+    }
+
+    /* ── Load weekly spending chart ── */
+    async function loadWeeklyChart() {
+      const chartEl = document.getElementById('chart-bars');
+      const labelsEl = document.getElementById('chart-labels');
+      const totalEl = document.getElementById('weekly-total');
+
+      try {
+        const res = await api.get('/sessions/weekly-spending');
+        const days = res?.data?.days || res?.data?.weekly_spending || [];
+
+        /* Build 7-day array (pad missing days with 0) */
+        const now = new Date();
+        const dayMap = {};
+        days.forEach(d => { dayMap[d.date] = parseFloat(d.total_kes || 0); });
+
+        const labels = [];
+        const amounts = [];
+        for (let i = 6; i >= 0; i--) {
+          const dt = new Date(now);
+          dt.setDate(dt.getDate() - i);
+          const key = dt.toISOString().split('T')[0];
+          labels.push(dt.toLocaleDateString('en-KE', { weekday: 'short' }));
+          amounts.push(dayMap[key] || 0);
+        }
+
+        const maxAmt = Math.max(...amounts, 1);
+        const weeklyTotal = amounts.reduce((s, a) => s + a, 0);
+        totalEl.textContent = `KES ${weeklyTotal.toLocaleString('en-KE')}`;
+
+        chartEl.innerHTML = amounts.map((amt, i) => {
+          const pct = (amt / maxAmt) * 100;
+          const h = Math.max(4, (pct / 100) * 112); /* max 112px = h-28 */
+          return `
+        <div class="chart-bar group" title="KES ${amt.toLocaleString('en-KE')}">
+          <div class="bar-fill" style="height:${h}px;"></div>
+        </div>`;
+        }).join('');
+
+        labelsEl.innerHTML = labels.map((l, i) => `
+      <div class="chart-bar">
+        <span class="bar-label">${l}</span>
+      </div>`).join('');
+
+      } catch (err) {
+        /* Fallback: show zeros if API fails */
+        const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        chartEl.innerHTML = labels.map(() =>
+          `<div class="chart-bar"><div class="bar-fill" style="height:4px;"></div></div>`
+        ).join('');
+        labelsEl.innerHTML = labels.map(l =>
+          `<div class="chart-bar"><span class="bar-label">${l}</span></div>`
+        ).join('');
+        totalEl.textContent = 'KES 0';
+        console.warn('Weekly chart:', err.message);
+      }
+    }
+
+    /* ── Init ── */
+    (async () => {
+      await Promise.all([loadActiveSession(), loadHistory(), loadWeeklyChart()]);
     })();
   </script>
 </body>
+
 </html>

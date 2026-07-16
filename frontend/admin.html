@@ -1,656 +1,987 @@
-<!DOCTYPE html> <html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Maidanja Admin Dashboard</title>
-<script src="/js/api.js"></script>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style> .glass-panel { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); } .glass-card { background: #12121A; border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s ease; } .glass-card:hover { border-color: rgba(0, 212, 255, 0.15); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); } .gradient-border { border-image: linear-gradient(45deg, #a8e8ff, #d2bbff) 1; } .primary-gradient { background: linear-gradient(135deg, #3cd7ff 0%, #6001d1 100%); } .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; } </style>
-<script id="tailwind-config"> tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed": "#b4ebff", "on-primary-container": "#00586b", "surface-container-low": "#1b1b23", "secondary-fixed": "#eaddff", "secondary": "#d2bbff", "primary": "#a8e8ff", "on-primary-fixed": "#001f27", "tertiary-fixed-dim": "#c6c6c7", "surface-container-highest": "#34343d", "background": "#0d0d15", "tertiary-fixed": "#e2e2e2", "surface-variant": "#34343d", "surface-dim": "#13131b", "on-tertiary": "#2f3131", "surface-container-lowest": "#0d0d15", "surface-container-high": "#292932", "on-tertiary-fixed": "#1a1c1c", "on-error-container": "#ffdad6", "inverse-surface": "#e4e1ed", "tertiary-container": "#c2c3c3", "on-secondary": "#3f008e", "surface": "#13131b", "surface-bright": "#393841", "on-tertiary-container": "#4f5051", "on-error": "#690005", "secondary-container": "#6001d1", "on-secondary-fixed-variant": "#5a00c6", "secondary-fixed-dim": "#d2bbff", "tertiary": "#dedfdf", "on-surface": "#e4e1ed", "on-background": "#e4e1ed", "error-container": "#93000a", "surface-container": "#1f1f27", "outline-variant": "#3c494e", "on-primary-fixed-variant": "#004e5f", "primary-container": "#00d4ff", "outline": "#859398", "on-secondary-fixed": "#25005a", "on-secondary-container": "#c9aeff", "surface-tint": "#3cd7ff", "on-primary": "#003642", "inverse-on-surface": "#303038", "on-surface-variant": "#bbc9cf", "error": "#ffb4ab", "inverse-primary": "#00677e", "primary-fixed-dim": "#3cd7ff", "on-tertiary-fixed-variant": "#454747" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin-desktop": "64px", "md": "16px", "xs": "4px", "lg": "24px", "sm": "8px", "xl": "40px", "margin-mobile": "20px", "base": "4px", "gutter": "16px" }, "fontFamily": { "headline-md": ["Sora"], "body-md": ["DM Sans"], "label-md": ["DM Sans"], "headline-lg-mobile": ["Sora"], "headline-lg": ["Sora"], "display-lg": ["Sora"], "body-lg": ["DM Sans"] }, "fontSize": { "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}], "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}], "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}], "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}], "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}], "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}], "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}] } }, }, } </script> <link rel="stylesheet" href="/css/navbar.css" />
-<link rel="stylesheet" href="/css/globals.css" />
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Maidanja WiFi</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/globals.css" />
+  <script src="/js/api.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'mn-navy':   '#1B3A6B',
+            'mn-blue':   '#1E88C7',
+            'mn-orange': '#F4901E',
+            'mn-amber':  '#FDB912',
+            'mn-paper':  '#FAFBFC',
+            'mn-ink':    '#2B3245',
+            'mn-grey':   '#6B7280',
+          },
+          fontFamily: { sans: ['Manrope','sans-serif'] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { font-family:'Manrope',sans-serif; background:#F3F6FA; color:#2B3245; }
+    .mi { font-family:'Material Symbols Outlined'; font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-flex; align-items:center; }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width:260px; flex-shrink:0;
+      background:#1B3A6B;
+      min-height:100vh;
+      position:fixed; left:0; top:0;
+      display:flex; flex-direction:column;
+      z-index:100;
+      transition: transform 0.3s ease;
+    }
+    #sidebar-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:99;
+    }
+
+    /* Main content offset */
+    #main-content { margin-left:260px; min-height:100vh; }
+
+    /* Mobile: sidebar slides in/out */
+    @media(max-width:768px){
+      #sidebar { transform:translateX(-100%); }
+      #sidebar.open { transform:translateX(0); }
+      #main-content { margin-left:0; }
+      #sidebar-overlay.show { display:block; }
+    }
+
+    /* Sidebar nav links */
+    .s-link {
+      display:flex; align-items:center; gap:12px; padding:11px 16px; border-radius:10px;
+      color:rgba(255,255,255,0.65); font-size:0.875rem; font-weight:600;
+      cursor:pointer; transition:all 0.2s ease; border:none; background:none; width:100%; text-align:left;
+    }
+    .s-link:hover { background:rgba(255,255,255,0.1); color:#fff; }
+    .s-link.active { background:rgba(244,144,30,0.2); color:#FDB912; border-left:3px solid #F4901E; padding-left:13px; }
+
+    /* Top bar */
+    #top-bar {
+      background:#fff; border-bottom:1px solid #E8EDF2;
+      height:64px; position:sticky; top:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 24px; box-shadow:0 2px 8px rgba(27,58,107,0.06);
+    }
+
+    /* KPI card */
+    .kpi-card {
+      background:#fff; border:1px solid #E8EDF2; border-radius:16px; padding:20px;
+      box-shadow:0 2px 8px rgba(27,58,107,0.06);
+    }
+    .kpi-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+
+    /* Content panel */
+    .panel { background:#fff; border:1px solid #E8EDF2; border-radius:16px; overflow:hidden; }
+    .panel-header { padding:18px 24px; border-bottom:1px solid #F0F3F7; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+    /* Table */
+    .a-table { width:100%; border-collapse:separate; border-spacing:0; }
+    .a-table th { background:#F3F6FA; color:#6B7280; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; padding:10px 16px; text-align:left; }
+    .a-table td { padding:13px 16px; border-bottom:1px solid #F0F3F7; font-size:0.875rem; }
+    .a-table tr:last-child td { border-bottom:none; }
+    .a-table tbody tr:hover td { background:#F8FAFC; }
+
+    /* Badges */
+    .bd-completed { background:#dcfce7; color:#15803d; padding:2px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
+    .bd-pending   { background:#fef9c3; color:#854d0e; padding:2px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
+    .bd-failed    { background:#fee2e2; color:#b91c1c; padding:2px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
+    .bd-admin     { background:rgba(30,136,199,0.1); color:#1E88C7; padding:2px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
+    .bd-user      { background:#F3F6FA; color:#6B7280; padding:2px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
+    .bd-sim       { background:rgba(253,185,18,0.2); color:#8B6900; border:1px solid rgba(253,185,18,0.4); padding:3px 10px; border-radius:999px; font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; }
+
+    /* Chart bar */
+    .a-bar { display:flex; align-items:flex-end; gap:3px; }
+    .a-bar-col { flex:1; border-radius:4px 4px 0 0; background:linear-gradient(180deg,#1E88C7,#1B3A6B); min-height:4px; transition:height 0.5s; }
+    .a-bar-col:hover { background:linear-gradient(180deg,#F4901E,#1E88C7); }
+
+    /* Disconnect btn */
+    .btn-disconnect {
+      background:rgba(220,38,38,0.1); color:#dc2626; border:1px solid rgba(220,38,38,0.2);
+      border-radius:8px; padding:6px 12px; font-size:0.78rem; font-weight:700;
+      cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:4px;
+    }
+    .btn-disconnect:hover { background:rgba(220,38,38,0.2); border-color:rgba(220,38,38,0.4); }
+    .btn-disconnect:disabled { opacity:0.5; cursor:not-allowed; }
+
+    /* Search */
+    .a-input {
+      background:#F3F6FA; border:1.5px solid #E8EDF2; border-radius:10px; padding:8px 14px;
+      font-size:0.875rem; font-family:'Manrope',sans-serif; color:#2B3245; outline:none;
+      transition:border-color 0.2s; min-height:40px;
+    }
+    .a-input:focus { border-color:#1E88C7; background:#fff; }
+
+    /* Time progress bar */
+    .time-bar { height:6px; border-radius:999px; background:#E8EDF2; overflow:hidden; }
+    .time-bar-fill { height:100%; background:linear-gradient(135deg,#1E88C7,#F4901E); border-radius:999px; transition:width 0.4s; }
+
+    /* Modal */
+    #add-pkg-modal {
+      display:none; position:fixed; inset:0; z-index:200;
+      background:rgba(0,0,0,0.5); backdrop-filter:blur(4px);
+      align-items:center; justify-content:center; padding:20px;
+    }
+    #add-pkg-modal.open { display:flex; }
+    .modal-card { background:#fff; border-radius:20px; max-width:480px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
+
+    /* Mobile hamburger */
+    #menu-btn { display:none; background:none; border:none; cursor:pointer; padding:8px; }
+    @media(max-width:768px){ #menu-btn { display:flex; flex-direction:column; gap:5px; } }
+    #menu-btn span { display:block; width:22px; height:2px; background:#2B3245; border-radius:2px; }
+
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes fade-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .fade-in { animation:fade-in 0.35s ease both; }
+
+    /* Section hidden by default */
+    .admin-section { display:none; }
+    .admin-section.active { display:block; animation:fade-in 0.3s ease; }
+  </style>
 </head>
-<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
-<!-- Global Navigation Bar -->
-<nav id="navbar" class="navbar"> <div class="navbar-container"> <div class="navbar-left"> <button class="back-button" onclick="goBack()" title="Go back to previous page" aria-label="Go back">←</button> <a href="/index.html" class="navbar-brand"> <img src="/images/logo.jpg" alt="Maidanja WiFi" /> <span class="hidden sm:inline">Maidanja WiFi</span> </a> </div> <div class="navbar-center"> <h1 class="navbar-title">Loading...</h1> </div> <div class="navbar-right"> <button id="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false"> <span></span><span></span><span></span> </button> <div id="nav-items" class="hidden sm:flex"></div> </div> </div>
-</nav>
-<!-- Sidebar Navigation -->
-<aside class="fixed left-0 top-0 h-screen w-72 bg-surface-container-lowest border-r border-white/5 z-50 flex flex-col">
-<a href="index.html" class="p-lg flex items-center justify-center border-b border-white/5 mb-md">
-<img src="/images/logo.jpg" alt="Maidanja WiFi" class="h-12 w-auto object-contain rounded-lg">
-</a>
-<nav class="flex-1 px-md space-y-xs">
-<a class="nav-link flex items-center gap-md px-lg py-md rounded-xl text-primary font-bold bg-primary-container/10 transition-all active:scale-95 cursor-pointer" data-section="section-overview">
-<span class="material-symbols-outlined">dashboard</span>
-<span class="font-label-md text-label-md">Overview</span>
-</a>
-<a class="nav-link flex items-center gap-md px-lg py-md rounded-xl text-on-surface-variant hover:text-primary transition-all active:scale-95 cursor-pointer" data-section="section-users">
-<span class="material-symbols-outlined">group</span>
-<span class="font-label-md text-label-md">Users</span>
-</a>
-<a class="nav-link flex items-center gap-md px-lg py-md rounded-xl text-on-surface-variant hover:text-primary transition-all active:scale-95 cursor-pointer" data-section="section-sessions">
-<span class="material-symbols-outlined">sensors</span>
-<span class="font-label-md text-label-md">Sessions</span>
-</a>
-<a class="nav-link flex items-center gap-md px-lg py-md rounded-xl text-on-surface-variant hover:text-primary transition-all active:scale-95 cursor-pointer" data-section="section-revenue">
-<span class="material-symbols-outlined">payments</span>
-<span class="font-label-md text-label-md">Revenue</span>
-</a>
-<a class="nav-link flex items-center gap-md px-lg py-md rounded-xl text-on-surface-variant hover:text-primary transition-all active:scale-95 cursor-pointer" data-section="section-packages">
-<span class="material-symbols-outlined">inventory_2</span>
-<span class="font-label-md text-label-md">Packages</span>
-</a>
-<a class="nav-link flex items-center gap-md px-lg py-md rounded-xl text-on-surface-variant hover:text-primary transition-all active:scale-95 cursor-pointer" data-section="section-settings">
-<span class="material-symbols-outlined">settings</span>
-<span class="font-label-md text-label-md">Settings</span>
-</a>
-</nav>
-<div class="p-lg mt-auto border-t border-white/5 space-y-md">
-<button onclick="goBack()" class="flex items-center gap-md w-full px-lg py-md rounded-xl text-on-surface-variant hover:text-primary transition-all active:scale-95">
-<span class="material-symbols-outlined">arrow_back</span>
-<span class="font-label-md text-label-md">Back</span>
-</button>
-<div class="glass-card rounded-xl p-md flex items-center gap-md">
-<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold"> M </div>
-<div>
-<p class="font-label-md text-label-md text-on-surface">Maidanja</p>
-<span class="text-[10px] px-2 py-0.5 rounded-full bg-primary-container/20 text-primary-fixed border border-primary-container/30">ADMIN</span>
-</div>
-<button onclick="api.logout()" class="ml-auto text-on-surface-variant hover:text-error transition-colors" title="Logout">
-<span class="material-symbols-outlined text-[20px]">logout</span>
-</button>
-</div>
-</div>
-</aside>
-<!-- Main Content Canvas -->
-<main class="ml-72 min-h-screen">
-<!-- Top App Bar -->
-<header class="sticky top-0 h-20 glass-panel z-40 px-xl flex items-center justify-between">
-<h1 class="font-headline-lg text-headline-lg">Dashboard Overview</h1>
-<div class="flex items-center gap-lg">
-<div class="relative">
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
-<span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-error rounded-full border-2 border-background"></span>
-</div>
-<button onclick="window.location.href='packages.html'" class="primary-gradient text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md active:scale-95 transition-transform flex items-center gap-sm shadow-lg shadow-primary-container/20">
-<span class="material-symbols-outlined text-[18px]">bolt</span> Connect Now </button>
-</div>
-</header>
-<div class="p-xl space-y-xl">
-<div id="section-overview" class="admin-section space-y-xl">
-<!-- KPI Cards -->
-<div class="grid-auto-fit gap-lg">
-<div class="glass-card p-lg rounded-xl">
-<div class="flex justify-between items-start mb-md">
-<span class="material-symbols-outlined text-primary-container p-sm bg-primary-container/10 rounded-lg">group</span>
-<span class="text-on-surface-variant font-label-md">+12%</span>
-</div>
-<p class="text-on-surface-variant font-label-md mb-xs">Total Users</p>
-<h3 class="font-headline-lg text-headline-lg" id="kpi-users">—</h3>
-</div>
-<div class="glass-card p-lg rounded-xl">
-<div class="flex justify-between items-start mb-md">
-<div class="flex items-center gap-xs">
-<span class="material-symbols-outlined text-success p-sm bg-green-500/10 rounded-lg text-green-400">router</span>
-<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-</div>
-<span class="text-on-surface-variant font-label-md">Live</span>
-</div>
-<p class="text-on-surface-variant font-label-md mb-xs">Active Sessions</p>
-<h3 class="font-headline-lg text-headline-lg" id="kpi-sessions">—</h3>
-</div>
-<div class="glass-card p-lg rounded-xl">
-<div class="flex justify-between items-start mb-md">
-<span class="material-symbols-outlined text-secondary-container p-sm bg-secondary-container/10 rounded-lg">payments</span>
-<span class="text-on-surface-variant font-label-md">KES</span>
-</div>
-<p class="text-on-surface-variant font-label-md mb-xs">Today's Revenue</p>
-<h3 class="font-headline-lg text-headline-lg" id="kpi-today">—</h3>
-</div>
-<div class="glass-card p-lg rounded-xl border-2 border-primary/20">
-<div class="flex justify-between items-start mb-md">
-<span class="material-symbols-outlined text-primary p-sm bg-primary/10 rounded-lg">account_balance_wallet</span>
-<span class="text-on-surface-variant font-label-md">Lifetime</span>
-</div>
-<p class="text-on-surface-variant font-label-md mb-xs">Total Revenue</p>
-<h3 class="font-headline-lg text-headline-lg" id="kpi-total">—</h3>
-</div>
-</div>
-<!-- Analytics Row -->
-<div class="flex flex-col xl:flex-row gap-lg">
-<!-- Area Chart Placeholder -->
-<div class="xl:w-3/5 glass-card p-lg rounded-xl flex flex-col">
-<div class="flex justify-between items-center mb-xl">
-<h4 class="font-headline-md text-headline-md">Revenue Analytics (30 Days)</h4>
-<select class="bg-surface-container-high border-none rounded-lg text-label-md focus:ring-primary">
-<option>Daily</option>
-<option>Weekly</option>
-</select>
-</div>
-<div class="relative h-64 w-full flex items-end justify-between px-md gap-2">
-<!-- Simulated Chart Bars/Area -->
-<div class="h-1/2 w-full bg-primary/20 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
-<div class="h-2/3 w-full bg-primary/20 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
-<div class="h-3/4 w-full bg-primary/20 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
-<div class="h-2/5 w-full bg-primary/20 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
-<div class="h-4/5 w-full bg-primary/20 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
-<div class="h-full w-full bg-primary/30 rounded-t-sm relative group cursor-pointer hover:bg-primary/50 transition-all">
-<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-surface p-2 rounded border border-primary text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">KES 5,200 (Today)</div>
-</div>
-</div>
-<div class="flex justify-between mt-md px-md text-on-surface-variant text-[10px]">
-<span>May 1</span>
-<span>May 15</span>
-<span>Today</span>
-</div>
-</div>
-<!-- Pie Chart Placeholder -->
-<div class="xl:w-2/5 glass-card p-lg rounded-xl">
-<h4 class="font-headline-md text-headline-md mb-xl">Package Breakdown</h4>
-<div class="flex items-center justify-center h-64 relative">
-<!-- Simulated Donut Chart -->
-<div class="w-48 h-48 rounded-full border-[12px] border-primary-container relative">
-<div class="absolute inset-0 rounded-full border-[12px] border-secondary-container border-l-transparent border-b-transparent rotate-45"></div>
-<div class="absolute inset-0 flex flex-col items-center justify-center">
-<span class="font-headline-md text-headline-md">84%</span>
-<span class="text-on-surface-variant text-[10px]">Unlimited</span>
-</div>
-</div>
-</div>
-<div class="space-y-sm mt-md">
-<div class="flex items-center justify-between text-label-md">
-<div class="flex items-center gap-sm">
-<span class="w-3 h-3 rounded-full bg-primary-container"></span>
-<span class="text-on-surface-variant">Unlimited 24h</span>
-</div>
-<span>62%</span>
-</div>
-<div class="flex items-center justify-between text-label-md">
-<div class="flex items-center gap-sm">
-<span class="w-3 h-3 rounded-full bg-secondary-container"></span>
-<span class="text-on-surface-variant">Weekly Max</span>
-</div>
-<span>22%</span>
-</div>
-<div class="flex items-center justify-between text-label-md">
-<div class="flex items-center gap-sm">
-<span class="w-3 h-3 rounded-full bg-surface-container-highest"></span>
-<span class="text-on-surface-variant">Other</span>
-</div>
-<span>16%</span>
-</div>
-</div>
-</div>
-</div>
-</div>
 
-<div id="section-users" class="admin-section hidden space-y-xl">
-<section class="glass-card rounded-xl overflow-hidden">
-<div class="px-lg py-xl flex justify-between items-center border-b border-white/5">
-<h4 class="font-headline-md text-headline-md">User Management</h4>
-<div class="flex gap-md">
-<input type="text" id="user-search" placeholder="Search by phone or name..." class="bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary w-64 px-4 py-2">
-<button class="bg-primary/10 text-primary px-lg py-md rounded-lg font-label-md hover:bg-primary/20 transition-all">Export CSV</button>
-</div>
-</div>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="bg-surface-container-low text-on-surface-variant font-label-md">
-<th class="px-lg py-md">User Details</th>
-<th class="px-lg py-md">Role</th>
-<th class="px-lg py-md">Total Spent</th>
-<th class="px-lg py-md">Joined At</th>
-<th class="px-lg py-md">Last Login</th>
-<th class="px-lg py-md text-right">Status</th>
-</tr>
-</thead>
-<tbody id="users-tbody" class="divide-y divide-white/5 font-body-md">
-<tr><td colspan="6" class="px-lg py-lg text-on-surface-variant text-center">Loading users...</td></tr>
-</tbody>
-</table>
-</div>
-</section>
-</div>
+<body>
 
-<div id="section-sessions" class="admin-section hidden space-y-xl">
-<section class="glass-card rounded-xl overflow-hidden">
-<div class="px-lg py-xl flex justify-between items-center border-b border-white/5">
-<h4 class="font-headline-md text-headline-md">Active Sessions</h4>
-<span class="text-on-surface-variant font-label-md" id="active-sessions-count">Loading live users...</span>
-</div>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="bg-surface-container-low text-on-surface-variant font-label-md">
-<th class="px-lg py-md">User Phone</th>
-<th class="px-lg py-md">Package</th>
-<th class="px-lg py-md">Time Left</th>
-<th class="px-lg py-md">Speed</th>
-<th class="px-lg py-md">Connected At</th>
-<th class="px-lg py-md text-right">Actions</th>
-</tr>
-</thead>
-<tbody id="sessions-tbody" class="divide-y divide-white/5 font-body-md">
-<tr><td colspan="6" class="px-lg py-lg text-on-surface-variant text-center">Loading sessions...</td></tr>
-</tbody>
-</table>
-</div>
-</section>
-</div>
+<!-- ── SIDEBAR OVERLAY (mobile) ── -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<div id="section-revenue" class="admin-section hidden space-y-xl">
-<section class="glass-card rounded-xl overflow-hidden">
-<div class="px-lg py-xl flex justify-between items-center border-b border-white/5">
-<h4 class="font-headline-md text-headline-md">Transaction History</h4>
-<div class="flex gap-md">
-<select id="revenue-status-filter" class="bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2">
-<option value="all">All Transactions</option>
-<option value="completed">Completed</option>
-<option value="pending">Pending</option>
-<option value="failed">Failed</option>
-</select>
-</div>
-</div>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="bg-surface-container-low text-on-surface-variant font-label-md">
-<th class="px-lg py-md">M-Pesa Receipt</th>
-<th class="px-lg py-md">Customer</th>
-<th class="px-lg py-md">Package</th>
-<th class="px-lg py-md">Amount</th>
-<th class="px-lg py-md">Date</th>
-<th class="px-lg py-md text-right">Status</th>
-</tr>
-</thead>
-<tbody id="revenue-tbody" class="divide-y divide-white/5 font-body-md">
-<tr><td colspan="6" class="px-lg py-lg text-on-surface-variant text-center">Loading transactions...</td></tr>
-</tbody>
-</table>
-</div>
-</section>
-</div>
+<!-- ════════════════════════════════════════════════════
+     SIDEBAR — Navy, admin navigation
+     ════════════════════════════════════════════════════ -->
+<aside id="sidebar">
 
-<div id="section-packages" class="admin-section hidden space-y-xl">
-<!-- Package Manager -->
-<section class="glass-card rounded-xl overflow-hidden">
-<div class="px-lg py-xl flex justify-between items-center border-b border-white/5">
-<div>
-<h4 class="font-headline-md text-headline-md">Package Manager</h4>
-<p class="text-on-surface-variant text-sm mt-1">Configure your Wi-Fi monetization tiers</p>
-</div>
-<button onclick="openAddPackageModal()" class="flex items-center gap-sm px-lg py-md rounded-xl border border-primary/30 hover:border-primary text-primary transition-all active:scale-95 bg-primary/5">
-<span class="material-symbols-outlined">add</span>
-<span class="font-label-md">Add Package</span>
-</button>
-</div>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="bg-surface-container-low text-on-surface-variant font-label-md">
-<th class="px-lg py-md">Package Name</th>
-<th class="px-lg py-md">Duration</th>
-<th class="px-lg py-md">Data Cap</th>
-<th class="px-lg py-md">Price</th>
-<th class="px-lg py-md text-right">Action</th>
-</tr>
-</thead>
-<tbody id="packages-tbody" class="divide-y divide-white/5">
-<!-- Packages will be loaded here -->
-<tr class="hover:bg-white/5 transition-colors">
-<td class="px-lg py-lg font-bold text-center" colspan="5">Loading packages...</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</div>
+  <!-- Logo -->
+  <div class="px-5 py-5 border-b border-white/10">
+    <a href="/index.html" class="flex items-center gap-2.5">
+      <img src="/images/logo.png" alt="Maidanja WiFi" class="h-9 w-auto rounded-lg" />
+      <span class="font-800 text-white text-base tracking-tight">Maidanja WiFi</span>
+    </a>
+    <!-- Simulation mode badge (shown if mode=simulation) -->
+    <div id="sim-badge" class="hidden mt-2">
+      <span class="bd-sim">
+        <span class="mi" style="font-size:0.7rem;">science</span>
+        Simulation Mode
+      </span>
+    </div>
+  </div>
 
-<div id="section-settings" class="admin-section hidden space-y-xl">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
-<section class="glass-card p-lg rounded-xl">
-<h4 class="font-headline-md text-headline-md mb-lg">System Health</h4>
-<div class="space-y-lg">
-<div class="flex justify-between items-center">
-<span class="text-on-surface-variant">Hotspot Mode</span>
-<span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs" id="health-mode">Simulation</span>
-</div>
-<div class="flex justify-between items-center">
-<span class="text-on-surface-variant">System Uptime</span>
-<span class="text-on-surface" id="health-uptime">0h 0m</span>
-</div>
-<div class="flex justify-between items-center">
-<span class="text-on-surface-variant">Memory Usage</span>
-<span class="text-on-surface" id="health-memory">0 MB</span>
-</div>
-<div class="space-y-xs">
-<div class="flex justify-between text-xs mb-1">
-<span class="text-on-surface-variant">Capacity Load</span>
-<span id="health-capacity-pct">0%</span>
-</div>
-<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
-<div id="health-capacity-bar" class="h-full bg-primary" style="width: 0%"></div>
-</div>
-</div>
-</div>
-</section>
+  <!-- Nav links -->
+  <nav class="flex-1 px-3 py-4 space-y-1" aria-label="Admin navigation">
+    <button class="s-link active" data-section="overview" onclick="navTo('overview')">
+      <span class="mi">dashboard</span><span>Overview</span>
+    </button>
+    <button class="s-link" data-section="sessions" onclick="navTo('sessions')">
+      <span class="mi">sensors</span><span>Sessions</span>
+    </button>
+    <button class="s-link" data-section="users" onclick="navTo('users')">
+      <span class="mi">group</span><span>Users</span>
+    </button>
+    <button class="s-link" data-section="revenue" onclick="navTo('revenue')">
+      <span class="mi">payments</span><span>Revenue</span>
+    </button>
+    <button class="s-link" data-section="packages" onclick="navTo('packages')">
+      <span class="mi">inventory_2</span><span>Packages</span>
+    </button>
+    <button class="s-link" data-section="settings" onclick="navTo('settings')">
+      <span class="mi">settings</span><span>System Health</span>
+    </button>
+  </nav>
 
-<section class="glass-card p-lg rounded-xl">
-<h4 class="font-headline-md text-headline-md mb-lg">Quick Actions</h4>
-<div class="grid grid-cols-2 gap-md">
-<button class="flex flex-col items-center justify-center gap-md p-lg rounded-xl bg-surface-container hover:bg-white/5 border border-white/5 transition-all">
-<span class="material-symbols-outlined text-primary">restart_alt</span>
-<span class="text-xs">Restart API</span>
-</button>
-<button class="flex flex-col items-center justify-center gap-md p-lg rounded-xl bg-surface-container hover:bg-white/5 border border-white/5 transition-all">
-<span class="material-symbols-outlined text-secondary">database</span>
-<span class="text-xs">Backup DB</span>
-</button>
-<button class="flex flex-col items-center justify-center gap-md p-lg rounded-xl bg-surface-container hover:bg-white/5 border border-white/5 transition-all">
-<span class="material-symbols-outlined text-error">dangerous</span>
-<span class="text-xs text-error">Flush Cache</span>
-</button>
-<button onclick="api.logout()" class="flex flex-col items-center justify-center gap-md p-lg rounded-xl bg-surface-container hover:bg-white/5 border border-white/5 transition-all">
-<span class="material-symbols-outlined text-on-surface-variant">logout</span>
-<span class="text-xs">Logout</span>
-</button>
-</div>
-</section>
-</div>
-</div>
-</div>
-</div>
-
-<!-- Add Package Modal -->
-<div id="add-package-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-  <div class="glass-card rounded-xl p-xl w-full max-w-md border border-white/10 shadow-2xl">
-    <div class="flex justify-between items-center mb-lg border-b border-white/10 pb-md">
-      <h3 class="font-headline-md text-headline-md">Add New Package</h3>
-      <button onclick="closeAddPackageModal()" class="text-on-surface-variant hover:text-error transition-colors">
-        <span class="material-symbols-outlined">close</span>
+  <!-- Sidebar footer: user chip + logout -->
+  <div class="px-4 py-4 border-t border-white/10">
+    <div class="flex items-center gap-3 bg-white/5 rounded-xl p-3">
+      <div class="w-9 h-9 rounded-full bg-mn-orange/80 flex items-center justify-center text-white font-800 text-sm flex-shrink-0">
+        <span id="avatar-letter">A</span>
+      </div>
+      <div class="min-w-0">
+        <p id="sidebar-name" class="font-700 text-white text-sm truncate">Admin</p>
+        <p class="text-white/40 text-xs">Administrator</p>
+      </div>
+      <button onclick="api.logout()" title="Sign out"
+              class="ml-auto text-white/40 hover:text-red-400 transition-colors flex-shrink-0">
+        <span class="mi" style="font-size:1.2rem;">logout</span>
       </button>
     </div>
-    <form id="add-package-form" class="space-y-md">
-      <div>
-        <label class="block text-label-md text-on-surface-variant mb-xs">Package Name</label>
-        <input type="text" id="pkg-name" required class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 2 Hours Pass">
+  </div>
+
+</aside>
+
+<!-- ════════════════════════════════════════════════════
+     MAIN CONTENT
+     ════════════════════════════════════════════════════ -->
+<div id="main-content">
+
+  <!-- Top bar -->
+  <div id="top-bar">
+    <div class="flex items-center gap-3">
+      <!-- Hamburger (mobile) -->
+      <button id="menu-btn" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <span></span><span></span><span></span>
+      </button>
+      <h1 id="page-title" class="font-800 text-mn-navy" style="font-size:1.1rem;">Dashboard Overview</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="top-sim-badge" class="bd-sim hidden items-center gap-1">
+        <span class="mi" style="font-size:0.7rem;">science</span> Simulation
+      </span>
+      <a href="/packages.html"
+         class="bg-mn-orange text-white font-700 px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 hover:bg-mn-orange/90 transition-colors">
+        <span class="mi" style="font-size:1rem;">bolt</span> Connect Now
+      </a>
+    </div>
+  </div>
+
+  <!-- ══ Content sections ══ -->
+  <div class="p-6 space-y-6">
+
+    <!-- ── OVERVIEW ── -->
+    <section id="sec-overview" class="admin-section active space-y-6">
+
+      <!-- KPI row -->
+      <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <div class="kpi-card">
+          <div class="kpi-icon mb-3" style="background:rgba(30,136,199,0.1);">
+            <span class="mi text-mn-blue" style="font-size:1.3rem;">group</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Total Users</p>
+          <p id="kpi-users"   class="font-800 text-mn-navy" style="font-size:1.8rem;">—</p>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon mb-3" style="background:rgba(34,197,94,0.1);">
+            <span class="mi text-green-500" style="font-size:1.3rem;">router</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Active Sessions</p>
+          <div class="flex items-end gap-2">
+            <p id="kpi-sessions" class="font-800 text-mn-navy" style="font-size:1.8rem;">—</p>
+            <span class="w-2 h-2 rounded-full bg-green-500 mb-2" style="animation:pulse 2s ease-in-out infinite;">
+            </span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon mb-3" style="background:rgba(244,144,30,0.1);">
+            <span class="mi text-mn-orange" style="font-size:1.3rem;">payments</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Today's Revenue</p>
+          <p id="kpi-today" class="font-800 text-mn-navy" style="font-size:1.5rem;">—</p>
+        </div>
+        <div class="kpi-card" style="border:2px solid rgba(27,58,107,0.15);">
+          <div class="kpi-icon mb-3" style="background:rgba(27,58,107,0.08);">
+            <span class="mi text-mn-navy" style="font-size:1.3rem;">account_balance_wallet</span>
+          </div>
+          <p class="text-mn-grey text-xs font-700 mb-1">Total Revenue</p>
+          <p id="kpi-total" class="font-800 text-mn-navy" style="font-size:1.5rem;">—</p>
+        </div>
       </div>
-      <div class="grid grid-cols-2 gap-md">
+
+      <!-- Revenue chart row -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div class="kpi-card xl:col-span-2">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <p class="font-800 text-mn-navy" style="font-size:1rem;">Revenue (Last 7 Days)</p>
+              <p class="text-mn-grey text-xs mt-0.5" id="chart-total-label">Loading…</p>
+            </div>
+          </div>
+          <div id="revenue-chart" class="a-bar h-32 items-end">
+            <div class="flex-1 flex items-center justify-center text-mn-grey">
+              <span class="mi" style="font-size:1.5rem;animation:spin 1s linear infinite;">progress_activity</span>
+            </div>
+          </div>
+          <div id="revenue-chart-labels" class="a-bar mt-2"></div>
+        </div>
+
+        <!-- Recent activity -->
+        <div class="kpi-card">
+          <p class="font-800 text-mn-navy mb-4" style="font-size:1rem;">Quick Stats</p>
+          <div id="quick-stats" class="space-y-3 text-sm text-mn-grey">
+            <div class="text-center"><span class="mi" style="animation:spin 1s linear infinite;font-size:1.2rem;">progress_activity</span></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── SESSIONS ── -->
+    <section id="sec-sessions" class="admin-section space-y-4">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="font-800 text-mn-navy">Active Sessions</h2>
+            <p class="text-mn-grey text-xs mt-0.5" id="sessions-count">Loading…</p>
+          </div>
+          <button onclick="loadSessions()"
+                  class="text-mn-blue font-700 text-xs flex items-center gap-1 hover:underline">
+            <span class="mi" style="font-size:1rem;">refresh</span> Refresh
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>Phone</th><th>Package</th><th>Time Left</th>
+                <th>Speed</th><th>Connected At</th><th class="text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="sessions-tbody">
+              <tr><td colspan="6" class="text-center py-8 text-mn-grey">Loading sessions…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── USERS ── -->
+    <section id="sec-users" class="admin-section space-y-4">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="font-800 text-mn-navy">User Management</h2>
+          <div class="flex gap-2 flex-wrap">
+            <input type="text" id="user-search" class="a-input" placeholder="Search by phone or name…"
+                   oninput="filterUsers()" style="min-width:200px;" />
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>User</th><th>Role</th><th>Total Spent</th>
+                <th>Joined</th><th>Last Login</th><th class="text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="6" class="text-center py-8 text-mn-grey">Loading users…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── REVENUE ── -->
+    <section id="sec-revenue" class="admin-section space-y-4">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="font-800 text-mn-navy">Transaction History</h2>
+          <select id="revenue-filter" onchange="applyRevenueFilter()"
+                  class="a-input" style="min-width:150px;">
+            <option value="all">All Transactions</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>Receipt</th><th>Customer</th><th>Package</th>
+                <th>Amount</th><th>Date</th><th class="text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="revenue-tbody">
+              <tr><td colspan="6" class="text-center py-8 text-mn-grey">Loading transactions…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PACKAGES ── -->
+    <section id="sec-packages" class="admin-section space-y-4">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="font-800 text-mn-navy">Package Manager</h2>
+            <p class="text-mn-grey text-xs mt-0.5">Configure WiFi monetisation tiers</p>
+          </div>
+          <button onclick="openModal()"
+                  class="bg-mn-orange text-white font-700 px-4 py-2 rounded-xl text-sm flex items-center gap-1.5 hover:bg-mn-orange/90 transition-colors">
+            <span class="mi" style="font-size:1.1rem;">add</span> Add Package
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>Package Name</th><th>Duration</th><th>Speed</th>
+                <th>Price</th><th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="packages-tbody">
+              <tr><td colspan="5" class="text-center py-8 text-mn-grey">Loading packages…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SYSTEM HEALTH ── -->
+    <section id="sec-settings" class="admin-section">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="kpi-card">
+          <h2 class="font-800 text-mn-navy mb-5">System Health</h2>
+          <div class="space-y-4">
+            <div class="flex justify-between text-sm">
+              <span class="text-mn-grey font-600">Hotspot Mode</span>
+              <span id="h-mode" class="font-700 text-mn-navy">—</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-mn-grey font-600">System Uptime</span>
+              <span id="h-uptime" class="font-700 text-mn-navy">—</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-mn-grey font-600">Memory Usage</span>
+              <span id="h-memory" class="font-700 text-mn-navy">—</span>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-mn-grey font-600">Capacity Load</span>
+                <span id="h-cap-pct" class="font-700">—</span>
+              </div>
+              <div class="time-bar">
+                <div id="h-cap-bar" class="time-bar-fill" style="width:0%;"></div>
+              </div>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-mn-grey font-600">Status</span>
+              <span id="h-status" class="font-700 text-green-600">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <h2 class="font-800 text-mn-navy mb-5">Quick Actions</h2>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="api.logout()"
+                    class="flex flex-col items-center gap-2 p-4 rounded-xl bg-mn-paper hover:bg-gray-100 transition-colors border border-gray-200">
+              <span class="mi text-mn-grey" style="font-size:1.5rem;">logout</span>
+              <span class="text-xs font-700 text-mn-grey">Sign Out</span>
+            </button>
+            <a href="/packages.html"
+               class="flex flex-col items-center gap-2 p-4 rounded-xl bg-mn-paper hover:bg-gray-100 transition-colors border border-gray-200">
+              <span class="mi text-mn-blue" style="font-size:1.5rem;">wifi</span>
+              <span class="text-xs font-700 text-mn-grey">Buy Package</span>
+            </a>
+            <button onclick="loadStats(); loadRevenueChart();"
+                    class="flex flex-col items-center gap-2 p-4 rounded-xl bg-mn-paper hover:bg-gray-100 transition-colors border border-gray-200">
+              <span class="mi text-mn-orange" style="font-size:1.5rem;">refresh</span>
+              <span class="text-xs font-700 text-mn-grey">Refresh Stats</span>
+            </button>
+            <button onclick="loadHealth()"
+                    class="flex flex-col items-center gap-2 p-4 rounded-xl bg-mn-paper hover:bg-gray-100 transition-colors border border-gray-200">
+              <span class="mi text-green-600" style="font-size:1.5rem;">health_and_safety</span>
+              <span class="text-xs font-700 text-mn-grey">Check Health</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     ADD PACKAGE MODAL
+     ════════════════════════════════════════════════════ -->
+<div id="add-pkg-modal">
+  <div class="modal-card p-7">
+    <div class="flex items-center justify-between mb-5 pb-4 border-b border-gray-100">
+      <h2 class="font-800 text-mn-navy" style="font-size:1.1rem;">Add New Package</h2>
+      <button onclick="closeModal()" class="text-mn-grey hover:text-red-500 transition-colors">
+        <span class="mi" style="font-size:1.3rem;">close</span>
+      </button>
+    </div>
+
+    <form id="add-pkg-form" class="space-y-4">
+      <div>
+        <label class="block text-sm font-700 text-mn-navy mb-1.5" for="f-name">Package Name</label>
+        <input type="text" id="f-name" class="a-input" style="width:100%;" placeholder="e.g. 2 Hours Pass" required />
+      </div>
+      <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-label-md text-on-surface-variant mb-xs">Duration (Hours)</label>
-          <input type="number" id="pkg-duration" required min="1" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 2">
+          <label class="block text-sm font-700 text-mn-navy mb-1.5" for="f-duration">Duration (Hours)</label>
+          <input type="number" id="f-duration" class="a-input" style="width:100%;" placeholder="e.g. 2" min="0.5" step="0.5" required />
         </div>
         <div>
-          <label class="block text-label-md text-on-surface-variant mb-xs">Speed (Mbps)</label>
-          <input type="number" id="pkg-speed" required min="1" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 5">
+          <label class="block text-sm font-700 text-mn-navy mb-1.5" for="f-speed">Speed (Mbps)</label>
+          <input type="number" id="f-speed" class="a-input" style="width:100%;" placeholder="e.g. 5" min="1" required />
         </div>
       </div>
       <div>
-        <label class="block text-label-md text-on-surface-variant mb-xs">Price (KES)</label>
-        <input type="number" id="pkg-price" required min="1" step="0.01" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="e.g. 20">
+        <label class="block text-sm font-700 text-mn-navy mb-1.5" for="f-price">Price (KES)</label>
+        <input type="number" id="f-price" class="a-input" style="width:100%;" placeholder="e.g. 30" min="1" step="0.01" required />
       </div>
       <div>
-        <label class="block text-label-md text-on-surface-variant mb-xs">Description (Optional)</label>
-        <textarea id="pkg-desc" rows="2" class="w-full bg-surface-container-high border-none rounded-lg text-sm focus:ring-primary px-4 py-2 text-on-surface placeholder-on-surface-variant/50" placeholder="Brief description..."></textarea>
+        <label class="block text-sm font-700 text-mn-navy mb-1.5" for="f-desc">Description (Optional)</label>
+        <textarea id="f-desc" class="a-input" style="width:100%;" rows="2" placeholder="Brief description…"></textarea>
       </div>
-      <div class="pt-md flex justify-end gap-md border-t border-white/10 mt-lg">
-        <button type="button" onclick="closeAddPackageModal()" class="px-lg py-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
-        <button type="submit" id="add-pkg-btn" class="primary-gradient text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md active:scale-95 transition-transform flex items-center gap-sm">Save Package</button>
+
+      <div id="modal-error" class="hidden text-red-600 text-sm font-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3"></div>
+
+      <div class="flex justify-end gap-3 pt-2 border-t border-gray-100 mt-4">
+        <button type="button" onclick="closeModal()"
+                class="px-5 py-2.5 rounded-xl text-mn-grey font-700 text-sm hover:bg-gray-100 transition-colors">
+          Cancel
+        </button>
+        <button type="submit" id="save-pkg-btn"
+                class="bg-mn-orange text-white font-700 px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 hover:bg-mn-orange/90 transition-colors">
+          Save Package
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="mt-xl py-xl px-xl border-t border-white/5 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest">
-<p class="text-on-surface-variant text-label-md">© 2024 Maidanja WiFi. Powered by M-Pesa.</p>
-<div class="flex gap-lg mt-md md:mt-0">
-<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="packages.html">Packages</a>
-<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="dashboard.html">Dashboard</a>
-<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="admin.html">Admin</a>
-</div>
-</footer>
-</main>
+
 <script>
-/* ── Security: Admin Role Check (must be first) ──────────────────────────────── */
-(async () => {
+/* ════════════════════════════════════════════════════════
+   ADMIN DASHBOARD LOGIC
+   Endpoints (all require JWT + admin role):
+     GET  /api/admin/stats
+     GET  /api/admin/sessions?status=active&limit=25
+     GET  /api/admin/users
+     GET  /api/admin/transactions
+     GET  /api/packages               (public read)
+     POST /api/packages               (create)
+     POST /api/admin/disconnect/:id
+     GET  /api/admin/hotspot/health
+   ════════════════════════════════════════════════════════ */
+
+/* ── Guard ── */
+(function () {
   const user = api.getUser();
   if (!user || user.role !== 'admin') {
     window.location.href = '/login.html';
-    return;
   }
+  /* Populate sidebar name */
+  const nameEl   = document.getElementById('sidebar-name');
+  const avatarEl = document.getElementById('avatar-letter');
+  if (user?.name) { nameEl.textContent = user.name; avatarEl.textContent = user.name[0].toUpperCase(); }
 })();
 
-/* ── Security: HTML Escape Utility ──────────────────────────────────────────────── */
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+/* ── HTML escape ── */
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-/* ── Navigation Logic ────────────────────────────────────────────────────────────── */
-function initNavigation() {
-  const links = document.querySelectorAll('.nav-link');
-  const sections = document.querySelectorAll('.admin-section');
-  const headerTitle = document.querySelector('header h1');
 
-  links.forEach(link => {
-    link.addEventListener('click', () => {
-      const sectionId = link.getAttribute('data-section');
-      
-      // Update UI
-      links.forEach(l => {
-        l.classList.remove('text-primary', 'font-bold', 'bg-primary-container/10');
-        l.classList.add('text-on-surface-variant');
-      });
-      link.classList.add('text-primary', 'font-bold', 'bg-primary-container/10');
-      link.classList.remove('text-on-surface-variant');
+/* ── Sidebar navigation ── */
+const SECTIONS = { overview:'Overview', sessions:'Active Sessions', users:'User Management',
+                   revenue:'Revenue', packages:'Package Manager', settings:'System Health' };
 
-      // Show section
-      sections.forEach(s => s.classList.add('hidden'));
-      document.getElementById(sectionId).classList.remove('hidden');
-
-      // Update Header
-      headerTitle.textContent = link.querySelector('span:last-child').textContent + (sectionId === 'section-overview' ? ' Overview' : '');
-      
-      // Load data for section
-      loadSectionData(sectionId);
-    });
+function navTo(id) {
+  document.querySelectorAll('.s-link').forEach(el => {
+    el.classList.toggle('active', el.dataset.section === id);
   });
+  document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
+  document.getElementById(`sec-${id}`).classList.add('active');
+  document.getElementById('page-title').textContent = SECTIONS[id];
+
+  /* Load data on demand */
+  switch(id) {
+    case 'overview': loadStats(); loadRevenueChart(); break;
+    case 'sessions': loadSessions(); break;
+    case 'users':    loadUsers();    break;
+    case 'revenue':  loadRevenue();  break;
+    case 'packages': loadAdminPackages(); break;
+    case 'settings': loadHealth();   break;
+  }
+  closeSidebar();
 }
 
-async function loadSectionData(sectionId) {
-  switch(sectionId) {
-    case 'section-overview': loadStats(); break;
-    case 'section-users': loadUsers(); break;
-    case 'section-sessions': loadSessions(); break;
-    case 'section-revenue': loadRevenue(); break;
-    case 'section-packages': loadPackages(); break;
-    case 'section-settings': loadHealth(); break;
+/* ── Mobile sidebar ── */
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('show');
+}
+
+/* ── Duration formatter ── */
+function fmtDur(h) {
+  const n = Number(h);
+  if (n < 1) return `${Math.round(n*60)}m`;
+  if (n === 1) return '1h'; if (n === 24) return '1 Day';
+  if (n === 168) return '1 Week'; if (n >= 720) return '1 Month';
+  return n <= 12 ? `${n}h` : `${Math.round(n/24)}d`;
+}
+
+/* ── Time-left string ── */
+function fmtSecs(s) {
+  if (s <= 0) return 'Expired';
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+/* ── Status badge ── */
+function txBadge(s) {
+  if (s === 'completed') return `<span class="bd-completed">Completed</span>`;
+  if (s === 'failed')    return `<span class="bd-failed">Failed</span>`;
+  return `<span class="bd-pending">${esc((s||'pending').toUpperCase())}</span>`;
+}
+
+/* ════════════════ DATA LOADERS ════════════════ */
+
+/* ── Stats (Overview KPIs) ── */
+async function loadStats() {
+  try {
+    const res = await api.get('/admin/stats');
+    const d   = res.data;
+    document.getElementById('kpi-users').textContent    = (d.total_users ?? '—').toLocaleString();
+    document.getElementById('kpi-sessions').textContent = (d.active_sessions ?? '—').toLocaleString();
+    document.getElementById('kpi-today').textContent    = `KES ${parseFloat(d.today_revenue_kes||0).toLocaleString('en-KE')}`;
+    document.getElementById('kpi-total').textContent    = `KES ${parseFloat(d.total_revenue_kes||0).toLocaleString('en-KE')}`;
+
+    /* Quick stats panel */
+    document.getElementById('quick-stats').innerHTML = `
+      <div class="flex justify-between text-sm">
+        <span>Active now</span>
+        <span class="font-700 text-mn-navy">${d.active_sessions ?? 0} users</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span>All-time users</span>
+        <span class="font-700 text-mn-navy">${(d.total_users||0).toLocaleString()}</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span>Revenue today</span>
+        <span class="font-700 text-mn-orange">KES ${parseFloat(d.today_revenue_kes||0).toLocaleString('en-KE')}</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span>Lifetime revenue</span>
+        <span class="font-700 text-mn-navy">KES ${parseFloat(d.total_revenue_kes||0).toLocaleString('en-KE')}</span>
+      </div>`;
+  } catch (err) { console.error('Stats:', err.message); }
+}
+
+/* ── Revenue chart (last 7 days from transactions) ── */
+let allTxs = [];
+async function loadRevenueChart() {
+  try {
+    if (!allTxs.length) {
+      const res = await api.get('/admin/transactions');
+      allTxs = res.data.transactions || [];
+    }
+
+    /* Group completed txs by date for last 7 days */
+    const dayMap = {};
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const dt = new Date(now); dt.setDate(dt.getDate() - i);
+      dayMap[dt.toISOString().split('T')[0]] = 0;
+    }
+    allTxs.filter(t => t.status === 'completed').forEach(t => {
+      const key = t.created_at?.split('T')[0];
+      if (key && dayMap.hasOwnProperty(key)) dayMap[key] += parseFloat(t.amount_kes || 0);
+    });
+
+    const keys    = Object.keys(dayMap);
+    const amounts = Object.values(dayMap);
+    const maxAmt  = Math.max(...amounts, 1);
+    const total   = amounts.reduce((s,a) => s+a, 0);
+
+    document.getElementById('chart-total-label').textContent =
+      `Total: KES ${total.toLocaleString('en-KE')}`;
+
+    const chartEl  = document.getElementById('revenue-chart');
+    const labelsEl = document.getElementById('revenue-chart-labels');
+
+    chartEl.innerHTML = amounts.map((amt, i) => {
+      const pct = (amt / maxAmt) * 100;
+      const h   = Math.max(4, (pct/100) * 112);
+      return `<div class="flex-1 a-bar-col group cursor-pointer" style="height:${h}px;" title="KES ${amt.toLocaleString('en-KE')}"></div>`;
+    }).join('');
+
+    labelsEl.innerHTML = keys.map(k => {
+      const d = new Date(k);
+      return `<span class="flex-1 text-center text-mn-grey font-600" style="font-size:0.62rem;">
+        ${d.toLocaleDateString('en-KE',{weekday:'short'})}
+      </span>`;
+    }).join('');
+
+  } catch (err) { console.error('Chart:', err.message); }
+}
+
+/* ── Sessions ── */
+let allSessions = [];
+async function loadSessions() {
+  try {
+    const res      = await api.get('/admin/sessions?status=active&limit=25');
+    allSessions    = res.data.sessions || [];
+    const tbody    = document.getElementById('sessions-tbody');
+    const countEl  = document.getElementById('sessions-count');
+    countEl.textContent = `${allSessions.length} active user${allSessions.length !== 1 ? 's' : ''}`;
+
+    if (!allSessions.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-mn-grey">No active sessions right now.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = allSessions.map(s => {
+      const secs    = Math.max(0, (new Date(s.expires_at) - Date.now()) / 1000);
+      const total   = (Number(s.duration_hours) || 1) * 3600;
+      const pct     = Math.min(100, (secs / total) * 100);
+      const timeStr = fmtSecs(secs);
+      return `
+        <tr>
+          <td><span class="font-mono font-700 text-mn-blue text-sm">${esc(s.phone_number)}</span></td>
+          <td><span class="badge-orange text-xs">${esc(s.package_name)}</span></td>
+          <td style="min-width:130px;">
+            <div class="time-bar mb-1">
+              <div class="time-bar-fill" style="width:${pct}%;"></div>
+            </div>
+            <span class="text-xs text-mn-grey">${timeStr}</span>
+          </td>
+          <td class="text-sm">${parseFloat(s.speed_mbps)} Mbps</td>
+          <td class="text-xs text-mn-grey">
+            ${s.started_at ? new Date(s.started_at).toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'}) : '—'}
+          </td>
+          <td class="text-right">
+            <button class="btn-disconnect" id="dis-${esc(s.id)}"
+                    onclick="disconnectUser('${esc(s.id)}', this)">
+              <span class="mi" style="font-size:1rem;">power_settings_new</span> Kick
+            </button>
+          </td>
+        </tr>`;
+    }).join('');
+  } catch (err) {
+    document.getElementById('sessions-tbody').innerHTML =
+      `<tr><td colspan="6" class="text-center py-6 text-mn-grey">Error: ${esc(err.message)}</td></tr>`;
   }
 }
 
-/* ── Data Loading Functions ─────────────────────────────────────────────────── */
-async function loadStats() { 
-  try { 
-    const res = await api.get('/admin/stats'); 
-    const d = res.data; 
-    document.getElementById('kpi-users').textContent = d.total_users.toLocaleString(); 
-    document.getElementById('kpi-sessions').textContent = d.active_sessions.toLocaleString(); 
-    document.getElementById('kpi-today').textContent = parseFloat(d.today_revenue_kes).toLocaleString(); 
-    document.getElementById('kpi-total').textContent = parseFloat(d.total_revenue_kes).toLocaleString(); 
-  } catch (err) { console.error('Stats error:', err.message); }
-} 
+/* ── Disconnect user ── */
+async function disconnectUser(sessionId, btn) {
+  if (!confirm('Disconnect this user? Their session will end immediately.')) return;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="mi" style="font-size:1rem;animation:spin 1s linear infinite;">progress_activity</span>';
+  try {
+    await api.post(`/admin/disconnect/${sessionId}`, {});
+    loadSessions(); loadStats();
+  } catch (err) {
+    alert('Disconnect failed: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<span class="mi" style="font-size:1rem;">power_settings_new</span> Kick';
+  }
+}
 
+/* ── Users ── */
+let allUsers = [];
 async function loadUsers() {
   try {
-    const res = await api.get('/admin/users');
-    const users = res.data.users; // Correct mapping
-    const tbody = document.getElementById('users-tbody');
-    if (!users || users.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="px-lg py-lg text-on-surface-variant text-center">No users found.</td></tr>`;
-      return;
-    }
-    tbody.innerHTML = users.map(u => `
-      <tr class="hover:bg-white/5 transition-colors">
-        <td class="px-lg py-lg">
-          <div class="font-bold">${escapeHtml(u.name || 'N/A')}</div>
-          <div class="text-xs text-on-surface-variant">${escapeHtml(u.phone_number)}</div>
-        </td>
-        <td class="px-lg py-lg">
-          <span class="px-2 py-0.5 rounded bg-surface-container text-xs capitalize">${escapeHtml(u.role)}</span>
-        </td>
-        <td class="px-lg py-lg font-bold text-primary">KES ${parseFloat(u.total_spent).toLocaleString()}</td>
-        <td class="px-lg py-lg text-xs text-on-surface-variant">${new Date(u.created_at).toLocaleDateString()}</td>
-        <td class="px-lg py-lg text-xs text-on-surface-variant">${u.last_login_at ? new Date(u.last_login_at).toLocaleTimeString() : 'Never'}</td>
-        <td class="px-lg py-lg text-right">
-          <span class="w-2 h-2 inline-block rounded-full ${u.is_active ? 'bg-green-500' : 'bg-red-500'} mr-2"></span>
-          <span class="text-xs">${u.is_active ? 'Active' : 'Banned'}</span>
-        </td>
-      </tr>
-    `).join('');
-  } catch (err) { console.error('Users error:', err.message); }
+    const res  = await api.get('/admin/users');
+    allUsers   = res.data.users || [];
+    renderUsers(allUsers);
+  } catch (err) {
+    document.getElementById('users-tbody').innerHTML =
+      `<tr><td colspan="6" class="text-center py-6 text-mn-grey">Error: ${esc(err.message)}</td></tr>`;
+  }
+}
+function renderUsers(users) {
+  const tbody = document.getElementById('users-tbody');
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-mn-grey">No users found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td>
+        <p class="font-700 text-mn-navy text-sm">${esc(u.name || 'No Name')}</p>
+        <p class="text-xs text-mn-grey font-mono">${esc(u.phone_number)}</p>
+      </td>
+      <td>
+        ${u.role === 'admin'
+          ? `<span class="bd-admin">Admin</span>`
+          : `<span class="bd-user">User</span>`}
+      </td>
+      <td class="font-700 text-mn-blue text-sm">
+        KES ${parseFloat(u.total_spent||0).toLocaleString('en-KE')}
+      </td>
+      <td class="text-xs text-mn-grey">
+        ${u.created_at ? new Date(u.created_at).toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'}) : '—'}
+      </td>
+      <td class="text-xs text-mn-grey">
+        ${u.last_login_at ? new Date(u.last_login_at).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : 'Never'}
+      </td>
+      <td class="text-right">
+        <span class="flex items-center justify-end gap-1.5">
+          <span class="w-2 h-2 rounded-full ${u.is_active ? 'bg-green-500' : 'bg-red-500'}"></span>
+          <span class="text-xs font-700 ${u.is_active ? 'text-green-600' : 'text-red-500'}">
+            ${u.is_active ? 'Active' : 'Banned'}
+          </span>
+        </span>
+      </td>
+    </tr>`).join('');
+}
+function filterUsers() {
+  const q = document.getElementById('user-search').value.toLowerCase().trim();
+  if (!q) { renderUsers(allUsers); return; }
+  renderUsers(allUsers.filter(u =>
+    (u.name||'').toLowerCase().includes(q) ||
+    (u.phone_number||'').includes(q)
+  ));
 }
 
-async function loadSessions() { 
-  try { 
-    const res = await api.get('/admin/sessions?status=active&limit=20'); 
-    const sessions = res.data.sessions; 
-    const tbody = document.getElementById('sessions-tbody'); 
-    document.getElementById('active-sessions-count').textContent = `Showing ${sessions.length} live users`;
-    if (sessions.length === 0) { 
-      tbody.innerHTML = `<tr><td colspan="6" class="px-lg py-lg text-on-surface-variant text-center">No active sessions.</td></tr>`; 
-      return; 
-    } 
-    tbody.innerHTML = sessions.map(s => { 
-      const secsLeft = Math.max(0, (new Date(s.expires_at) - Date.now()) / 1000); 
-      const pct = Math.min(100, (secsLeft / (24 * 3600)) * 100); // simplified pct
-      const timeLabel = secsLeft > 3600 ? `${Math.floor(secsLeft/3600)}h ${Math.floor((secsLeft%3600)/60)}m remaining` : `${Math.floor(secsLeft/60)}m remaining`; 
-      return ` <tr class="hover:bg-white/5 transition-colors"> <td class="px-lg py-lg font-mono text-primary">${escapeHtml(s.phone_number)}</td> <td class="px-lg py-lg"> <span class="px-3 py-1 rounded-full bg-secondary-container/20 text-secondary text-xs">${escapeHtml(s.package_name)}</span> </td> <td class="px-lg py-lg w-48"> <div class="flex flex-col gap-xs"> <div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden"> <div class="h-full primary-gradient" style="width:${pct}%"></div> </div> <span class="text-[10px] text-on-surface-variant">${timeLabel}</span> </div> </td> <td class="px-lg py-lg">${parseFloat(s.speed_mbps)} Mbps</td> <td class="px-lg py-lg text-on-surface-variant text-sm"> ${new Date(s.started_at).toLocaleTimeString()} </td> <td class="px-lg py-lg text-right"> <button onclick="disconnectUser('${escapeHtml(s.id)}', this)" class="text-error hover:bg-error/10 p-2 rounded-lg transition-colors"> <span class="material-symbols-outlined">power_settings_new</span> </button> </td> </tr>`; 
-    }).join(''); 
-  } catch (err) { console.error('Sessions error:', err.message); }
-} 
-
+/* ── Revenue ── */
 async function loadRevenue() {
   try {
-    const res = await api.get('/admin/transactions');
-    const txs = res.data.transactions; // Correct mapping
-    const tbody = document.getElementById('revenue-tbody');
-    if (!txs || txs.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="px-lg py-lg text-on-surface-variant text-center">No transactions found.</td></tr>`;
+    if (!allTxs.length) {
+      const res = await api.get('/admin/transactions');
+      allTxs = res.data.transactions || [];
+    }
+    applyRevenueFilter();
+  } catch (err) {
+    document.getElementById('revenue-tbody').innerHTML =
+      `<tr><td colspan="6" class="text-center py-6 text-mn-grey">Error: ${esc(err.message)}</td></tr>`;
+  }
+}
+function applyRevenueFilter() {
+  const f = document.getElementById('revenue-filter').value;
+  const rows = f === 'all' ? allTxs : allTxs.filter(t => t.status === f);
+  const tbody = document.getElementById('revenue-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-mn-grey">No transactions match this filter.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(t => `
+    <tr>
+      <td class="font-mono text-xs">${esc(t.mpesa_receipt_number || 'PENDING')}</td>
+      <td>
+        <p class="font-700 text-sm text-mn-navy">${esc(t.name||'Guest')}</p>
+        <p class="text-xs text-mn-grey">${esc(t.phone_number)}</p>
+      </td>
+      <td class="text-sm">${esc(t.package_name||'—')}</td>
+      <td class="font-800 text-mn-ink text-sm">KES ${parseFloat(t.amount_kes||0).toLocaleString('en-KE')}</td>
+      <td class="text-xs text-mn-grey">
+        ${t.created_at ? new Date(t.created_at).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—'}
+      </td>
+      <td class="text-right">${txBadge(t.status)}</td>
+    </tr>`).join('');
+}
+
+/* ── Admin packages ── */
+async function loadAdminPackages() {
+  try {
+    const res  = await api.get('/packages', false);
+    const pkgs = res.data.packages || [];
+    const tbody = document.getElementById('packages-tbody');
+    if (!pkgs.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-mn-grey">No packages configured.</td></tr>';
       return;
     }
-    tbody.innerHTML = txs.map(t => `
-      <tr class="hover:bg-white/5 transition-colors">
-        <td class="px-lg py-lg font-mono text-xs">${escapeHtml(t.mpesa_receipt_number || 'PENDING')}</td>
-        <td class="px-lg py-lg">
-          <div class="text-sm">${escapeHtml(t.name || 'Guest')}</div>
-          <div class="text-[10px] text-on-surface-variant">${escapeHtml(t.phone_number)}</div>
+    tbody.innerHTML = pkgs.map(p => `
+      <tr>
+        <td class="font-700 text-mn-navy">${esc(p.name)}</td>
+        <td class="text-sm text-mn-grey">${fmtDur(p.duration_hours)}</td>
+        <td class="text-sm">${parseInt(p.speed_mbps)} Mbps</td>
+        <td class="font-800 text-mn-blue text-sm">KES ${parseFloat(p.price_kes).toLocaleString('en-KE')}</td>
+        <td class="text-right">
+          <span class="text-mn-grey text-xs">ID: ${esc(String(p.id))}</span>
         </td>
-        <td class="px-lg py-lg text-sm">${escapeHtml(t.package_name)}</td>
-        <td class="px-lg py-lg font-bold">KES ${parseFloat(t.amount_kes).toLocaleString()}</td>
-        <td class="px-lg py-lg text-xs text-on-surface-variant">${new Date(t.created_at).toLocaleString()}</td>
-        <td class="px-lg py-lg text-right">
-          <span class="px-2 py-0.5 rounded text-[10px] ${t.status === 'completed' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${escapeHtml((t.status || '').toUpperCase())}</span>
-        </td>
-      </tr>
-    `).join('');
-  } catch (err) { console.error('Revenue error:', err.message); }
+      </tr>`).join('');
+  } catch (err) {
+    document.getElementById('packages-tbody').innerHTML =
+      `<tr><td colspan="5" class="text-center py-6 text-mn-grey">Error: ${esc(err.message)}</td></tr>`;
+  }
 }
 
-async function loadPackages() {
-  try {
-    const res = await api.get('/packages', false); 
-    const packages = res.data.packages; // Correct mapping
-    const tbody = document.getElementById('packages-tbody');
-    tbody.innerHTML = packages.map(p => `
-      <tr class="hover:bg-white/5 transition-colors">
-        <td class="px-lg py-lg font-bold">${escapeHtml(p.name)}</td>
-        <td class="px-lg py-lg text-on-surface-variant">${parseInt(p.duration_hours)} Hours</td>
-        <td class="px-lg py-lg">${parseInt(p.speed_mbps)} Mbps</td>
-        <td class="px-lg py-lg font-bold text-primary-container">KES ${parseFloat(p.price_kes).toLocaleString()}</td>
-        <td class="px-lg py-lg text-right space-x-md">
-          <button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
-          <button class="text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
-        </td>
-      </tr>
-    `).join('');
-  } catch (err) { console.error('Packages error:', err.message); }
-}
-
+/* ── System health ── */
 async function loadHealth() {
   try {
     const res = await api.get('/admin/hotspot/health');
-    const h = res.data;
-    document.getElementById('health-mode').textContent = h.mode;
-    document.getElementById('health-uptime').textContent = `${Math.floor(h.uptime / 3600)}h ${Math.floor((h.uptime % 3600) / 60)}m`;
-    document.getElementById('health-memory').textContent = `${h.memoryUsage.heapUsed} MB`;
-    document.getElementById('health-capacity-pct').textContent = `${h.capacityPercent}%`;
-    document.getElementById('health-capacity-bar').style.width = `${h.capacityPercent}%`;
-    document.getElementById('health-capacity-bar').className = `h-full ${h.status === 'healthy' ? 'bg-success' : (h.status === 'warning' ? 'bg-secondary' : 'bg-error')}`;
-  } catch (err) { console.error('Health error:', err.message); }
+    const h   = res.data;
+
+    const isSimulation = (h.mode || '').toLowerCase().includes('sim');
+    document.getElementById('sim-badge').classList.toggle('hidden', !isSimulation);
+    document.getElementById('top-sim-badge').classList.toggle('hidden', !isSimulation);
+    if (!isSimulation) document.getElementById('top-sim-badge').style.display = 'none';
+    else               document.getElementById('top-sim-badge').style.display = 'inline-flex';
+
+    document.getElementById('h-mode').textContent   = h.mode || '—';
+    document.getElementById('h-uptime').textContent =
+      `${Math.floor((h.uptime||0)/3600)}h ${Math.floor(((h.uptime||0)%3600)/60)}m`;
+    document.getElementById('h-memory').textContent =
+      h.memoryUsage?.heapUsed != null ? `${h.memoryUsage.heapUsed} MB` : '—';
+    document.getElementById('h-cap-pct').textContent  = `${h.capacityPercent ?? 0}%`;
+    document.getElementById('h-cap-bar').style.width  = `${h.capacityPercent ?? 0}%`;
+
+    const statusEl = document.getElementById('h-status');
+    const sc = h.status === 'healthy' ? 'text-green-600' : h.status === 'warning' ? 'text-mn-amber' : 'text-red-500';
+    statusEl.className = `font-700 ${sc}`;
+    statusEl.textContent = (h.status || '—').charAt(0).toUpperCase() + (h.status||'').slice(1);
+
+  } catch (err) { console.error('Health:', err.message); }
 }
 
-async function disconnectUser(sessionId, btn) { 
-  if(!confirm('Disconnect this user?')) return;
-  btn.disabled = true; 
-  try { 
-    await api.post(`/admin/disconnect/${sessionId}`, {}); 
-    loadSessions(); loadStats();
-  } catch (err) { alert('Failed to disconnect: ' + err.message); btn.disabled = false; }
-} 
-
-/* ── Modal Logic ──────────────────────────────────────────────────────────── */
-function openAddPackageModal() {
-  document.getElementById('add-package-modal').classList.remove('hidden');
+/* ════════════ MODAL ════════════ */
+function openModal() {
+  document.getElementById('add-pkg-modal').classList.add('open');
+  document.getElementById('modal-error').classList.add('hidden');
 }
-
-function closeAddPackageModal() {
-  document.getElementById('add-package-modal').classList.add('hidden');
-  document.getElementById('add-package-form').reset();
+function closeModal() {
+  document.getElementById('add-pkg-modal').classList.remove('open');
+  document.getElementById('add-pkg-form').reset();
+  document.getElementById('modal-error').classList.add('hidden');
 }
+/* Close on backdrop click */
+document.getElementById('add-pkg-modal').addEventListener('click', function(e){
+  if (e.target === this) closeModal();
+});
 
-document.getElementById('add-package-form').addEventListener('submit', async (e) => {
+document.getElementById('add-pkg-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const btn = document.getElementById('add-pkg-btn');
-  const originalText = btn.innerHTML;
-  btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> Saving...`;
+  const btn = document.getElementById('save-pkg-btn');
+  const orig = btn.innerHTML;
   btn.disabled = true;
+  btn.innerHTML = `<span class="mi" style="animation:spin 1s linear infinite;font-size:1.1rem;">progress_activity</span> Saving…`;
 
   const data = {
-    name: document.getElementById('pkg-name').value,
-    duration_hours: parseInt(document.getElementById('pkg-duration').value),
-    speed_mbps: parseInt(document.getElementById('pkg-speed').value),
-    price_kes: parseFloat(document.getElementById('pkg-price').value),
-    description: document.getElementById('pkg-desc').value
+    name:           document.getElementById('f-name').value.trim(),
+    duration_hours: parseFloat(document.getElementById('f-duration').value),
+    speed_mbps:     parseInt(document.getElementById('f-speed').value),
+    price_kes:      parseFloat(document.getElementById('f-price').value),
+    description:    document.getElementById('f-desc').value.trim()
   };
 
   try {
     await api.post('/packages', data);
-    closeAddPackageModal();
-    loadPackages(); // Refresh the list
-    alert('Package added successfully!');
+    closeModal();
+    loadAdminPackages();
   } catch (err) {
-    console.error('Error adding package:', err);
-    alert('Failed to add package: ' + err.message);
+    const errEl = document.getElementById('modal-error');
+    errEl.textContent = err.message || 'Failed to save package.';
+    errEl.classList.remove('hidden');
   } finally {
-    btn.innerHTML = originalText;
     btn.disabled = false;
+    btn.innerHTML = orig;
   }
 });
 
-/* ── Init ─────────────────────────────────────────────────────────────────── */
-initNavigation();
+/* ════════════ INIT ════════════ */
 loadStats();
-setInterval(() => { 
-  const activeSection = document.querySelector('.admin-section:not(.hidden)').id;
-  loadSectionData(activeSection);
-}, 30000); 
+loadRevenueChart();
+loadHealth();
+
+/* Auto-refresh every 30s */
+setInterval(() => {
+  const activeSection = document.querySelector('.admin-section.active')?.id?.replace('sec-','');
+  if (activeSection === 'overview') { loadStats(); loadRevenueChart(); }
+  if (activeSection === 'sessions') loadSessions();
+}, 30000);
 </script>
-<script src="/js/navbar.js"></script>
-</div> <script src="/js/footer.js"></script>
-</body></html>
+</body>
+</html>

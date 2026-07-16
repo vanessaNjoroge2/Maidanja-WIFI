@@ -1,185 +1,295 @@
 <!doctype html>
-<html class="dark" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Payment Success | Maidanja WiFi</title>
-    <script src="/js/api.js"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/globals.css" />
-    <link rel="stylesheet" href="/css/navbar.css" />
-    <style>
-      .glass-card {
-        background: rgba(18, 18, 26, 0.6);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      }
-      .mesh-bg {
-        background-color: #0a0a0f;
-        background-image: radial-gradient(at 0% 0%, rgba(0, 212, 255, 0.15) 0px, transparent 50%),
-          radial-gradient(at 100% 0%, rgba(96, 1, 209, 0.15) 0px, transparent 50%),
-          radial-gradient(at 50% 100%, rgba(0, 212, 255, 0.1) 0px, transparent 50%);
-      }
-      .success-glow {
-        box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
-      }
-    </style>
-  </head>
-  <body class="bg-background text-on-background font-body-md mesh-bg min-h-screen flex flex-col">
-    <!-- Global Navigation Bar -->
-    <nav id="navbar" class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-left">
-          <button class="back-button" onclick="window.location.href='/dashboard.html'" title="Dashboard">←</button>
-          <a href="/index.html" class="navbar-brand">
-            <img src="/images/logo.jpg" alt="Maidanja WiFi" />
-            <span class="hidden sm:inline">Maidanja WiFi</span>
-          </a>
-        </div>
-        <div class="navbar-center">
-          <h1 class="navbar-title">Success</h1>
-        </div>
-        <div class="navbar-right">
-          <button id="mobile-menu-btn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-          </button>
-          <div id="nav-items" class="hidden sm:flex"></div>
-        </div>
-      </div>
-    </nav>
+<html lang="en">
 
-    <!-- Main Content -->
-    <main class="flex-grow flex items-center justify-center px-margin-mobile pt-24 pb-12">
-      <div class="glass-card w-full max-w-md rounded-xl p-xl flex flex-col items-center text-center success-glow relative">
-        <!-- Go to Session -->
-        <button
-          onclick="window.location.href = '/success.html'"
-          class="absolute top-6 right-6 flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-300"
-        >
-          <span class="font-label-md text-label-md text-sm">Go to Session</span>
-          <span class="material-symbols-outlined text-sm">arrow_forward</span>
-        </button>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Successful | Maidanja WiFi</title>
 
-        <!-- Large Checkmark -->
-        <div class="w-24 h-24 rounded-full bg-primary-container/20 flex items-center justify-center mb-lg border border-primary-container/30">
-          <span class="material-symbols-outlined text-[64px] text-primary-container" style="font-variation-settings: 'FILL' 1">check_circle</span>
-        </div>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/css/navbar.css" />
+  <link rel="stylesheet" href="/css/globals.css" />
+  <script src="/js/api.js"></script>
 
-        <h1 class="font-headline-lg text-headline-lg mb-sm text-primary">Payment Received!</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant mb-xl">Your connection is now active.</p>
-
-        <!-- Success Details Card -->
-        <div class="w-full bg-surface-container-lowest/50 rounded-lg p-md border border-white/5 mb-xl text-left">
-          <div class="flex justify-between mb-sm">
-            <span class="text-on-surface-variant font-label-md text-label-md">Reference</span>
-            <span id="receipt-ref" class="text-on-surface font-label-md text-label-md font-bold">—</span>
-          </div>
-          <div class="flex justify-between mb-sm">
-            <span class="text-on-surface-variant font-label-md text-label-md">Plan</span>
-            <span id="receipt-plan" class="text-on-surface font-label-md text-label-md font-bold">—</span>
-          </div>
-          <div class="flex justify-between mb-sm">
-            <span class="text-on-surface-variant font-label-md text-label-md">Amount</span>
-            <span id="receipt-amount" class="text-on-surface font-label-md text-label-md font-bold">—</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-on-surface-variant font-label-md text-label-md">Status</span>
-            <span class="inline-flex items-center gap-xs text-primary-container font-label-md text-label-md font-bold">
-              <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
-              Active
-            </span>
-          </div>
-        </div>
-
-        <!-- Countdown -->
-        <div class="flex flex-col items-center gap-sm">
-          <div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden max-w-[200px]">
-            <div id="progress-bar" class="h-full bg-gradient-to-r from-primary-container to-secondary-container w-0 transition-all duration-1000"></div>
-          </div>
-          <p class="font-label-md text-label-md text-on-tertiary-fixed-variant">
-            Redirecting in <span id="countdown" class="text-primary font-bold">5</span>s
-          </p>
-        </div>
-
-        <!-- Manual Action -->
-        <button
-          onclick="window.location.href = '/success.html'"
-          class="mt-xl text-primary font-label-md text-label-md hover:underline decoration-primary/30 transition-all"
-        >
-          Didn't redirect? Click here to browse
-        </button>
-      </div>
-    </main>
-
-    <footer class="bg-surface dark:bg-surface border-t border-white/5 mt-auto">
-      <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive">
-        <div class="mb-md md:mb-0">
-          <span class="font-headline-md text-headline-md text-primary font-bold">Maidanja WiFi</span>
-          <p class="text-on-surface-variant text-label-md mt-xs font-label-md">
-            © 2026 Maidanja WiFi. Powered by M-Pesa.
-          </p>
-        </div>
-      </div>
-    </footer>
-
-    <script src="/js/navbar.js"></script>
-    <script src="/js/footer.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        if (!api.isLoggedIn()) {
-          window.location.href = "/login.html";
-          return;
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'mn-navy': '#1B3A6B', 'mn-blue': '#1E88C7', 'mn-orange': '#F4901E',
+            'mn-amber': '#FDB912', 'mn-paper': '#FAFBFC', 'mn-ink': '#2B3245', 'mn-grey': '#6B7280',
+          },
+          fontFamily: { sans: ['Manrope', 'sans-serif'] }
         }
+      }
+    };
+  </script>
 
-        // Try to get data from multiple sources for robustness
-        const result = JSON.parse(localStorage.getItem("maidanja_payment_result") || "null");
-        const payment = JSON.parse(localStorage.getItem("maidanja_payment") || "null");
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #FAFBFC;
+      color: #2B3245;
+    }
 
-        console.log("Success Page Data:", { result, payment });
+    .mi {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-flex;
+      align-items: center;
+    }
 
-        // Update Reference
-        const ref = result?.mpesa_receipt_number || result?.receipt_number || "Completed";
-        document.getElementById("receipt-ref").textContent = ref;
+    /* Burst animation */
+    @keyframes burst {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
 
-        // Update Plan
-        const plan = result?.package_name || payment?.package_name || "WiFi Plan";
-        document.getElementById("receipt-plan").textContent = plan;
+      60% {
+        transform: scale(1.15);
+      }
 
-        // Update Amount
-        const amountVal = result?.amount_kes || payment?.amount || "0";
-        document.getElementById("receipt-amount").textContent = `KES ${parseFloat(amountVal).toLocaleString()}`;
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
 
-        // Countdown and Progress
-        let timeLeft = 5;
-        const countdownEl = document.getElementById("countdown");
-        const progressEl = document.getElementById("progress-bar");
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
 
-        const timer = setInterval(() => {
-          timeLeft--;
-          if (countdownEl) countdownEl.textContent = timeLeft;
-          if (progressEl) progressEl.style.width = `${((5 - timeLeft) / 5) * 100}%`;
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-          if (timeLeft <= 0) {
-            clearInterval(timer);
-            window.location.href = "/success.html";
-          }
-        }, 1000);
+    .burst {
+      animation: burst 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
 
-        // Clear temporary payment data so it doesn't reappear
-        // But keep user info
-        localStorage.removeItem("maidanja_payment");
-        localStorage.removeItem("maidanja_payment_result");
-        localStorage.removeItem("maidanja_package");
-      });
-    </script>
-  </body>
+    .fade-up {
+      animation: fade-up 0.5s ease both;
+    }
+
+    .delay-1 {
+      animation-delay: 0.15s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.3s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.45s;
+    }
+
+    .delay-4 {
+      animation-delay: 0.6s;
+    }
+
+    .success-card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(27, 58, 107, 0.1);
+      border: 1px solid #E8EDF2;
+      max-width: 440px;
+      width: 100%;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid #F0F3F7;
+      font-size: 0.88rem;
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      color: #6B7280;
+      font-weight: 600;
+    }
+
+    .detail-value {
+      color: #2B3245;
+      font-weight: 700;
+      text-align: right;
+      max-width: 60%;
+      word-break: break-all;
+    }
+
+    .btn-dashboard {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #1E88C7 0%, #F4901E 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      font-family: 'Manrope', sans-serif;
+      transition: opacity 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-dashboard:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      background: transparent;
+      border: 2px solid #D1D9E0;
+      color: #2B3245;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: 'Manrope', sans-serif;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      border-color: #1B3A6B;
+      background: rgba(27, 58, 107, 0.04);
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="navbar" class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <a href="/index.html" class="navbar-brand">
+          <img src="/images/logo.png" alt="Maidanja WiFi" />
+          <span class="hidden sm:inline">Maidanja WiFi</span>
+        </a>
+      </div>
+      <div class="navbar-center">
+        <h1 class="navbar-title">Payment Successful</h1>
+      </div>
+      <div class="navbar-right">
+        <button id="mobile-menu-btn" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        <div id="nav-items" class="hidden sm:flex"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="min-h-screen flex items-center justify-center px-5 py-12">
+    <div class="success-card p-8 text-center">
+
+      <!-- Success icon burst -->
+      <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6 burst">
+        <span class="mi text-green-500" style="font-size:2.8rem;">check_circle</span>
+      </div>
+
+      <h1 class="font-800 text-mn-navy mb-2 fade-up delay-1" style="font-size:1.6rem;">
+        You're Connected! 🎉
+      </h1>
+      <p class="text-mn-grey mb-7 fade-up delay-2" style="font-size:0.95rem;">
+        Your WiFi session is now active. Get back to what matters — your studies.
+      </p>
+
+      <!-- Receipt details -->
+      <div class="bg-mn-paper rounded-2xl p-5 mb-7 text-left fade-up delay-3">
+        <p class="text-xs font-700 text-mn-grey uppercase tracking-wider mb-3">Payment Receipt</p>
+        <div id="details-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="space-y-3 fade-up delay-4">
+        <button class="btn-dashboard" onclick="window.location.href='/dashboard.html'">
+          <span class="mi" style="font-size:1.1rem;">wifi</span>
+          Go to My Dashboard
+        </button>
+        <button class="btn-secondary" onclick="window.location.href='/packages.html'">
+          <span class="mi" style="font-size:1.1rem;">add_shopping_cart</span>
+          Buy Another Package
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/navbar.js"></script>
+
+  <script>
+    /* ════════════════════════════════════════════════════════
+       SUCCESS PAGE LOGIC
+       Data source: localStorage['maidanja_payment_result']
+       ════════════════════════════════════════════════════════ */
+
+    if (!api.isLoggedIn()) { window.location.href = '/login.html'; }
+
+    const result = JSON.parse(localStorage.getItem('maidanja_payment_result') || 'null');
+    if (!result) { window.location.href = '/packages.html'; }
+
+    /* ── Render receipt details ── */
+    const container = document.getElementById('details-container');
+
+    function row(label, value) {
+      return `<div class="detail-row">
+    <span class="detail-label">${label}</span>
+    <span class="detail-value">${value}</span>
+  </div>`;
+    }
+
+    const rows = [];
+
+    if (result.mpesa_receipt_number) {
+      rows.push(row('M-Pesa Receipt', `<span style="font-family:monospace;">${result.mpesa_receipt_number}</span>`));
+    }
+    if (result.package_name) {
+      rows.push(row('Package', result.package_name));
+    }
+    if (result.amount_kes) {
+      rows.push(row('Amount Paid', `<span style="color:#1B3A6B;">KES ${parseFloat(result.amount_kes).toLocaleString('en-KE')}</span>`));
+    }
+    if (result.phone_number) {
+      rows.push(row('Phone Number', result.phone_number));
+    }
+    if (result.created_at) {
+      rows.push(row('Date', new Date(result.created_at).toLocaleString('en-KE', {
+        dateStyle: 'medium', timeStyle: 'short'
+      })));
+    }
+
+    if (rows.length === 0) {
+      rows.push(row('Status', '<span style="color:#16a34a;font-weight:800;">✓ Payment Confirmed</span>'));
+    }
+
+    container.innerHTML = rows.join('');
+
+    /* ── Clean up localStorage ── */
+    localStorage.removeItem('maidanja_payment');
+    localStorage.removeItem('maidanja_package');
+  </script>
+</body>
+
 </html>

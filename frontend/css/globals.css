@@ -142,3 +142,257 @@ a.btn,
   width: 100%;
   max-width: 100vw;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Maidanja Brand Design System — Color Tokens & Component Classes
+   Added for the 2026 brand rebuild. Complements Tailwind extended config.
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Brand CSS Custom Properties ──────────────────────────────────────────── */
+:root {
+  --mn-navy:    #1B3A6B;
+  --mn-blue:    #1E88C7;
+  --mn-orange:  #F4901E;
+  --mn-amber:   #FDB912;
+  --mn-paper:   #FAFBFC;
+  --mn-ink:     #2B3245;
+  --mn-grey:    #6B7280;
+  --mn-gradient: linear-gradient(135deg, #1E88C7 0%, #F4901E 100%);
+  --mn-shadow-sm:  0 2px 8px rgba(27, 58, 107, 0.08);
+  --mn-shadow-md:  0 6px 24px rgba(27, 58, 107, 0.12);
+  --mn-shadow-lg:  0 12px 48px rgba(27, 58, 107, 0.18);
+}
+
+/* ── Light-mode page base ──────────────────────────────────────────────────── */
+.page-light {
+  background-color: var(--mn-paper);
+  color: var(--mn-ink);
+  font-family: 'Manrope', 'Inter', sans-serif;
+}
+
+/* ── Brand gradient utility ────────────────────────────────────────────────── */
+.brand-gradient { background: var(--mn-gradient); }
+.brand-gradient-text {
+  background: var(--mn-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Light card ───────────────────────────────────────────────────────────── */
+.mn-card {
+  background: #ffffff;
+  border: 1px solid #E8EDF2;
+  border-radius: 16px;
+  box-shadow: var(--mn-shadow-sm);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.mn-card:hover {
+  box-shadow: var(--mn-shadow-md);
+  transform: translateY(-3px);
+}
+.mn-card-flat {
+  background: #ffffff;
+  border: 1px solid #E8EDF2;
+  border-radius: 16px;
+}
+
+/* ── Orange primary button ────────────────────────────────────────────────── */
+.btn-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--mn-orange);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.75rem 1.625rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  min-height: 48px;
+  letter-spacing: 0.01em;
+}
+.btn-brand:hover {
+  background: #e07c0b;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(244, 144, 30, 0.38);
+}
+.btn-brand:active { transform: translateY(0); }
+
+/* Gradient CTA variant */
+.btn-brand-gradient {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--mn-gradient);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.75rem 1.625rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  min-height: 48px;
+}
+.btn-brand-gradient:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(30, 136, 199, 0.3);
+}
+
+/* Navy outline button */
+.btn-outline-navy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--mn-navy);
+  font-weight: 600;
+  padding: 0.75rem 1.625rem;
+  border-radius: 12px;
+  border: 2px solid rgba(27, 58, 107, 0.25);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  min-height: 48px;
+}
+.btn-outline-navy:hover {
+  border-color: var(--mn-navy);
+  background: rgba(27, 58, 107, 0.05);
+}
+
+/* ── Status Badges ────────────────────────────────────────────────────────── */
+.badge-sim {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(253, 185, 18, 0.15);
+  color: #8B6900;
+  border: 1px solid rgba(253, 185, 18, 0.4);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.badge-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(34, 197, 94, 0.1);
+  color: #15803d;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.badge-orange {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(244, 144, 30, 0.1);
+  color: var(--mn-orange);
+  border: 1px solid rgba(244, 144, 30, 0.25);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* ── Light page section wrapper ───────────────────────────────────────────── */
+.mn-section {
+  padding: clamp(3rem, 6vw, 5.5rem) clamp(1.25rem, 5vw, 2.5rem);
+}
+.mn-max { max-width: 1200px; margin: 0 auto; }
+
+/* ── Admin light sidebar override ─────────────────────────────────────────── */
+.admin-sidebar {
+  background: var(--mn-navy);
+  color: #ffffff;
+}
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.admin-nav-link:hover {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+}
+.admin-nav-link.active {
+  background: rgba(244,144,30,0.2);
+  color: var(--mn-amber);
+  border-left: 3px solid var(--mn-orange);
+  padding-left: 11px;
+}
+
+/* ── Input styles for light pages ─────────────────────────────────────────── */
+.mn-input {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #D1D9E0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--mn-ink);
+  font-family: 'Manrope', sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: 48px;
+  outline: none;
+}
+.mn-input:focus {
+  border-color: var(--mn-blue);
+  box-shadow: 0 0 0 3px rgba(30, 136, 199, 0.12);
+}
+.mn-input::placeholder { color: #A8B2BD; }
+
+/* ── Light table ──────────────────────────────────────────────────────────── */
+.mn-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.mn-table th {
+  background: #F3F6FA;
+  color: var(--mn-grey);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 16px;
+  text-align: left;
+}
+.mn-table th:first-child { border-radius: 10px 0 0 10px; }
+.mn-table th:last-child  { border-radius: 0 10px 10px 0; }
+.mn-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #F0F3F7;
+  font-size: 0.9rem;
+}
+.mn-table tr:hover td { background: #F8FAFC; }
+
+/* ── Countdown ring ───────────────────────────────────────────────────────── */
+@keyframes mn-pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+.mn-pulse { animation: mn-pulse 2s ease-in-out infinite; }
+
+/* ── Smooth scroll ────────────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+

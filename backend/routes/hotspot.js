@@ -23,13 +23,17 @@ router.post('/login', auth, async (req, res, next) => {
     const userId = req.user.id;
     const phone = req.user.phone_number;
 
-    // Validate payment exists for this user
+    // Validate payment exists for this user and has not been used, or has an active session waiting for credentials
     const paymentResult = await pool.query(
-      `SELECT p.*, pkg.speed_mbps, pkg.duration_hours
+      `SELECT p.*, pkg.name as package_name, pkg.speed_mbps, pkg.duration_hours, s.id AS active_session_id
        FROM payments p
        JOIN packages pkg ON p.package_id = pkg.id
-       WHERE p.user_id = $1 AND p.package_id = $2 AND p.status = 'completed'
-       ORDER BY p.completed_at DESC LIMIT 1`,
+       LEFT JOIN sessions s ON s.payment_id = p.id
+       WHERE p.user_id = $1 
+         AND p.package_id = $2 
+         AND p.status = 'completed'
+         AND (s.id IS NULL OR (s.status = 'active' AND s.hotspot_user_id IS NULL))
+       ORDER BY p.updated_at DESC LIMIT 1`,
       [userId, packageId]
     );
 
@@ -42,18 +46,21 @@ router.post('/login', auth, async (req, res, next) => {
 
     const payment = paymentResult.rows[0];
 
-    // Check for active session (only 1 per user)
+    // Check if user has an active session with hotspot credentials (excluding the one for this payment, if it exists)
     const activeSessionResult = await pool.query(
       `SELECT * FROM sessions 
-       WHERE user_id = $1 AND status = 'active'`,
-      [userId]
+       WHERE user_id = $1 
+         AND status = 'active' 
+         AND hotspot_user_id IS NOT NULL 
+         AND id != COALESCE($2, '00000000-0000-0000-0000-000000000000')`,
+      [userId, payment.active_session_id]
     );
 
     if (activeSessionResult.rows.length > 0) {
       const existingSession = activeSessionResult.rows[0];
       return res.status(409).json({
         success: false,
-        message: 'You already have an active session',
+        message: 'You already have another active hotspot session',
         existingSession: {
           expiresAt: existingSession.expires_at,
           hotspotUsername: existingSession.hotspot_user_id,
@@ -77,22 +84,39 @@ router.post('/login', auth, async (req, res, next) => {
       );
     }
 
-    // Create session
-    const session = await mikrotikService.createSession(
-      userId,
-      phone,
-      hotspotUser.hotspotUserId,
-      hotspotUser.username,
-      packageId,
-      payment.duration_hours
-    );
+    let sessionId = payment.active_session_id;
+    let expiresAt;
+    
+    if (sessionId) {
+      // If session already exists (created by webhook), update it with hotspot_user_id
+      await pool.query(
+        `UPDATE sessions SET hotspot_user_id = $1 WHERE id = $2`,
+        [hotspotUser.hotspotUserId, sessionId]
+      );
+      // Fetch expires_at of the existing session
+      const sessQ = await pool.query('SELECT expires_at FROM sessions WHERE id = $1', [sessionId]);
+      expiresAt = sessQ.rows[0].expires_at;
+    } else {
+      // Create session from scratch
+      const session = await mikrotikService.createSession(
+        userId,
+        phone,
+        hotspotUser.hotspotUserId,
+        hotspotUser.username,
+        packageId,
+        payment.duration_hours,
+        payment.id
+      );
+      sessionId = session.sessionId;
+      expiresAt = session.expiresAt;
+    }
 
     // Return WiFi credentials
     res.json({
       success: true,
       message: 'Hotspot credentials generated',
       data: {
-        sessionId: session.sessionId,
+        sessionId: sessionId,
         hotspot: {
           username: hotspotUser.username,
           password: hotspotUser.password,
@@ -100,10 +124,10 @@ router.post('/login', auth, async (req, res, next) => {
           address: process.env.HOTSPOT_ADDRESS || '192.168.100.1',
         },
         session: {
-          expiresAt: session.expiresAt,
-          durationHours: session.durationHours,
+          expiresAt: expiresAt,
+          durationHours: payment.duration_hours,
           package: {
-            name: payment.name,
+            name: payment.package_name,
             speed: `${payment.speed_mbps} Mbps`,
             duration: formatDuration(payment.duration_hours),
           },
@@ -228,7 +252,8 @@ router.post('/disconnect', auth, async (req, res, next) => {
  * GET /api/hotspot/health
  * Check hotspot system health
  */
-router.get('/health', auth, async (req, res, next) => {
+const adminOnly = require('../middleware/adminOnly');
+router.get('/health', auth, adminOnly, async (req, res, next) => {
   try {
     const mode = mikrotikService.getMode();
     const activeSessions = await mikrotikService.getActiveSessionCount();

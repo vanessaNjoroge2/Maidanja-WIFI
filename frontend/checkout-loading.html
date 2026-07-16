@@ -1,231 +1,336 @@
 <!doctype html>
-<html class="dark" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Verifying Payment | Maidanja WiFi</title>
-    <script src="/js/api.js"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/globals.css" />
-    <link rel="stylesheet" href="/css/navbar.css" />
-    <style>
-      @keyframes mesh-drift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifying Payment | Maidanja WiFi</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/css/navbar.css" />
+  <link rel="stylesheet" href="/css/globals.css" />
+  <script src="/js/api.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'mn-navy': '#1B3A6B', 'mn-blue': '#1E88C7', 'mn-orange': '#F4901E',
+            'mn-amber': '#FDB912', 'mn-paper': '#FAFBFC', 'mn-ink': '#2B3245', 'mn-grey': '#6B7280',
+          },
+          fontFamily: { sans: ['Manrope', 'sans-serif'] }
+        }
       }
-      .animated-mesh {
-        background: linear-gradient(-45deg, #0a0a0f, #13131b, #1b1b23, #08080c);
-        background-size: 400% 400%;
-        animation: mesh-drift 15s ease infinite;
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #FAFBFC;
+      color: #2B3245;
+    }
+
+    .mi {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .loading-card {
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(27, 58, 107, 0.1);
+      border: 1px solid #E8EDF2;
+      max-width: 440px;
+      width: 100%;
+    }
+
+    /* Ripple rings */
+    .ripple-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+    }
+
+    .ripple-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(30, 136, 199, 0.35);
+      animation: ripple 2.4s ease-out infinite;
+    }
+
+    .ripple-ring:nth-child(2) {
+      animation-delay: 0.8s;
+    }
+
+    .ripple-ring:nth-child(3) {
+      animation-delay: 1.6s;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(1);
+        opacity: 0.7;
       }
-      .glass-panel {
-        background: rgba(18, 18, 26, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      }
-      .signal-wave {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        border: 2px solid #00d4ff;
-        width: 100%;
-        height: 100%;
+
+      100% {
+        transform: scale(2.6);
         opacity: 0;
-        animation: ripple 2s infinite;
       }
-      .signal-wave-delay-1 { animation-delay: 0.6s; }
-      .signal-wave-delay-2 { animation-delay: 1.2s; }
-      @keyframes ripple {
-        0% { width: 80%; height: 80%; opacity: 0.5; }
-        100% { width: 250%; height: 250%; opacity: 0; }
+    }
+
+    .ripple-center {
+      position: absolute;
+      inset: 20%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1E88C7 0%, #F4901E 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Progress steps */
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0F3F7;
+    }
+
+    .step:last-child {
+      border-bottom: none;
+    }
+
+    .step-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .step-dot.done {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .step-dot.active {
+      background: linear-gradient(135deg, #1E88C7, #F4901E);
+    }
+
+    .step-dot.pending {
+      background: #F3F6FA;
+      color: #9CA3AF;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
       }
-      @keyframes spinner { to { transform: rotate(360deg); } }
-      .spinner-icon { animation: spinner 1s linear infinite; }
-    </style>
-  </head>
-  <body class="bg-background text-on-background animated-mesh min-h-screen flex flex-col font-body-md overflow-x-hidden">
-    <!-- Global Navigation Bar -->
-    <nav id="navbar" class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-left">
-          <button class="back-button" onclick="goBack()" title="Go back">←</button>
-          <a href="/index.html" class="navbar-brand">
-            <img src="/images/logo.jpg" alt="Maidanja WiFi" />
-            <span class="hidden sm:inline">Maidanja WiFi</span>
-          </a>
-        </div>
-        <div class="navbar-center">
-          <h1 class="navbar-title">Processing Payment</h1>
-        </div>
-        <div class="navbar-right">
-          <button id="mobile-menu-btn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-          </button>
-          <div id="nav-items" class="hidden sm:flex"></div>
+    }
+
+    @keyframes pulse-soft {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.6
+      }
+    }
+
+    .spin-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    .pulse-soft {
+      animation: pulse-soft 1.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="navbar" class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <a href="/index.html" class="navbar-brand">
+          <img src="/images/logo.png" alt="Maidanja WiFi" />
+          <span class="hidden sm:inline">Maidanja WiFi</span>
+        </a>
+      </div>
+      <div class="navbar-center">
+        <h1 class="navbar-title">Verifying Payment</h1>
+      </div>
+      <div class="navbar-right">
+        <button id="mobile-menu-btn" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        <div id="nav-items" class="hidden sm:flex"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="min-h-screen flex items-center justify-center px-5 py-12">
+    <div class="loading-card p-8 text-center">
+
+      <!-- Ripple animation -->
+      <div class="ripple-wrap mb-7">
+        <div class="ripple-ring"></div>
+        <div class="ripple-ring"></div>
+        <div class="ripple-ring"></div>
+        <div class="ripple-center">
+          <span class="mi text-white spin-icon" style="font-size:1.6rem;">wifi</span>
         </div>
       </div>
-    </nav>
 
-    <!-- Main Canvas -->
-    <main class="flex-grow flex items-center justify-center px-margin-mobile pt-24 pb-xl">
-      <div class="w-full max-w-md relative">
-        <!-- Contextual Loading Header -->
-        <div class="text-center mb-xl">
-          <h1 class="font-headline-lg text-headline-lg text-primary mb-xs">Almost There</h1>
-          <p class="text-on-surface-variant font-body-md text-body-md">
-            Check your phone for the M-Pesa prompt.
-          </p>
+      <h1 class="font-800 text-mn-navy mb-2" style="font-size:1.5rem;">Almost There!</h1>
+      <p class="text-mn-grey mb-6" style="font-size:0.95rem;">
+        Check your phone for the M-Pesa prompt, then enter your PIN to confirm.
+      </p>
+
+      <!-- Package summary pill -->
+      <div
+        class="bg-mn-paper border border-gray-200 rounded-2xl p-4 mb-6 flex items-center justify-between gap-3 text-left">
+        <div>
+          <p class="text-xs font-700 text-mn-grey uppercase tracking-wider mb-0.5">Plan Selected</p>
+          <p id="loading-pkg-name" class="font-800 text-mn-navy" style="font-size:1.05rem;">—</p>
         </div>
+        <div class="text-right flex-shrink-0">
+          <p id="loading-pkg-price" class="font-800 text-mn-ink" style="font-size:1.25rem;">—</p>
+          <p class="text-xs text-mn-grey" id="loading-phone">—</p>
+        </div>
+      </div>
 
-        <!-- Checkout Card -->
-        <div class="glass-panel rounded-xl p-lg relative z-10">
-          <div class="flex flex-col gap-lg">
-            <!-- Package Summary -->
-            <div class="flex justify-between items-center bg-surface-container-low p-md rounded-lg border border-white/5">
-              <div class="flex flex-col">
-                <span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest">Selected Plan</span>
-                <span id="loading-pkg-name" class="text-headline-md font-headline-md text-on-surface">Loading...</span>
-              </div>
-              <div class="text-right">
-                <span id="loading-pkg-price" class="text-headline-md font-headline-md text-primary-container">—</span>
-              </div>
-            </div>
-
-            <!-- Phone Number -->
-            <div class="space-y-md">
-              <label class="block text-label-md font-label-md text-on-surface-variant px-xs">M-Pesa Phone Number</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none">
-                  <span class="material-symbols-outlined text-on-surface-variant">phone_iphone</span>
-                </div>
-                <input id="loading-phone" class="w-full bg-[#08080C] border border-outline-variant text-on-surface-variant rounded-lg py-md pl-12 pr-md font-body-md text-body-md cursor-not-allowed opacity-60" disabled type="text" value="Loading..." />
-              </div>
-            </div>
-
-            <!-- Pulsing Action Button -->
-            <div class="relative flex justify-center py-xl">
-              <div class="signal-wave"></div>
-              <div class="signal-wave signal-wave-delay-1"></div>
-              <div class="signal-wave signal-wave-delay-2"></div>
-              <button class="relative z-20 w-full bg-gradient-to-br from-primary-container to-secondary-container text-white py-lg rounded-full font-headline-md text-headline-md flex items-center justify-center gap-md shadow-[0_0_20px_rgba(0,212,255,0.2)]" disabled>
-                <span class="material-symbols-outlined spinner-icon">progress_activity</span>
-                <span>Verifying Payment...</span>
-              </button>
-            </div>
-
-            <!-- Instructions -->
-            <div class="flex gap-md p-md bg-primary/5 rounded-lg border border-primary/10">
-              <span class="material-symbols-outlined text-primary-container">info</span>
-              <p class="text-label-md font-label-md text-on-surface-variant">
-                Enter your M-Pesa PIN on the pop-up window appearing on your phone to complete the transaction.
-              </p>
-            </div>
-
-            <!-- Manual Verify (will be appended by script) -->
-            <div id="manual-verify-container" class="flex flex-col items-center"></div>
+      <!-- Progress steps -->
+      <div class="mb-6 text-left">
+        <div class="step">
+          <div class="step-dot done"><span class="mi" style="font-size:0.9rem;">check</span></div>
+          <div>
+            <p class="font-700 text-sm text-mn-navy">STK Push Sent</p>
+            <p class="text-xs text-mn-grey">Prompt dispatched to your phone</p>
           </div>
         </div>
-
-        <!-- Decorative Blurs -->
-        <div class="absolute -top-12 -right-12 w-32 h-32 opacity-20 blur-3xl bg-primary-container rounded-full"></div>
-        <div class="absolute -bottom-12 -left-12 w-40 h-40 opacity-10 blur-3xl bg-secondary-container rounded-full"></div>
-      </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-surface dark:bg-surface border-t border-white/5 mt-auto">
-      <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive">
-        <div class="mb-md md:mb-0">
-          <span class="font-headline-md text-headline-md text-primary font-bold">Maidanja WiFi</span>
-          <p class="text-on-surface-variant text-label-md mt-xs font-label-md">
-            © 2026 Maidanja WiFi. Powered by M-Pesa.
-          </p>
+        <div class="step">
+          <div class="step-dot active">
+            <span class="mi text-white spin-icon" style="font-size:0.8rem;">progress_activity</span>
+          </div>
+          <div>
+            <p class="font-700 text-sm text-mn-navy pulse-soft">Awaiting your PIN</p>
+            <p class="text-xs text-mn-grey">Enter your M-Pesa PIN on the phone prompt</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot pending"><span class="mi" style="font-size:0.8rem;">wifi</span></div>
+          <div>
+            <p class="font-700 text-sm text-mn-grey">WiFi Activation</p>
+            <p class="text-xs text-mn-grey">Instant after payment confirmed</p>
+          </div>
         </div>
       </div>
-    </footer>
 
-    <script src="/js/navbar.js"></script>
-    <script src="/js/footer.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        if (!api.isLoggedIn()) {
-          window.location.href = "/login.html";
-          return;
-        }
+      <!-- Blue info box -->
+      <div class="flex gap-3 bg-mn-blue/5 border border-mn-blue/15 rounded-2xl p-4 text-left mb-5">
+        <span class="mi text-mn-blue flex-shrink-0 mt-0.5" style="font-size:1.2rem;">info</span>
+        <p class="text-sm text-mn-grey leading-relaxed">
+          The M-Pesa prompt may take up to 30 seconds to appear.
+          Do <strong>not</strong> close this page — it will redirect automatically once payment is confirmed.
+        </p>
+      </div>
 
-        const payment = JSON.parse(localStorage.getItem("maidanja_payment") || "null");
-        if (!payment?.checkout_request_id) {
-          window.location.href = "/packages.html";
-          return;
-        }
+      <!-- Manual verify (injected by script) -->
+      <div id="manual-verify-container"></div>
 
-        // Populate UI
-        document.getElementById("loading-pkg-name").textContent = payment.package_name || "Package";
-        document.getElementById("loading-pkg-price").textContent = payment.amount ? `KES ${parseFloat(payment.amount).toLocaleString()}` : "—";
-        document.getElementById("loading-phone").value = payment.phone_number || (api.getUser()?.phone_number ?? "");
+    </div>
+  </main>
 
-        let attempts = 0;
-        const MAX_ATTEMPTS = 60;
-        let poller;
+  <script src="/js/navbar.js"></script>
 
-        async function pollPayment(isManual = false) {
-          try {
-            const res = await api.get(`/payments/status/${payment.checkout_request_id}`);
-            const status = res.data.payment.status;
+  <script>
+    /* ════════════════════════════════════════════════════════
+       PAYMENT POLLING LOGIC
+       Endpoint: GET /api/payments/status/:checkoutRequestId
+       Poll every 5 seconds, max 60 attempts (5 minutes)
+       ════════════════════════════════════════════════════════ */
 
-            if (status === "completed") {
-              if (poller) clearInterval(poller);
-              localStorage.setItem("maidanja_payment_result", JSON.stringify(res.data.payment));
-              window.location.href = "/checkout-success.html";
-              return;
-            }
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!api.isLoggedIn()) { window.location.href = '/login.html'; return; }
 
-            if (status === "failed" || status === "cancelled") {
-              if (poller) clearInterval(poller);
-              localStorage.setItem("maidanja_payment_result", JSON.stringify(res.data.payment));
-              window.location.href = "/checkout-failed.html";
-              return;
-            }
+      const payment = JSON.parse(localStorage.getItem('maidanja_payment') || 'null');
+      if (!payment?.checkout_request_id) { window.location.href = '/packages.html'; return; }
 
-            if (!isManual) attempts++;
-            if (attempts >= MAX_ATTEMPTS) {
-              if (poller) clearInterval(poller);
-              localStorage.setItem("maidanja_payment_result", JSON.stringify({ 
-                error_message: "Verification timed out. If money was deducted, your session will activate shortly. Please check your Dashboard." 
-              }));
-              window.location.href = "/checkout-failed.html";
-            }
-          } catch (err) {
-            console.warn("Poll error:", err.message);
-            if (!isManual) attempts++;
+      /* Populate UI */
+      document.getElementById('loading-pkg-name').textContent =
+        payment.package_name || 'Package';
+      document.getElementById('loading-pkg-price').textContent =
+        payment.amount ? `KES ${parseFloat(payment.amount).toLocaleString('en-KE')}` : '—';
+      document.getElementById('loading-phone').textContent =
+        payment.phone_number || api.getUser()?.phone_number || '';
+
+      let attempts = 0;
+      const MAX_ATTEMPTS = 60;
+      let poller;
+
+      async function pollPayment(isManual = false) {
+        try {
+          const res = await api.get(`/payments/status/${payment.checkout_request_id}`);
+          const status = res.data.payment.status;
+
+          if (status === 'completed') {
+            if (poller) clearInterval(poller);
+            localStorage.setItem('maidanja_payment_result', JSON.stringify(res.data.payment));
+            window.location.href = '/checkout-success.html';
+            return;
           }
+
+          if (status === 'failed' || status === 'cancelled') {
+            if (poller) clearInterval(poller);
+            localStorage.setItem('maidanja_payment_result', JSON.stringify(res.data.payment));
+            window.location.href = '/checkout-failed.html';
+            return;
+          }
+
+          if (!isManual) attempts++;
+          if (attempts >= MAX_ATTEMPTS) {
+            if (poller) clearInterval(poller);
+            localStorage.setItem('maidanja_payment_result', JSON.stringify({
+              error_message: 'Verification timed out. If money was deducted, your session will activate shortly. Check your Dashboard.'
+            }));
+            window.location.href = '/checkout-failed.html';
+          }
+        } catch (err) {
+          console.warn('Poll error:', err.message);
+          if (!isManual) attempts++;
         }
+      }
 
-        // Manual Verify Button
-        const verifyBtn = document.createElement("button");
-        verifyBtn.className = "mt-4 w-full py-2 text-sm text-primary hover:underline transition-all opacity-80 hover:opacity-100";
-        verifyBtn.innerHTML = "Having trouble? Click here to verify manually";
-        verifyBtn.onclick = () => pollPayment(true);
-        document.getElementById("manual-verify-container").appendChild(verifyBtn);
+      /* Manual verify button */
+      const btn = document.createElement('button');
+      btn.style.cssText = 'margin-top:8px; font-family:Manrope,sans-serif; font-size:0.82rem; color:#1E88C7; background:none; border:none; cursor:pointer; text-decoration:underline; font-weight:600;';
+      btn.textContent = 'Having trouble? Verify manually';
+      btn.onclick = () => pollPayment(true);
+      document.getElementById('manual-verify-container').appendChild(btn);
 
-        // Start polling
-        setTimeout(() => {
-          pollPayment();
-          poller = setInterval(pollPayment, 5000);
-        }, 3000);
-      });
-    </script>
-  </body>
+      /* Start polling after 3s initial delay */
+      setTimeout(() => {
+        pollPayment();
+        poller = setInterval(pollPayment, 5000);
+      }, 3000);
+    });
+  </script>
+</body>
+
 </html>

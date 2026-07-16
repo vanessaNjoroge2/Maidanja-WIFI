@@ -18,8 +18,12 @@ const signToken = (userId, tokenVersion = 0) =>
 const normalizePhoneNumber = (phone) => {
   // Remove spaces, dashes, parentheses, and +
   let normalized = phone.replace(/[\s\-()]/g, '').replace(/^\+/, '');
-  // If starts with 07, replace with 254
-  if (normalized.startsWith('07')) normalized = '254' + normalized.slice(1);
+  // If starts with 07 or 01, replace with 254
+  if (normalized.startsWith('07') || normalized.startsWith('01')) {
+    normalized = '254' + normalized.slice(1);
+  } else if (normalized.length === 9 && (normalized.startsWith('7') || normalized.startsWith('1'))) {
+    normalized = '254' + normalized;
+  }
   // Validate format: 254 + 9 digits
   if (!/^254\d{9}$/.test(normalized)) return null;
   return normalized;
@@ -123,7 +127,7 @@ router.post(
       const { password } = req.body;
 
       const result = await pool.query(
-        'SELECT id, phone_number, name, role, password_hash, is_active, token_version FROM users WHERE phone_number = $1',
+        'SELECT id, phone_number, name, role, password_hash, is_active, token_version, created_at FROM users WHERE phone_number = $1',
         [normalizedPhone]
       );
 

@@ -1,737 +1,505 @@
-<!doctype html>
-<html lang="en" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Maidanja WiFi - Packages</title>
-
-    <!-- API -->
-    <script src="/js/api.js"></script>
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-
-    <!-- Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Icons -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet"
-    />
-
-    <link rel="stylesheet" href="/css/navbar.css" />
-    <link rel="stylesheet" href="/css/globals.css" />
-
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      :root {
-        --primary: #a8e8ff;
-        --secondary: #d2bbff;
-        --bg: #0a0a0f;
-        --card: rgba(22, 22, 32, 0.7);
-        --text: #e4e1ed;
-        --muted: #bbc9cf;
-      }
-
-      body {
-        background:
-          radial-gradient(
-            circle at top left,
-            rgba(60, 215, 255, 0.15),
-            transparent 30%
-          ),
-          radial-gradient(
-            circle at bottom right,
-            rgba(96, 1, 209, 0.15),
-            transparent 30%
-          ),
-          var(--bg);
-
-        color: var(--text);
-        font-family: "DM Sans", sans-serif;
-        min-height: 100vh;
-        overflow-x: hidden;
-      }
-
-      /* NAVBAR (Handled by global CSS) */
-
-      /* HERO */
-
-      .hero {
-        max-width: 1200px;
-        margin: auto;
-        padding: 4rem 1.2rem 2rem;
-        text-align: center;
-      }
-
-      .hero-title {
-        font-size: clamp(2.3rem, 6vw, 4.2rem);
-        font-family: "Sora", sans-serif;
-        font-weight: 800;
-        line-height: 1.1;
-        margin-bottom: 1rem;
-
-        background: linear-gradient(135deg, #a8e8ff, #d2bbff);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .hero-subtitle {
-        color: var(--muted);
-        max-width: 720px;
-        margin: auto;
-        font-size: 1.05rem;
-        line-height: 1.7;
-      }
-
-      /* FILTERS */
-
-      .filters {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-        margin-top: 2rem;
-      }
-
-      .filter-btn {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.04);
-        color: var(--muted);
-        padding: 0.8rem 1.3rem;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: 0.3s;
-        font-weight: 700;
-      }
-
-      .filter-btn:hover,
-      .filter-btn.active {
-        background: rgba(168, 232, 255, 0.12);
-        color: var(--primary);
-        border-color: rgba(168, 232, 255, 0.4);
-      }
-
-      /* PACKAGES */
-
-      .packages-section {
-        max-width: 1200px;
-        margin: auto;
-        padding: 2rem 1.2rem 4rem;
-      }
-
-      .packages-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-      }
-
-      .package-card {
-        position: relative;
-        overflow: hidden;
-
-        background: var(--card);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 24px;
-
-        padding: 1.5rem;
-
-        backdrop-filter: blur(18px);
-
-        transition: 0.35s ease;
-      }
-
-      .package-card:hover {
-        transform: translateY(-8px);
-        border-color: rgba(168, 232, 255, 0.25);
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
-      }
-
-      .glow-effect::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        padding: 1px;
-        border-radius: inherit;
-
-        background: linear-gradient(
-          135deg,
-          rgba(168, 232, 255, 0.35),
-          rgba(210, 187, 255, 0.08)
-        );
-
-        -webkit-mask: linear-gradient(#fff 0 0);
-        mask: linear-gradient(#fff 0 0);
-
-        pointer-events: none;
-      }
-
-      .badge {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-
-        padding: 0.45rem 0.8rem;
-        border-radius: 999px;
-
-        font-size: 0.7rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-      }
-
-      .badge-blue {
-        background: rgba(59, 130, 246, 0.18);
-        color: #93c5fd;
-      }
-
-      .badge-primary {
-        background: rgba(168, 232, 255, 0.16);
-        color: var(--primary);
-      }
-
-      .badge-gold {
-        background: rgba(251, 191, 36, 0.15);
-        color: #fcd34d;
-      }
-
-      .package-icon {
-        width: 62px;
-        height: 62px;
-        border-radius: 18px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        background: linear-gradient(
-          135deg,
-          rgba(168, 232, 255, 0.18),
-          rgba(210, 187, 255, 0.12)
-        );
-
-        margin-bottom: 1.2rem;
-      }
-
-      .package-icon span {
-        font-size: 2rem;
-        color: var(--primary);
-      }
-
-      .package-duration {
-        color: var(--muted);
-        font-size: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .package-name {
-        font-family: "Sora", sans-serif;
-        font-size: 1.45rem;
-        font-weight: 700;
-        margin-top: 0.35rem;
-        margin-bottom: 0.8rem;
-      }
-
-      .package-price {
-        font-size: 2.8rem;
-        font-family: "Sora", sans-serif;
-        font-weight: 800;
-        margin-bottom: 1rem;
-      }
-
-      .package-price span {
-        font-size: 1rem;
-        color: var(--muted);
-        font-weight: 500;
-      }
-
-      .speed-box {
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-
-        padding: 0.9rem;
-        border-radius: 14px;
-
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-
-        margin-bottom: 1.2rem;
-      }
-
-      .speed-box span {
-        color: var(--primary);
-      }
-
-      .features {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-        margin-bottom: 1.7rem;
-      }
-
-      .features li {
-        display: flex;
-        gap: 0.7rem;
-        align-items: center;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-
-      .features .material-symbols-outlined {
-        color: var(--primary);
-        font-size: 1.1rem;
-      }
-
-      .buy-btn {
-        width: 100%;
-        border: none;
-        cursor: pointer;
-
-        padding: 0.95rem 1rem;
-
-        border-radius: 14px;
-
-        font-size: 0.95rem;
-        font-weight: 800;
-
-        transition: 0.3s ease;
-      }
-
-      .buy-btn.primary {
-        background: linear-gradient(135deg, #3cd7ff, #6001d1);
-        color: white;
-      }
-
-      .buy-btn.primary:hover {
-        transform: scale(1.02);
-        opacity: 0.95;
-      }
-
-      .buy-btn.outline {
-        background: transparent;
-        border: 1px solid rgba(168, 232, 255, 0.3);
-        color: var(--primary);
-      }
-
-      .buy-btn.outline:hover {
-        background: rgba(168, 232, 255, 0.08);
-      }
-
-      /* CTA */
-
-      .cta-section {
-        max-width: 1200px;
-        margin: auto;
-        padding: 0 1.2rem 4rem;
-      }
-
-      .cta-card {
-        position: relative;
-        overflow: hidden;
-
-        border-radius: 30px;
-
-        background: linear-gradient(
-          135deg,
-          rgba(168, 232, 255, 0.08),
-          rgba(210, 187, 255, 0.06)
-        );
-
-        border: 1px solid rgba(168, 232, 255, 0.12);
-
-        padding: 3rem 2rem;
-
-        text-align: center;
-      }
-
-      .cta-card h2 {
-        font-family: "Sora", sans-serif;
-        font-size: clamp(1.6rem, 4vw, 2.6rem);
-        margin-bottom: 1rem;
-      }
-
-      .cta-card p {
-        color: var(--muted);
-        max-width: 760px;
-        margin: auto;
-        line-height: 1.8;
-      }
-
-      .cta-buttons {
-        margin-top: 2rem;
-
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .cta-btn {
-        text-decoration: none;
-        padding: 0.9rem 1.3rem;
-        border-radius: 14px;
-        font-weight: 700;
-      }
-
-      .call-btn {
-        background: rgba(168, 232, 255, 0.12);
-        color: var(--primary);
-      }
-
-      .mail-btn {
-        background: rgba(210, 187, 255, 0.12);
-        color: var(--secondary);
-      }
-
-      /* FOOTER (Handled by global CSS) */
-
-      @media (max-width: 768px) {
-        .nav-links {
-          display: none;
-        }
-
-        .package-price {
-          font-size: 2.3rem;
-        }
-
-        .footer-grid {
-          grid-template-columns: 1fr !important;
-          text-align: center;
-        }
-        .footer-grid > div {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- NAVBAR -->
-    <nav id="navbar" class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-left">
-          <button class="back-button" onclick="goBack()" title="Go back">←</button>
-          <a href="/index.html" class="navbar-brand">
-            <img src="/images/logo.jpg" alt="Maidanja WiFi" />
-            <span class="hidden sm:inline">Maidanja WiFi</span>
-          </a>
-        </div>
-        <div class="navbar-center">
-          <h1 class="navbar-title">WiFi Packages</h1>
-        </div>
-        <div class="navbar-right">
-          <button id="mobile-menu-btn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-          </button>
-          <div id="nav-items" class="hidden sm:flex"></div>
-        </div>
-      </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiFi Packages | Maidanja WiFi</title>
+  <meta name="description" content="Choose a Maidanja WiFi plan starting from KES 5. Pay via M-Pesa, instant activation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="/js/api.js"></script>
+  <style>
+    :root{
+      --ink:#121A30;             /* Navy Blue (Dark) */
+      --ink-soft:#4C5670;        /* Navy Blue (Soft) */
+      --paper:#FDFBF7;           /* Warm Light Paper Background */
+      --paper-2:#F5F1E9;         /* Slightly Dimmer Paper */
+      --signal:#F4820A;          /* Orange Accent */
+      --signal-dark:#D4690A;     /* Darker Orange Hover */
+      --stamp:#F4820A;           /* Orange Accent */
+      --line:#E7E1D3;            /* Warm Line Border */
+      --white:#FFFFFF;
+      --radius:14px;
+      --font-display:'Space Grotesk', sans-serif;
+      --font-body:'Inter', sans-serif;
+      --font-mono:'IBM Plex Mono', monospace;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    body{
+      font-family:var(--font-body);
+      background:var(--paper);
+      color:var(--ink);
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;}
+
+    /* ---------- Header ---------- */
+    header.site{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 24px;
+      background:var(--paper);
+      border-bottom:1px solid var(--line);
+      position:sticky; top:0; z-index:20;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:1.05rem; text-decoration:none;}
+    .brand img{height:34px; width:auto; object-fit:contain; border-radius:8px;}
+    .header-actions{display:flex; align-items:center; gap:14px; font-size:.85rem;}
+    .header-actions a.session{color:var(--ink-soft); text-decoration:none; font-weight:600;}
+    .header-actions a.session:hover{color:var(--ink);}
+    .btn-dash{
+      background:var(--ink); color:var(--paper); border:none;
+      padding:9px 16px; border-radius:999px; font-weight:600; font-size:.85rem;
+      text-decoration:none; cursor:pointer; transition:background .2s;
+    }
+    .btn-dash:hover{background:var(--signal);}
+
+    /* ---------- Hero (ticket roll) ---------- */
+    .hero{
+      background:var(--ink);
+      color:var(--paper);
+      padding:56px 24px 46px;
+      position:relative;
+      text-align:center;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; left:0; right:0; bottom:-1px; height:14px;
+      background:
+        radial-gradient(circle at 10px 0, transparent 8px, var(--ink) 8.5px) top/20px 14px repeat-x;
+      transform: rotate(180deg);
+    }
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em;
+      color:var(--signal); text-transform:uppercase;
+      border:1px solid rgba(244,130,10,.5); border-radius:999px;
+      padding:6px 14px; margin-bottom:22px;
+    }
+    .eyebrow::before{ content:"●"; color:var(--signal); font-size:.6rem; }
+    .hero h1{
+      font-family:var(--font-display); font-weight:700;
+      font-size:clamp(2rem, 6vw, 3.1rem);
+      letter-spacing:-.01em;
+      margin-bottom:14px;
+    }
+    .hero p.sub{
+      color:#C7D2CB; font-size:1rem; max-width:520px; margin:0 auto 28px;
+      line-height:1.5;
+    }
+    .trust-row{
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+    }
+    .trust-chip{
+      font-family:var(--font-mono); font-size:.75rem;
+      background:rgba(255,255,255,.06);
+      border:1px dashed rgba(255,255,255,.25);
+      border-radius:999px; padding:7px 14px;
+      color:#DCE6E0;
+    }
+
+    /* Active Session Alert */
+    .session-alert-wrap {
+      max-width: 1140px; margin: 24px auto 0; padding: 0 20px;
+    }
+    .session-alert-card {
+      background: #FFF4E8; border: 1px solid rgba(244,130,10,0.35); border-radius: 12px;
+      padding: 14px 20px; display:flex; justify-content:space-between; align-items:center; gap:12px;
+    }
+    .session-alert-card .text { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+    .session-alert-card .text span { color: var(--signal); }
+    .session-alert-card a { font-size: 0.85rem; font-weight: 700; color: var(--signal); text-decoration:none; }
+    .session-alert-card a:hover { text-decoration:underline; }
+
+    /* ---------- Filter (LED segmented control) ---------- */
+    .filter-wrap{
+      display:flex; justify-content:center;
+      padding:28px 24px 6px;
+    }
+    .filter{
+      display:inline-flex; gap:6px;
+      background:var(--paper-2);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:5px;
+    }
+    .filter button{
+      font-family:var(--font-mono);
+      font-size:.78rem;
+      letter-spacing:.02em;
+      border:none; background:transparent;
+      color:var(--ink-soft);
+      padding:8px 16px; border-radius:999px;
+      cursor:pointer;
+      display:flex; align-items:center; gap:7px;
+      transition:all .15s ease;
+    }
+    .filter button::before{
+      content:""; width:7px; height:7px; border-radius:50%;
+      background:var(--line);
+      transition:background .15s ease;
+    }
+    .filter button.active{
+      background:var(--ink); color:var(--paper);
+    }
+    .filter button.active::before{ background:var(--signal); box-shadow:0 0 6px var(--signal); }
+
+    /* ---------- Grid ---------- */
+    .grid{
+      max-width:1180px; margin:0 auto;
+      padding:36px 20px 80px;
+      display:grid; gap:22px;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:720px){ .grid{ grid-template-columns:repeat(2,1fr);} }
+    @media(min-width:1040px){ .grid{ grid-template-columns:repeat(3,1fr);} }
+
+    /* ---------- Ticket card ---------- */
+    .ticket{
+      background:var(--white);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      position:relative;
+      display:flex; flex-direction:column;
+      overflow:hidden;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .ticket:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(18,26,48,.08); }
+    .ticket.popular{ border-color:var(--stamp); border-width:2px; }
+
+    .ticket-top{ padding:22px 22px 18px; position:relative; }
+    .ticket-eyebrow{
+      font-family:var(--font-mono); font-size:.68rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .tag-pill{
+      font-family:var(--font-mono); font-size:.62rem; letter-spacing:.06em;
+      background:var(--paper-2); color:var(--ink);
+      border-radius:5px; padding:2px 7px;
+    }
+    .price-row{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+    .price{ font-family:var(--font-display); font-weight:700; font-size:2.1rem; }
+    .price .cur{ font-size:1rem; font-weight:600; vertical-align:top; margin-right:1px;}
+    .per{ font-family:var(--font-mono); font-size:.85rem; color:var(--ink-soft); }
+    .rate{ font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-top:6px; }
+    .desc{ font-size:.88rem; color:var(--ink-soft); margin-top:10px; line-height:1.4; }
+
+    .stamp-badge{
+      position:absolute; top:16px; right:14px;
+      font-family:var(--font-mono); font-size:.62rem; font-weight:500; letter-spacing:.06em;
+      color:var(--stamp); border:1.5px solid var(--stamp); border-radius:999px;
+      padding:4px 10px; transform:rotate(6deg);
+      text-transform:uppercase;
+    }
+
+    /* perforation / tear divider */
+    .tear{
+      position:relative;
+      height:1px;
+      border-top:2px dashed var(--line);
+      margin:0 0;
+    }
+    .tear::before, .tear::after{
+      content:""; position:absolute; top:-9px;
+      width:18px; height:18px; border-radius:50%;
+      background:var(--paper);
+      border:1px solid var(--line);
+    }
+    .tear::before{ left:-10px; }
+    .tear::after{ right:-10px; }
+
+    .signal-bars{
+      display:flex; align-items:flex-end; gap:2px; height:16px; margin-top:12px;
+    }
+    .signal-bars span{ width:3px; background:var(--line); border-radius:1px; }
+    .signal-bars span.on{ background:var(--signal); }
+
+    .ticket-bottom{ padding:20px 22px 22px; flex:1; display:flex; flex-direction:column; gap:14px;}
+    .feat-list{ list-style:none; display:flex; flex-direction:column; gap:8px; font-size:.85rem; }
+    .feat-list li{ display:flex; gap:8px; align-items:flex-start; color:var(--ink);}
+    .feat-list li .dot{ color:var(--signal); font-weight:700; margin-top:1px;}
+
+    .serial{ font-family:var(--font-mono); font-size:.65rem; color:var(--line); letter-spacing:.05em; }
+
+    .cta{
+      margin-top:auto;
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      background:var(--ink); color:var(--paper);
+      border:none; border-radius:9px; padding:12px 16px;
+      font-weight:600; font-size:.88rem; cursor:pointer;
+      text-decoration:none;
+      transition:background .15s ease, color .15s ease;
+    }
+    .cta:hover{ background:var(--signal); color:#fff; }
+    .ticket.popular .cta{ background:var(--stamp); }
+    .ticket.popular .cta:hover{ background:var(--signal-dark); }
+
+    /* Loading state spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .pkg-loading {
+      grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center;
+      gap: 12px; padding: 48px; color: var(--ink-soft);
+    }
+    .pkg-loading svg { animation: spin 1s linear infinite; }
+
+    /* ---------- Footer ---------- */
+    footer{
+      background:var(--paper-2);
+      border-top:1px solid var(--line);
+      padding:22px 24px;
+    }
+    .foot-trust{
+      max-width:1180px; margin:0 auto 16px;
+      display:flex; flex-wrap:wrap; gap:20px; justify-content:center;
+      font-size:.8rem; color:var(--ink-soft); font-family:var(--font-mono);
+    }
+    .foot-trust span{ display:flex; align-items:center; gap:6px;}
+    .foot-links{
+      max-width:1180px; margin:0 auto;
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      gap:12px; font-size:.8rem; color:var(--ink-soft);
+    }
+    .foot-links nav{ display:flex; gap:18px; }
+    .foot-links nav a{ text-decoration:none; color:var(--ink-soft); }
+    .foot-links nav a:hover{ color:var(--ink); }
+
+    .hidden{ display:none !important; }
+  </style>
+</head>
+<body>
+
+<header class="site">
+  <a href="/index.html" class="brand">
+    <img src="/images/logo.png" alt="Maidanja WiFi" />
+    Maidanja WiFi
+  </a>
+  <div class="header-actions" id="header-actions">
+    <!-- Dynamic header links populated by JS -->
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Pay only what you need</div>
+  <h1>Pick your pass</h1>
+  <p class="sub">Every plan activates the moment M‑Pesa confirms — no contracts, no installation fee, no PayBill code to remember.</p>
+  <div class="trust-row">
+    <div class="trust-chip">⚡ Instant activation</div>
+    <div class="trust-chip">📲 M‑Pesa STK Push</div>
+    <div class="trust-chip">☎ Support 0706 407084</div>
+  </div>
+</section>
+
+<!-- Active Session Indicator -->
+<div class="session-alert-wrap" id="session-alert-wrap" style="display:none;">
+  <div class="session-alert-card">
+    <div class="text">📶 You have an active session running: <span id="session-alert-details">...</span></div>
+    <a href="/dashboard.html">View Dashboard →</a>
+  </div>
+</div>
+
+<div class="filter-wrap">
+  <div class="filter" id="filterBar">
+    <button class="active" data-filter="all" onclick="setFilter('all',this)">All plans</button>
+    <button data-filter="short" onclick="setFilter('short',this)">Short (≤4h)</button>
+    <button data-filter="daily" onclick="setFilter('daily',this)">Daily</button>
+    <button data-filter="weekly" onclick="setFilter('weekly',this)">Weekly+</button>
+  </div>
+</div>
+
+<div class="grid" id="grid">
+  <!-- Loading state -->
+  <div class="pkg-loading" id="pkg-loading">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+    </svg>
+    <span>Loading packages…</span>
+  </div>
+</div>
+
+<div id="no-results" style="display:none;text-align:center;padding:48px;color:var(--ink-soft);">
+  <p style="font-size:1.1rem;font-weight:600;">No packages match this filter.</p>
+  <button onclick="setFilter('all',document.querySelector('[data-filter=all]'))" style="margin-top:12px;background:none;border:none;color:var(--signal);font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:underline;">Show all plans</button>
+</div>
+
+<footer>
+  <div class="foot-trust">
+    <span>⚡ Instant activation after M‑Pesa confirmation</span>
+    <span>📲 M‑Pesa STK Push — no PayBill code needed</span>
+    <span>☎ Support: 0706 407084</span>
+  </div>
+  <div class="foot-links">
+    <a href="/index.html" class="brand" style="font-size:.9rem;">
+      <img src="/images/logo.png" alt="" style="height:26px; border-radius:6px;" />
+      Maidanja WiFi
+    </a>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="/login.html">Login</a>
     </nav>
+    <span style="font-size:.75rem; color:var(--ink-soft);">© 2026 Maidanja WiFi. Powered by M‑Pesa.</span>
+  </div>
+</footer>
 
-    <!-- HERO -->
+<script>
+  /* ── Header links population ── */
+  (function () {
+    const isLoggedIn = api.isLoggedIn();
+    const user = api.getUser();
+    const actions = document.getElementById('header-actions');
+    if (isLoggedIn && user) {
+      actions.innerHTML = `
+        <a class="session" href="/dashboard.html">My Dashboard</a>
+        <button onclick="api.logout()" class="btn-dash" style="background:var(--signal);cursor:pointer;color:#fff;">Logout</button>
+      `;
+    } else {
+      actions.innerHTML = `
+        <a class="session" href="/login.html">Sign In</a>
+        <a class="btn-dash" href="/login.html?tab=register">Register</a>
+      `;
+    }
+  })();
 
-    <section class="hero">
-      <h1 class="hero-title">
-        Affordable Internet <br />
-        For Everyone
-      </h1>
+  /* ── Format duration helper ── */
+  function fmtDur(h) {
+    const n = Number(h);
+    if (n < 1)    return `${Math.round(n * 60)} min`;
+    if (n === 1)  return '1h';
+    if (n === 24) return '24h';
+    if (n === 168) return '7 days';
+    if (n === 336) return '14 days';
+    if (n >= 720)  return '30 days';
+    return n <= 12 ? `${n}h` : `${Math.round(n / 24)} days`;
+  }
 
-      <p class="hero-subtitle">
-        Fast, reliable and flexible WiFi packages with instant activation via
-        M-Pesa. Enjoy stable internet for streaming, gaming, browsing and
-        studying.
-      </p>
+  /* ── Get category helper ── */
+  function getCategory(h) {
+    const n = Number(h);
+    if (n <= 4)   return 'short';
+    if (n === 24) return 'daily';
+    return 'weekly';
+  }
 
-      <div class="filters">
-        <button class="filter-btn active" onclick="filterPackages('all')">
-          All Packages
-        </button>
+  /* ── Signal bars helper ── */
+  function getSignalBarsHTML(speed) {
+    const s = Number(speed);
+    let barsOn = 1;
+    if (s >= 25)      barsOn = 5;
+    else if (s >= 15) barsOn = 4;
+    else if (s >= 10) barsOn = 3;
+    else if (s >= 5)  barsOn = 2;
 
-        <button class="filter-btn" onclick="filterPackages('data')">
-          Data
-        </button>
+    let html = '<div class="signal-bars" aria-hidden="true">';
+    const heights = [5, 8, 11, 14, 16];
+    for (let i = 0; i < 5; i++) {
+      const isOn = i < barsOn;
+      html += `<span class="${isOn ? 'on' : ''}" style="height:${heights[i]}px"></span>`;
+    }
+    html += '</div>';
+    return html;
+  }
 
-        <button class="filter-btn" onclick="filterPackages('unlimited')">
-          Unlimited
-        </button>
-      </div>
-    </section>
+  let allPkgs = [], currentFilter = 'all';
 
-    <!-- PACKAGES -->
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('#filterBar button').forEach(b => b.classList.toggle('active', b === btn));
+    render();
+  }
 
-    <section class="packages-section">
-      <div class="packages-grid" id="packages-grid"></div>
-    </section>
+  function render() {
+    const grid = document.getElementById('grid');
+    const noRes = document.getElementById('no-results');
+    
+    const filtered = currentFilter === 'all'
+      ? allPkgs
+      : allPkgs.filter(p => getCategory(p.duration_hours) === currentFilter);
 
-    <!-- CTA -->
+    if (!filtered.length) {
+      grid.innerHTML = '';
+      noRes.style.display = 'block';
+      return;
+    }
+    noRes.style.display = 'none';
 
-    <section class="cta-section">
-      <div class="cta-card glow-effect">
-        <h2>Bring Maidanja WiFi To Your Area</h2>
+    // The popular ticket card = middle package in list
+    const midIdx = Math.floor(filtered.length / 2);
 
-        <p>
-          If not part of Maidanja Hotspot WiFi, make your region or apartment a
-          hotspot zone. Anyone in need within Thika can call 0706407084 and full
-          installation will be done within 72 hours.
+    grid.innerHTML = filtered.map((p, i) => {
+      const pop = i === midIdx && filtered.length > 1;
+      const perHr = (p.price_kes / Math.max(Number(p.duration_hours), 1)).toFixed(2);
+      const categoryTag = p.duration_hours === 24 ? 'For students' : '';
 
-          <br /><br />
-
-          Free connection to flexible, reliable, affordable and stable internet.
-        </p>
-
-        <div class="cta-buttons">
-          <a href="tel:0706407084" class="cta-btn call-btn">
-            📞 Call: 0706407084
-          </a>
-
-          <a href="mailto:maidanja31@gmail.com" class="cta-btn mail-btn">
-            ✉ Email: maidanja31@gmail.com
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="w-full glass-card border-t border-white/5 mt-20">
-      <div class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive gap-lg md:gap-0 max-w-[1200px] mx-auto">
-        <!-- Left: Brand & Info -->
-        <div class="flex flex-col gap-sm items-center md:items-start mb-4 md:mb-0">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-2xl">wifi</span>
-            <span class="font-headline-md text-headline-md text-primary font-bold">Maidanja Hotspot WiFi</span>
-          </div>
-          <p class="text-on-surface-variant text-label-md font-label-md">
-            Fast, Reliable, Affordable Internet in Thika
-          </p>
-          <p class="text-on-surface-variant text-xs mt-1">
-            © 2026 Maidanja WiFi. Powered by M-Pesa.
-          </p>
-        </div>
-
-        <!-- Right: Links -->
-        <div class="flex gap-8">
-          <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="/packages.html">Packages</a>
-          <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="/dashboard.html">Dashboard</a>
-          <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="/login.html">Login</a>
-        </div>
-      </div>
-    </footer>
-
-    <script src="/js/navbar.js"></script>
-    <script src="/js/footer.js"></script>
-
-    <script>
-      // Fetch packages from backend API
-      let PACKAGES = [];
-      let currentFilter = "all";
-
-      // Helper: Format duration hours to human readable format
-      function formatDuration(h) {
-        const hours = Number(h);
-        if (hours < 1) return `${Math.round(hours * 60)} Minutes`;
-        if (hours === 1) return "1 Hour";
-        if (hours === 24) return "1 Day";
-        if (hours === 168) return "1 Week";
-        if (hours === 336) return "2 Weeks";
-        if (hours === 720) return "1 Month";
-        if (hours <= 12) return `${hours} Hours`;
-        return `${Math.round(hours / 24)} Days`;
-      }
-
-      // Helper: Select icon based on package duration
-      function getIconForDuration(h) {
-        const hours = Number(h);
-        if (hours <= 1) return "timer";
-        if (hours <= 12) return "brightness_4";
-        if (hours === 24) return "calendar_today";
-        if (hours === 168) return "calendar_month";
-        if (hours >= 336) return "workspace_premium";
-        return "bolt";
-      }
-
-      // Helper: Generate features based on duration
-      function getDefaultFeatures(h) {
-        const hours = Number(h);
-        const baseFeatures = [
-          "Instant M-Pesa Pay",
-          "24/7 Support",
-          "Reliable Connection",
-        ];
-
-        if (hours >= 24) {
-          baseFeatures.unshift("Unlimited Data");
-        } else {
-          baseFeatures.unshift("Unlimited Access");
-        }
-
-        return baseFeatures;
-      }
-
-      // Fetch packages from backend
-      async function loadPackages() {
-        try {
-          const res = await api.get("/packages", false); // No auth required
-
-          // Transform backend data to frontend format
-          PACKAGES = res.data.packages.map((pkg) => ({
-            id: pkg.id,
-            name: pkg.name,
-            duration: formatDuration(pkg.duration_hours),
-            duration_hours: pkg.duration_hours,
-            price: pkg.price_kes,
-            speed: `${pkg.speed_mbps} Mbps`,
-            speed_mbps: pkg.speed_mbps,
-            icon: getIconForDuration(pkg.duration_hours),
-            type: pkg.name.toLowerCase().includes("unlimited") ? "unlimited" : "data",
-            features: getDefaultFeatures(pkg.duration_hours),
-            badge: null,
-            badgeClass: null,
-            description: pkg.description || "",
-          }));
-
-          // Add special badges for popular packages
-          const populars = PACKAGES.filter((p) => p.duration_hours === 336); // 2 weeks
-          if (populars.length > 0) {
-            populars[0].badge = "MOST POPULAR";
-            populars[0].badgeClass = "badge-primary";
-          }
-
-          const best = PACKAGES.filter((p) => p.duration_hours === 720); // 1 month
-          if (best.length > 0) {
-            best[0].badge = "BEST VALUE";
-            best[0].badgeClass = "badge-gold";
-          }
-
-          renderPackages();
-        } catch (err) {
-          console.error("Failed to load packages:", err);
-          // Show error message to user
-          const grid = document.getElementById("packages-grid");
-          grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-                        <p style="color: #e4e1ed;">Failed to load packages. Please refresh the page.</p>
-                    </div>
-                `;
-        }
-      }
-
-      function renderPackages() {
-        const grid = document.getElementById("packages-grid");
-
-        grid.innerHTML = "";
-
-        const filtered =
-          currentFilter === "all"
-            ? PACKAGES
-            : PACKAGES.filter((pkg) => pkg.type === currentFilter);
-
-        filtered.forEach((pkg) => {
-          const card = document.createElement("div");
-
-          card.className = "package-card glow-effect";
-
-          card.innerHTML = `
-          ${
-            pkg.badge
-              ? `
-            <div class="badge ${pkg.badgeClass}">
-              ${pkg.badge}
+      return `
+        <div class="ticket ${pop ? 'popular' : ''}">
+          ${pop ? '<div class="stamp-badge">★ Most booked</div>' : ''}
+          <div class="ticket-top">
+            <div class="ticket-eyebrow">
+              ${p.name}
+              ${categoryTag ? `<span class="tag-pill">${categoryTag}</span>` : ''}
             </div>
-          `
-              : ""
-          }
-
-          <div class="package-icon">
-            <span class="material-symbols-outlined">
-              ${pkg.icon}
-            </span>
+            <div class="price-row">
+              <div class="price"><span class="cur">KES</span> ${parseFloat(p.price_kes).toLocaleString('en-KE')}</div>
+              <div class="per">/ ${fmtDur(p.duration_hours)}</div>
+            </div>
+            <div class="rate">≈ KES ${perHr} / hr</div>
+            <div class="desc">${p.description || `${p.speed_mbps} Mbps unlimited speed pass`}</div>
+            ${getSignalBarsHTML(p.speed_mbps)}
           </div>
-
-          <div class="package-duration">
-            ${pkg.duration}
+          <div class="tear"></div>
+          <div class="ticket-bottom">
+            <ul class="feat-list">
+              <li><span class="dot">✓</span> ${p.speed_mbps} Mbps guaranteed speed</li>
+              <li><span class="dot">✓</span> Unlimited data · ${fmtDur(p.duration_hours)} access</li>
+              <li><span class="dot">✓</span> M‑Pesa STK Push activation</li>
+            </ul>
+            <span class="serial">NO. ${String(i + 1).padStart(3, '0')}</span>
+            <button class="cta" onclick='buyPkg(${JSON.stringify(p).replace(/'/g, "&apos;")})'>
+              Get ${p.name} →
+            </button>
           </div>
+        </div>`;
+    }).join('');
+  }
 
-          <div class="package-name">
-            ${pkg.name}
-          </div>
+  function buyPkg(p) {
+    if (!api.isLoggedIn()) {
+      localStorage.setItem('maidanja_package', JSON.stringify(p));
+      window.location.href = '/login.html';
+      return;
+    }
+    localStorage.setItem('maidanja_package', JSON.stringify(p));
+    window.location.href = '/checkout.html';
+  }
 
-          <div class="package-price">
-            KES ${pkg.price}
-            <span>/once</span>
-          </div>
+  async function init() {
+    // Check active session status
+    if (api.isLoggedIn()) {
+      try {
+        const r = await api.get('/sessions/active');
+        if (r?.data?.session) {
+          const s = r.data.session;
+          const minsLeft = Math.floor((s.seconds_remaining || 0) / 60);
+          document.getElementById('session-alert-details').textContent = `${s.package_name} · ${minsLeft} mins remaining`;
+          document.getElementById('session-alert-wrap').style.display = 'block';
+        }
+      } catch (_) {}
+    }
 
-          <div class="speed-box">
-            <span class="material-symbols-outlined">speed</span>
-            <strong>${pkg.speed}</strong>
-          </div>
+    // Load live packages
+    try {
+      const r = await api.get('/packages', false);
+      allPkgs = (r.data.packages || []).sort((a, b) => a.price_kes - b.price_kes);
+      document.getElementById('pkg-loading').remove();
+      render();
+    } catch (e) {
+      document.getElementById('pkg-loading').innerHTML =
+        `<span style="color:#c0392b;">Could not load packages. <a href="javascript:init()" style="color:var(--signal);font-weight:600;">Retry</a></span>`;
+    }
+  }
 
-          <ul class="features">
-            ${pkg.features
-              .map(
-                (feature) => `
-              <li>
-                <span class="material-symbols-outlined">
-                  check_circle
-                </span>
-
-                ${feature}
-              </li>
-            `,
-              )
-              .join("")}
-          </ul>
-
-          <button
-            class="buy-btn ${pkg.badge ? "primary" : "outline"}"
-            onclick="buyPackage('${pkg.id}')"
-          >
-            Buy Now
-          </button>
-        `;
-
-          grid.appendChild(card);
-        });
-      }
-
-      function filterPackages(type) {
-        currentFilter = type;
-
-        document
-          .querySelectorAll(".filter-btn")
-          .forEach((btn) => btn.classList.remove("active"));
-
-        event.target.classList.add("active");
-
-        renderPackages();
-      }
-
-      function buyPackage(id) {
-        const selected = PACKAGES.find((p) => p.id === id);
-
-        localStorage.setItem("maidanja_package", JSON.stringify(selected));
-
-        window.location.href = "/checkout.html";
-      }
-
-
-      // Initialize packages on page load
-      loadPackages();
-    </script>
-  </body>
+  init();
+</script>
+</body>
 </html>

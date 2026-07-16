@@ -1,672 +1,572 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maidanja WiFi — Stay Connected. Never Miss a Class.</title>
+  <meta name="description" content="No router. No installation fee. No contract. Fast campus WiFi for ODeL and DIBEL students in Thika — paid with M-Pesa, one bundle at a time." />
 
-<html class="dark" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Maidanja WiFi | Blazing Fast Internet</title>
-    <script src="/js/api.js"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=DM+Sans:wght@400;500;700&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background-color: #0a0a0f;
-        color: #e4e1ed;
-        overflow-x: hidden;
-      }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-      .glass-card {
-        background: rgba(18, 18, 26, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
-      }
+  <!-- API client -->
+  <script src="/js/api.js"></script>
 
-      .mesh-gradient {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background: #0a0a0f;
-        overflow: hidden;
-      }
+  <style>
+    :root {
+      --paper:      #FDFBF7;
+      --paper-dim:  #F5F1E9;
+      --ink:        #12172B;
+      --ink-soft:   #4B5169;
+      --grey:       #6B7085;
+      --orange:     #F4820A;
+      --orange-dark:#D4690A;
+      --coral:      #FF6B4A;
+      --sky:        #2F80ED;
+      --line:       #E7E1D3;
+      --card:       #FFFFFF;
+      --radius:     18px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
 
-      .orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.15;
-        animation: move 25s infinite alternate ease-in-out;
-      }
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px;
+      max-width: 1140px; margin: 0 auto;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; }
+    .logo img { height: 34px; width: auto; border-radius: 8px; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 0.92rem; font-weight: 500; color: var(--ink-soft); transition: color .18s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      background: var(--ink); color: white !important; padding: 10px 20px;
+      border-radius: 999px; font-weight: 600; font-size: 0.9rem;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: #2a3150; }
+    @media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
 
-      .orb-cyan {
-        width: 500px;
-        height: 500px;
-        background: #00d4ff;
-        top: -100px;
-        left: -100px;
-      }
+    /* ── HERO ── */
+    .hero {
+      padding: 56px 24px 40px;
+      max-width: 1140px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center;
+    }
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 20px; } }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--paper-dim); border: 1px solid var(--line);
+      padding: 7px 14px; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--ink-soft); text-transform: uppercase; margin-bottom: 22px;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+    .hero h1 { font-size: 2.9rem; line-height: 1.08; font-weight: 700; color: var(--ink); margin-bottom: 20px; }
+    .hero h1 .accent { color: var(--orange); }
+    @media (max-width: 520px) { .hero h1 { font-size: 2.1rem; } }
+    .hero p.sub { font-size: 1.08rem; color: var(--ink-soft); max-width: 480px; margin-bottom: 30px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
 
-      .orb-violet {
-        width: 600px;
-        height: 600px;
-        background: #7c3aed;
-        bottom: -150px;
-        right: -100px;
-        animation-delay: -5s;
-      }
+    .btn-primary {
+      background: var(--orange); color: white; font-weight: 600;
+      padding: 15px 26px; border-radius: 12px; font-size: 0.98rem;
+      border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 8px 20px -8px rgba(244,130,10,0.5);
+      transition: background .2s, transform .15s, box-shadow .2s;
+    }
+    .btn-primary:hover { background: var(--orange-dark); transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(244,130,10,0.55); }
 
-      @keyframes move {
-        from {
-          transform: translate(0, 0) scale(1);
-        }
+    .btn-secondary {
+      background: transparent; color: var(--ink); font-weight: 600;
+      padding: 15px 26px; border-radius: 12px; font-size: 0.98rem;
+      border: 1.5px solid var(--line); cursor: pointer; transition: border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { border-color: #aaa9a0; background: var(--paper-dim); }
 
-        to {
-          transform: translate(100px, 100px) scale(1.2);
-        }
-      }
+    .hero-trust { display: flex; gap: 22px; flex-wrap: wrap; font-size: 0.85rem; color: var(--grey); }
+    .hero-trust span { display: flex; align-items: center; gap: 6px; }
+    .hero-trust b { color: var(--ink); }
 
-      .text-gradient-cyan {
-        background: linear-gradient(135deg, #00d4ff 0%, #a8e8ff 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
+    /* ── PHONE MOCK ── */
+    .phone-mock {
+      background: var(--ink); border-radius: 32px; padding: 14px;
+      max-width: 300px; margin: 0 auto;
+      box-shadow: 0 30px 60px -20px rgba(18,23,43,0.35);
+    }
+    .phone-screen { background: var(--paper); border-radius: 22px; padding: 20px 18px; }
+    .phone-app-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.75rem; color: var(--grey); margin-bottom: 16px; font-weight: 600;
+    }
+    .phone-app-logo { display: flex; align-items: center; gap: 6px; }
+    .phone-app-logo img { height: 20px; width: auto; border-radius: 4px; }
+    .phone-status { background: var(--paper-dim); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+    .phone-status .label { font-size: 0.72rem; color: var(--grey); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+    .phone-status .value { font-family: 'Space Grotesk'; font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-top: 4px; }
+    .signal-bars { display: flex; align-items: flex-end; gap: 3px; height: 16px; margin-top: 8px; }
+    .signal-bars div { width: 5px; background: var(--orange); border-radius: 2px; }
+    .phone-pkg {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+      margin-bottom: 8px; font-size: 0.85rem;
+    }
+    .phone-pkg.selected { border-color: var(--orange); background: #FFF4E8; }
+    .phone-pkg .price { font-weight: 700; color: var(--orange-dark); }
+    .phone-btn {
+      background: var(--orange); color: white; text-align: center; font-weight: 600;
+      padding: 13px; border-radius: 12px; margin-top: 12px; font-size: 0.9rem;
+      cursor: pointer; transition: background .18s;
+    }
+    .phone-btn:hover { background: var(--orange-dark); }
 
-      .btn-primary-gradient {
-        background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
-        transition: all 0.3s ease;
-      }
+    /* ── DAY IN THE LIFE ── */
+    .day-section { padding: 70px 24px; background: var(--ink); }
+    .day-head { max-width: 1140px; margin: 0 auto 40px; text-align: center; }
+    .day-head .eyebrow { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #C9CDDB; }
+    .day-head .eyebrow-dot { background: var(--coral); }
+    .day-head h2 { color: white; font-size: 2.1rem; margin-bottom: 12px; }
+    .day-head p { color: #9CA1B5; max-width: 520px; margin: 0 auto; }
+    .day-grid {
+      max-width: 1140px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    @media (max-width: 900px) { .day-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .day-grid { grid-template-columns: 1fr; } }
+    .day-card {
+      background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 16px; padding: 22px;
+      transition: background .2s;
+    }
+    .day-card:hover { background: rgba(255,255,255,0.07); }
+    .day-time { font-family: 'Space Grotesk'; font-size: 0.82rem; color: var(--coral); font-weight: 600; margin-bottom: 14px; }
+    .day-icon {
+      width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
+      font-size: 1.2rem;
+    }
+    .day-card h3 { color: white; font-size: 1.02rem; margin-bottom: 8px; }
+    .day-card p { color: #9CA1B5; font-size: 0.87rem; }
 
-      .btn-primary-gradient:hover {
-        box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
-        transform: translateY(-1px);
-      }
+    /* ── HOW IT WORKS ── */
+    .how-section { padding: 80px 24px; }
+    .section-head { max-width: 600px; margin: 0 auto 48px; text-align: center; }
+    .section-head .eyebrow { margin-left: auto; margin-right: auto; display: inline-flex; }
+    .section-head h2 { font-size: 2.1rem; margin-bottom: 12px; }
+    .section-head p { color: var(--ink-soft); }
+    .how-grid {
+      max-width: 1140px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    @media (max-width: 800px) { .how-grid { grid-template-columns: 1fr; } }
+    .how-step { position: relative; padding-top: 8px; }
+    .how-num {
+      font-family: 'Space Grotesk'; font-size: 0.85rem; font-weight: 700; color: var(--orange);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
+    .how-num::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+    .how-step h3 { font-size: 1.15rem; margin-bottom: 8px; }
+    .how-step p { color: var(--ink-soft); font-size: 0.92rem; }
 
-      .material-symbols-outlined {
-        font-variation-settings:
-          "FILL" 0,
-          "wght" 400,
-          "GRAD" 0,
-          "opsz" 24;
-      }
-    </style>
-    <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "surface-variant": "#34343d",
-              "tertiary-container": "#c2c3c3",
-              tertiary: "#dedfdf",
-              "tertiary-fixed-dim": "#c6c6c7",
-              "on-primary": "#003642",
-              outline: "#859398",
-              "surface-tint": "#3cd7ff",
-              "surface-container-high": "#292932",
-              "tertiary-fixed": "#e2e2e2",
-              primary: "#a8e8ff",
-              "surface-bright": "#393841",
-              surface: "#13131b",
-              "on-primary-fixed": "#001f27",
-              "on-background": "#e4e1ed",
-              "secondary-fixed": "#eaddff",
-              "on-secondary": "#3f008e",
-              "inverse-surface": "#e4e1ed",
-              "surface-container-highest": "#34343d",
-              "on-primary-container": "#00586b",
-              "primary-fixed": "#b4ebff",
-              background: "#13131b",
-              "on-surface": "#e4e1ed",
-              error: "#ffb4ab",
-              "on-tertiary-fixed-variant": "#454747",
-              "error-container": "#93000a",
-              "on-secondary-fixed-variant": "#5a00c6",
-              "on-tertiary-container": "#4f5051",
-              "primary-container": "#00d4ff",
-              "outline-variant": "#3c494e",
-              "on-surface-variant": "#bbc9cf",
-              "on-tertiary": "#2f3131",
-              "on-primary-fixed-variant": "#004e5f",
-              "secondary-container": "#6001d1",
-              "inverse-on-surface": "#303038",
-              "on-secondary-container": "#c9aeff",
-              "secondary-fixed-dim": "#d2bbff",
-              "surface-dim": "#13131b",
-              "primary-fixed-dim": "#3cd7ff",
-              "on-error-container": "#ffdad6",
-              "on-tertiary-fixed": "#1a1c1c",
-              "surface-container-low": "#1b1b23",
-              "inverse-primary": "#00677e",
-              "surface-container": "#1f1f27",
-              "surface-container-lowest": "#0d0d15",
-              "on-secondary-fixed": "#25005a",
-              secondary: "#d2bbff",
-              "on-error": "#690005",
-            },
-            borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "12px",
-              card: "16px",
-              full: "9999px",
-            },
-            spacing: {
-              sm: "8px",
-              xs: "4px",
-              lg: "24px",
-              base: "4px",
-              gutter: "16px",
-              "margin-mobile": "20px",
-              md: "16px",
-              "margin-desktop": "64px",
-              xl: "40px",
-            },
-            fontFamily: {
-              "headline-md": ["Sora"],
-              "body-lg": ["DM Sans"],
-              "label-md": ["DM Sans"],
-              "body-md": ["DM Sans"],
-              "display-lg": ["Sora"],
-              "headline-lg": ["Sora"],
-              "headline-lg-mobile": ["Sora"],
-            },
-            fontSize: {
-              "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
-              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
-              "label-md": [
-                "14px",
-                {
-                  lineHeight: "1.4",
-                  letterSpacing: "0.05em",
-                  fontWeight: "500",
-                },
-              ],
-              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
-              "display-lg": [
-                "48px",
-                {
-                  lineHeight: "1.1",
-                  letterSpacing: "-0.02em",
-                  fontWeight: "700",
-                },
-              ],
-              "headline-lg": [
-                "32px",
-                {
-                  lineHeight: "1.2",
-                  letterSpacing: "-0.01em",
-                  fontWeight: "600",
-                },
-              ],
-              "headline-lg-mobile": [
-                "28px",
-                { lineHeight: "1.2", fontWeight: "600" },
-              ],
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      body {
-        min-height: max(884px, 100dvh);
-      }
-    </style>
-    <link rel="stylesheet" href="/css/navbar.css" />
-    <link rel="stylesheet" href="/css/globals.css" />
-  </head>
+    /* ── PACKAGES ── */
+    .pkg-section { padding: 20px 24px 90px; }
+    .pkg-grid {
+      max-width: 1140px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
+    }
+    @media (max-width: 800px) { .pkg-grid { max-width: 420px; grid-template-columns: 1fr; } }
+    .pkg-card {
+      background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius);
+      padding: 28px; position: relative;
+      transition: transform .22s, box-shadow .22s;
+    }
+    .pkg-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px -16px rgba(18,23,43,0.12); }
+    .pkg-card.popular { border-color: var(--orange); box-shadow: 0 20px 40px -20px rgba(244,130,10,0.28); }
+    .pkg-card.popular:hover { box-shadow: 0 24px 48px -18px rgba(244,130,10,0.35); }
+    .pkg-badge {
+      position: absolute; top: -13px; right: 24px;
+      background: var(--orange); color: white; font-size: 0.72rem; font-weight: 700;
+      padding: 5px 12px; border-radius: 999px; letter-spacing: 0.03em;
+    }
+    .pkg-skeleton .pkg-badge { display: none; }
+    .pkg-name { font-size: 0.85rem; font-weight: 600; color: var(--grey); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 10px; }
+    .pkg-price { font-family: 'Space Grotesk'; font-size: 2.1rem; font-weight: 700; margin-bottom: 2px; }
+    .pkg-price span { font-size: 0.95rem; font-weight: 500; color: var(--grey); }
+    .pkg-desc { color: var(--ink-soft); font-size: 0.87rem; margin-bottom: 20px; }
+    .pkg-features { list-style: none; margin-bottom: 24px; }
+    .pkg-features li {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 10px;
+    }
+    .pkg-features li::before { content: '✓'; color: var(--orange); font-weight: 700; flex-shrink: 0; }
+    .pkg-btn {
+      display: block; text-align: center; width: 100%; padding: 13px; border-radius: 11px;
+      font-weight: 600; font-size: 0.92rem; font-family: 'Inter', sans-serif;
+      border: 1.5px solid var(--ink); background: transparent; cursor: pointer;
+      transition: background .18s, color .18s, border-color .18s;
+    }
+    .pkg-btn:hover { background: var(--ink); color: white; }
+    .pkg-card.popular .pkg-btn { background: var(--orange); color: white; border-color: var(--orange); }
+    .pkg-card.popular .pkg-btn:hover { background: var(--orange-dark); border-color: var(--orange-dark); }
 
-  <body class="antialiased font-body-md text-on-surface overflow-x-hidden">
-    <!-- Global Navigation Bar -->
-    <nav id="navbar" class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-left">
-          <button
-            class="back-button"
-            onclick="goBack()"
-            title="Go back to previous page"
-            aria-label="Go back"
-          >
-            ←
-          </button>
-          <a href="/index.html" class="navbar-brand">
-            <img src="/images/logo.jpg" alt="Maidanja WiFi" />
-            <span class="hidden sm:inline">Maidanja WiFi</span>
-          </a>
-        </div>
-        <div class="navbar-center">
-          <h1 class="navbar-title">Loading...</h1>
-        </div>
-        <div class="navbar-right">
-          <button id="mobile-menu-btn" aria-label="Toggle navigation menu">
-            <span></span><span></span><span></span>
-          </button>
-          <div id="nav-items" class="hidden sm:flex"></div>
-        </div>
-      </div>
-    </nav>
+    /* Loading spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .pkg-loading {
+      grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center;
+      gap: 12px; padding: 48px; color: var(--grey);
+    }
+    .pkg-loading svg { animation: spin 1s linear infinite; }
 
-    <!-- Animated Mesh Background -->
-    <div class="mesh-gradient">
-      <div class="orb orb-cyan"></div>
-      <div class="orb orb-violet"></div>
+    /* ── M-PESA STRIP ── */
+    .mpesa-strip { max-width: 1140px; margin: 0 auto 90px; padding: 0 24px; }
+    .mpesa-card {
+      background: linear-gradient(120deg, #2B1A06 0%, #12172B 100%);
+      border-radius: 24px; padding: 44px; display: flex; align-items: center; gap: 36px;
+      flex-wrap: wrap;
+    }
+    .mpesa-logo {
+      width: 60px; height: 60px; border-radius: 14px; background: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
+    }
+    .mpesa-logo img { width: 44px; height: 44px; object-fit: contain; border-radius: 6px; }
+    .mpesa-text { flex: 1; min-width: 240px; }
+    .mpesa-text h3 { color: white; font-size: 1.3rem; margin-bottom: 8px; }
+    .mpesa-text p { color: #B7BCCC; font-size: 0.93rem; max-width: 460px; }
+    .mpesa-cta {
+      background: var(--orange); color: white; font-weight: 600; padding: 14px 26px;
+      border-radius: 12px; font-size: 0.95rem; border: none; cursor: pointer;
+      white-space: nowrap; flex-shrink: 0;
+      transition: background .2s, transform .15s;
+    }
+    .mpesa-cta:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+    /* ── TESTIMONIAL ── */
+    .quote-section { padding: 0 24px 90px; }
+    .quote-card { max-width: 720px; margin: 0 auto; text-align: center; }
+    .quote-card p.quote {
+      font-family: 'Space Grotesk'; font-size: 1.35rem; font-weight: 500; line-height: 1.5;
+      color: var(--ink); margin-bottom: 20px;
+    }
+    .quote-attr { color: var(--grey); font-size: 0.9rem; font-weight: 500; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--line); padding: 40px 24px; }
+    .footer-inner {
+      max-width: 1140px; margin: 0 auto; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .footer-links { display: flex; gap: 24px; font-size: 0.87rem; color: var(--ink-soft); }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.82rem; color: var(--grey); }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="/index.html" class="logo">
+    <img src="/images/logo.png" alt="Maidanja WiFi logo" />
+    Maidanja WiFi
+  </a>
+  <div class="nav-links">
+    <a href="#packages">Packages</a>
+    <a href="#how">How it works</a>
+    <a href="/packages.html" class="nav-cta" id="nav-get-connected">Get Connected</a>
+  </div>
+</nav>
+
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div>
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Live across Kenyan campuses</div>
+    <h1>Stay connected.<br>Never miss a <span class="accent">class</span>.</h1>
+    <p class="sub">No router to buy. No installation fee. No contract. Just data for your Zoom lectures, assignments and forums — paid for with M-Pesa, one bundle at a time.</p>
+    <div class="hero-ctas">
+      <a href="/packages.html" class="btn-primary" id="hero-primary-cta">Get Connected Today →</a>
+      <a href="#packages"      class="btn-secondary">See Packages</a>
     </div>
-    <!-- Duplicate header removed — the #navbar component above handles navigation -->
-    <main
-      class="relative pt-8 pb-20 section-padding container-responsive min-h-screen flex flex-col justify-center items-center"
-    >
-      <!-- Hero Section -->
-      <section class="w-full text-center mb-xl">
-        <div
-          class="inline-flex items-center px-4 py-1.5 mb-8 rounded-full glass-card border-white/10 gap-2"
-        >
-          <span
-            class="w-2 h-2 rounded-full bg-primary-container animate-pulse"
-          ></span>
-          <span
-            class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest"
-            >Network Live in Kenya</span
-          >
-        </div>
-        <h1
-          class="font-display-lg text-display-lg md:text-[64px] mb-6 max-w-4xl mx-auto leading-[1.1]"
-        >
-          <span class="text-gradient-cyan">Blazing Fast</span> Wi-Fi,
-          <br class="hidden md:block" />
-          Pay as You Go
-        </h1>
-        <p
-          class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10"
-        >
-          Affordable internet access, powered by M-Pesa. Connect in seconds with
-          zero contracts and instant activation.
-        </p>
-        <div
-          class="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <a
-            href="packages.html"
-            class="btn-primary-gradient w-full sm:w-auto px-10 py-4 rounded-xl text-white font-headline-md text-body-lg font-bold text-center"
-          >
-            Get Connected
-          </a>
-          <a
-            href="packages.html"
-            class="w-full sm:w-auto px-10 py-4 rounded-xl border border-white/10 glass-card hover:bg-white/5 transition-colors font-headline-md text-body-lg text-center"
-          >
-            View Packages
-          </a>
-        </div>
-      </section>
-      <!-- Stats Bento Row -->
-      <section class="w-full grid-auto-fit mt-12">
-        <!-- Stat Card 1 -->
-        <div
-          class="glass-card p-6 rounded-card text-center flex flex-col items-center justify-center gap-3 group hover:border-primary-container/30 transition-colors"
-        >
-          <div
-            class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform"
-          >
-            <span
-              class="material-symbols-outlined text-primary-container"
-              data-icon="group"
-              >group</span
-            >
-          </div>
-          <div>
-            <h3 class="font-headline-lg text-headline-lg text-on-surface">
-              500+
-            </h3>
-            <p class="text-label-md font-label-md text-on-surface-variant">
-              Active Users
-            </p>
-          </div>
-        </div>
-        <!-- Stat Card 2 -->
-        <div
-          class="glass-card p-6 rounded-card text-center flex flex-col items-center justify-center gap-3 group hover:border-primary-container/30 transition-colors"
-        >
-          <div
-            class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform"
-          >
-            <span
-              class="material-symbols-outlined text-primary-container"
-              data-icon="bolt"
-              >bolt</span
-            >
-          </div>
-          <div>
-            <h3 class="font-headline-lg text-headline-lg text-on-surface">
-              99.9%
-            </h3>
-            <p class="text-label-md font-label-md text-on-surface-variant">
-              Uptime
-            </p>
-          </div>
-        </div>
-        <!-- Stat Card 3 -->
-        <div
-          class="glass-card p-6 rounded-card text-center flex flex-col items-center justify-center gap-3 group hover:border-primary-container/30 transition-colors"
-        >
-          <div
-            class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform"
-          >
-            <span
-              class="material-symbols-outlined text-primary-container"
-              data-icon="speed"
-              >speed</span
-            >
-          </div>
-          <div>
-            <h3 class="font-headline-lg text-headline-lg text-on-surface">
-              5 Mbps+
-            </h3>
-            <p class="text-label-md font-label-md text-on-surface-variant">
-              Speed
-            </p>
-          </div>
-        </div>
-      </section>
-      <!-- Scroll Indicator -->
-      <div class="mt-20 flex flex-col items-center gap-2 animate-bounce">
-        <span
-          class="text-label-md font-label-md text-outline uppercase tracking-widest"
-          >Scroll to explore</span
-        >
-        <span
-          class="material-symbols-outlined text-primary-container"
-          data-icon="expand_more"
-          >expand_more</span
-        >
+    <div class="hero-trust" id="trust-row">
+      <span><b id="trust-students">—</b> active plans</span>
+      <span><b>KES 0</b> installation</span>
+      <span><b>M-Pesa</b> pay-as-you-go</span>
+    </div>
+  </div>
+
+  <!-- Phone mock-up -->
+  <div class="phone-mock" aria-hidden="true">
+    <div class="phone-screen">
+      <div class="phone-app-header">
+        <span class="phone-app-logo">
+          <img src="/images/logo.png" alt="" />
+          Maidanja
+        </span>
+        <span>📶 Connected</span>
       </div>
-      <!-- Featured Image Context -->
-      <div
-        class="mt-24 w-full glass-card rounded-card overflow-hidden h-[400px] relative"
-      >
-        <img
-          alt="High-speed data visualization"
-          class="w-full h-full object-cover opacity-60 mix-blend-overlay"
-          data-alt="A sophisticated data visualization with glowing circuit lines and digital streams of information flowing through a dark, three-dimensional space. The color palette is dominated by electric cyan and deep violet neon lights against a midnight black background. The style is ultra-modern and cinematic, suggesting high-speed connectivity and advanced financial technology infrastructure. Subtle light glares and soft blurs create a premium glassmorphic atmosphere."
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuACy0MuBp1USoCZ-fbjhWA7m0GrkeFo9ytYQ77FVi75aqKNbIOFxsDu0zek59kYaUJ2p5lRF__S5HEwl-KB3x-ylWPFwzKRkufKXrQxaKDzlIEb4fI6qWb5eGgVeQSSv-zgRsOX7VUdjG1QPNFQWzVNg8xSKV4VwVAZn_TCDXLxIpJCp0O-B4Mix1hGMo6MYTImwKMvAHeeXHiDd3kWB_3ntstfe92ykNkm1TIG7NP_hgaYe4b_RYy9MiIQmU6KyTDdPm8umwoZgQ"
-        />
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-background to-transparent"
-        ></div>
-        <div
-          class="absolute bottom-8 left-8 right-8 flex justify-between items-end"
-        >
-          <div>
-            <h2 class="font-headline-lg text-headline-lg mb-2">
-              Powered by M-Pesa
-            </h2>
-            <p class="text-on-surface-variant max-w-md">
-              Seamlessly top up your connection using the most trusted payment
-              system in Kenya.
-            </p>
-          </div>
-          <div class="hidden md:block">
-            <div
-              class="w-16 h-1 bg-primary-container rounded-full shadow-[0_0_10px_#00d4ff]"
-            ></div>
-          </div>
+      <div class="phone-status">
+        <div class="label">Signal strength</div>
+        <div class="signal-bars">
+          <div style="height:6px"></div>
+          <div style="height:9px"></div>
+          <div style="height:12px"></div>
+          <div style="height:16px"></div>
         </div>
+        <div class="value" style="margin-top:10px;">Strong — ready for class</div>
       </div>
-    </main>
-
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <!-- PACKAGES PREVIEW SECTION -->
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section class="w-full section-padding bg-gradient-to-b from-transparent to-surface-container/30">
-      <div class="container-responsive">
-        <!-- Section Header -->
-        <div class="text-center mb-12">
-          <h2 class="font-display-lg text-display-lg md:text-5xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Flexible Packages for Everyone
-          </h2>
-          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8">
-            From students to professionals, we have the perfect plan for you. Pay only for what you use.
-          </p>
-          <a href="packages.html" class="btn-primary-gradient px-10 py-4 rounded-xl text-white font-headline-md text-body-lg font-bold inline-block">
-            View All Plans
-          </a>
-        </div>
-
-        <!-- Featured Packages Grid -->
-        <div class="grid-auto-fit mt-12">
-          <!-- Student Package -->
-          <div class="glass-card rounded-xl p-lg flex flex-col h-full border-blue-500/50 ring-2 ring-blue-500/30 bg-blue-500/5">
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white font-bold px-4 py-1 rounded-full text-xs shadow-lg tracking-widest">
-              STUDENT PLAN
-            </div>
-            <div class="flex justify-between items-start mb-md pt-4">
-              <span class="px-sm py-xs bg-blue-500/20 text-blue-300 rounded text-xs font-bold tracking-widest uppercase">Data Package</span>
-              <span class="material-symbols-outlined text-blue-300 text-2xl">school</span>
-            </div>
-            <h3 class="font-headline-md text-headline-md mb-sm">Student Package</h3>
-            <div class="flex items-baseline gap-xs mb-lg">
-              <span class="font-display-lg text-display-lg text-white font-bold">KES 20</span>
-              <span class="text-on-surface-variant text-sm">/24 hours</span>
-            </div>
-            <p class="text-on-surface-variant text-body-md mb-lg flex-grow">2GB high-speed data perfect for students. Get studying with reliable internet.</p>
-            <ul class="space-y-sm mb-lg">
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-blue-300 text-sm">check_circle</span> 2GB Data
-              </li>
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-blue-300 text-sm">check_circle</span> Valid 24 Hours
-              </li>
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-blue-300 text-sm">check_circle</span> Instant M-Pesa
-              </li>
-            </ul>
-            <a href="packages.html" class="w-full py-md rounded-lg bg-blue-600/30 text-blue-300 border border-blue-400/50 hover:bg-blue-600/40 transition-all font-bold text-label-md text-center">
-              Get Started
-            </a>
-          </div>
-
-          <!-- 1 Day Unlimited -->
-          <div class="glass-card rounded-xl p-lg flex flex-col h-full border-primary/50 ring-2 ring-primary/30 scale-105 z-10 bg-primary/5">
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary-container font-bold px-4 py-1 rounded-full text-xs shadow-lg tracking-widest">
-              POPULAR
-            </div>
-            <div class="flex justify-between items-start mb-md pt-4">
-              <span class="px-sm py-xs bg-primary/20 text-primary rounded text-xs font-bold tracking-widest uppercase">24 Hours</span>
-              <span class="material-symbols-outlined text-primary text-2xl">rocket_launch</span>
-            </div>
-            <h3 class="font-headline-md text-headline-md mb-sm">Full Day</h3>
-            <div class="flex items-baseline gap-xs mb-lg">
-              <span class="font-display-lg text-display-lg text-white font-bold">KES 80</span>
-              <span class="text-on-surface-variant text-sm">/day</span>
-            </div>
-            <p class="text-on-surface-variant text-body-md mb-lg flex-grow">Unlimited high-speed internet for a full 24 hours. Perfect for streaming and browsing.</p>
-            <ul class="space-y-sm mb-lg">
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Unlimited Data
-              </li>
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> 24-Hour Access
-              </li>
-              <li class="flex items-center gap-sm text-primary font-bold text-label-md">
-                <span class="material-symbols-outlined text-primary text-sm">stars</span> Most Popular
-              </li>
-            </ul>
-            <a href="packages.html" class="w-full py-md rounded-lg bg-gradient-to-r from-primary to-secondary text-white shadow-xl hover:shadow-primary/50 transition-all font-bold text-label-md text-center">
-              Buy Now
-            </a>
-          </div>
-
-          <!-- 1 Month Unlimited -->
-          <div class="glass-card rounded-xl p-lg flex flex-col h-full border-primary/40">
-            <div class="flex justify-between items-start mb-md">
-              <span class="px-sm py-xs bg-surface-container-high text-on-surface-variant rounded text-xs font-bold tracking-widest uppercase">30 Days</span>
-              <span class="material-symbols-outlined text-primary text-2xl">calendar_month</span>
-            </div>
-            <h3 class="font-headline-md text-headline-md mb-sm">Monthly</h3>
-            <div class="flex items-baseline gap-xs mb-lg">
-              <span class="font-display-lg text-display-lg text-white font-bold">KES 600</span>
-              <span class="text-on-surface-variant text-sm">/month</span>
-            </div>
-            <p class="text-on-surface-variant text-body-md mb-lg flex-grow">Unlimited data for a full month. Best value for regular internet users.</p>
-            <ul class="space-y-sm mb-lg">
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Unlimited Data
-              </li>
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Full Month Access
-              </li>
-              <li class="flex items-center gap-sm text-on-surface-variant text-label-md">
-                <span class="material-symbols-outlined text-primary text-sm">check_circle</span> Best Value
-              </li>
-            </ul>
-            <a href="packages.html" class="w-full py-md rounded-lg border border-primary text-primary hover:bg-primary/10 transition-all font-bold text-label-md text-center">
-              Get Connected
-            </a>
-          </div>
-        </div>
-
-        <!-- View All Link -->
-        <div class="text-center mt-12">
-          <p class="text-on-surface-variant text-body-md mb-4">More than 10 packages available</p>
-          <a href="packages.html" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-bold text-label-md">
-            View All Packages
-            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-          </a>
-        </div>
+      <!-- Populated from /api/packages (first 3) -->
+      <div id="phone-pkgs">
+        <div class="phone-pkg"><span>Loading…</span><span class="price">—</span></div>
       </div>
-    </section>
+      <a href="/packages.html" class="phone-btn">Pay with M-Pesa</a>
+    </div>
+  </div>
+</section>
 
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <!-- CTA BANNER: THIKA INSTALLATION OFFER -->
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section class="w-full section-padding bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 border-y border-primary/20">
-      <div class="container-responsive">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-lg items-center">
-          <!-- Left: Installation Offer -->
-          <div class="flex flex-col gap-md">
-            <div class="flex items-start gap-md">
-              <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <span class="material-symbols-outlined text-primary text-3xl">home_repair_service</span>
-              </div>
-              <div>
-                <h3 class="font-headline-lg text-headline-lg mb-2">Full Installation in Thika</h3>
-                <p class="text-on-surface text-body-lg leading-relaxed">
-                  Anyone in need within <span class="font-bold text-primary">Thika</span>, call us today. We provide <span class="font-bold text-primary">complete installation within 72 hours</span>.
-                </p>
-                <a href="tel:0706407084" class="inline-flex items-center gap-2 mt-4 px-md sm:px-lg py-sm rounded-lg bg-primary/20 hover:bg-primary/30 text-primary font-bold transition-all max-w-full text-sm sm:text-base">
-                  <span class="material-symbols-outlined text-sm sm:text-base">call</span>
-                  <span>Call: 0706407084</span>
-                </a>
-              </div>
-            </div>
-          </div>
 
-          <!-- Right: Hotspot Zone Offer -->
-          <div class="flex flex-col gap-md">
-            <div class="flex items-start gap-md">
-              <div class="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                <span class="material-symbols-outlined text-secondary text-3xl">hub</span>
-              </div>
-              <div>
-                <h3 class="font-headline-lg text-headline-lg mb-2">Become a WiFi Hub</h3>
-                <p class="text-on-surface text-body-lg leading-relaxed">
-                  Not yet part of Maidanja? <span class="font-bold text-primary">Make your region or apartment a WiFi hotspot zone</span> and earn while sharing fast internet.
-                </p>
-                <a href="mailto:maidanja31@gmail.com" class="inline-flex items-center gap-2 mt-4 px-md sm:px-lg py-sm rounded-lg bg-secondary/20 hover:bg-secondary/30 text-secondary font-bold transition-all max-w-full text-sm sm:text-base">
-                  <span class="material-symbols-outlined text-sm sm:text-base flex-shrink-0">mail</span>
-                  <span class="break-all">Email: maidanja31@gmail.com</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+<!-- ── DAY IN THE LIFE ── -->
+<section class="day-section">
+  <div class="day-head">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Built for ODeL, not just browsing</div>
+    <h2>A student's day, actually online</h2>
+    <p>Every plan is built around the moments that make or break your semester.</p>
+  </div>
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-time">7:00 AM</div>
+      <div class="day-icon">🎧</div>
+      <h3>Recorded lecture</h3>
+      <p>Catch up on last night's upload before the day starts — no buffering, no re-loading.</p>
+    </div>
+    <div class="day-card">
+      <div class="day-time">2:00 PM</div>
+      <div class="day-icon">🎥</div>
+      <h3>Live Zoom seminar</h3>
+      <p>Stay on screen and in the discussion, without your connection dropping mid-question.</p>
+    </div>
+    <div class="day-card">
+      <div class="day-time">8:00 PM</div>
+      <div class="day-icon">📝</div>
+      <h3>Assignment submission</h3>
+      <p>Upload right up to the deadline without the anxiety of a stalled connection.</p>
+    </div>
+    <div class="day-card">
+      <div class="day-time">10:00 PM</div>
+      <div class="day-icon">💬</div>
+      <h3>Group discussion forum</h3>
+      <p>Reply to classmates and share documents while the conversation's still active.</p>
+    </div>
+  </div>
+</section>
 
-        <!-- Bottom Tagline -->
-        <div class="mt-lg pt-lg border-t border-white/10 text-center">
-          <p class="text-on-surface font-body-lg leading-relaxed">
-            <span class="text-primary font-bold text-headline-md">✓ Free Connection</span> <br class="md:hidden" />
-            to <span class="font-bold">flexible, reliable, affordable, and stable internet</span> across Thika.
-          </p>
-        </div>
-      </div>
-    </section>
-    <!-- Footer -->
-    <footer class="w-full glass-card border-t border-white/5 mt-20">
-      <div
-        class="flex flex-col md:flex-row justify-between items-center py-lg w-full container-responsive gap-lg md:gap-0"
-      >
-        <!-- Left: Brand & Info -->
-        <div class="flex flex-col gap-sm items-center md:items-start mb-4 md:mb-0">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-2xl">wifi</span>
-            <span class="font-headline-md text-headline-md text-primary font-bold"
-              >Maidanja Hotspot WiFi</span
-            >
-          </div>
-          <p class="text-on-surface-variant text-label-md font-label-md">
-            Fast, Reliable, Affordable Internet in Thika
-          </p>
-          <p class="text-on-surface-variant text-xs mt-1">
-            © 2026 Maidanja WiFi. Powered by M-Pesa.
-          </p>
-        </div>
 
-        <!-- Center: Contact Info -->
-        <div class="flex flex-col gap-sm items-center">
-          <div class="flex gap-6 text-center flex-wrap justify-center">
-            <div>
-              <p class="font-label-md text-label-md text-on-surface-variant mb-1">📍 Location</p>
-              <p class="font-headline-md text-headline-md text-on-surface">Thika</p>
-            </div>
-            <div class="border-l border-white/10"></div>
-            <div>
-              <p class="font-label-md text-label-md text-on-surface-variant mb-1">📞 Phone</p>
-              <a href="tel:0706407084" class="font-headline-md text-headline-md text-primary hover:text-primary/80 transition-colors">0706407084</a>
-            </div>
-            <div class="border-l border-white/10"></div>
-            <div>
-              <p class="font-label-md text-label-md text-on-surface-variant mb-1">📧 Email</p>
-              <a href="mailto:maidanja31@gmail.com" class="font-headline-md text-headline-md text-primary hover:text-primary/80 transition-colors text-sm">maidanja31@gmail.com</a>
-            </div>
-          </div>
-        </div>
+<!-- ── HOW IT WORKS ── -->
+<section class="how-section" id="how">
+  <div class="section-head">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Three steps, no paperwork</div>
+    <h2>Getting online takes minutes</h2>
+    <p>From your study room, on your phone — no technician visit required.</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="how-num">01</div>
+      <h3>Sign up</h3>
+      <p>Create your account with just your phone number — no ID checks, no forms.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-num">02</div>
+      <h3>Pick a bundle</h3>
+      <p>Choose daily, weekly or monthly data — whatever fits your pocket this week.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-num">03</div>
+      <h3>Pay with M-Pesa</h3>
+      <p>Confirm the STK push and you're online in seconds. No contracts, ever.</p>
+    </div>
+  </div>
+</section>
 
-        <!-- Right: Links -->
-        <div class="flex gap-8">
-          <a
-            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
-            href="packages.html"
-            >Packages</a
-          >
-          <a
-            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
-            href="dashboard.html"
-            >Dashboard</a
-          >
-          <a
-            class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors"
-            href="login.html"
-            >Login</a
-          >
-        </div>
-      </div>
-    </footer>
-    <script src="/js/navbar.js"></script>
-    <script src="/js/footer.js"></script>
+
+<!-- ── LIVE PACKAGES ── -->
+<section class="pkg-section" id="packages">
+  <div class="section-head">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Pay only for what you need</div>
+    <h2>Packages that fit a student budget</h2>
+    <p>Switch, upgrade or pause anytime. No long-term commitments.</p>
+  </div>
+  <div class="pkg-grid" id="pkg-grid">
+    <!-- Loading state -->
+    <div class="pkg-loading" id="pkg-loading">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6B7085" stroke-width="2.5" stroke-linecap="round">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      </svg>
+      <span>Loading packages…</span>
+    </div>
+  </div>
+  <p class="wrap" style="text-align:center; margin-top:20px; font-size:0.87rem; color:var(--grey);">
+    All prices in KES · M-Pesa STK push · Instant activation
+  </p>
+</section>
+
+
+<!-- ── M-PESA STRIP ── -->
+<div class="mpesa-strip">
+  <div class="mpesa-card">
+    <div class="mpesa-logo">
+      <img src="/images/logo.png" alt="Maidanja WiFi" />
+    </div>
+    <div class="mpesa-text">
+      <h3>Powered by M-Pesa — the way you already pay</h3>
+      <p>Top up from KES 5 whenever you need to. No bank account, no credit check, no waiting for approval — just a phone number and an STK push.</p>
+    </div>
+    <a href="/packages.html" class="mpesa-cta">Get Connected →</a>
+  </div>
+</div>
+
+
+<!-- ── TESTIMONIAL ── -->
+<section class="quote-section">
+  <div class="quote-card">
+    <p class="quote">"I used to walk to the cyber café to submit assignments before the deadline. Now I just connect from my room and I'm done in minutes."</p>
+    <div class="quote-attr">— Third-year student, ODeL programme</div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <a href="/index.html" class="logo">
+      <img src="/images/logo.png" alt="Maidanja WiFi" style="height:28px; width:auto; border-radius:6px;" />
+      Maidanja WiFi
+    </a>
+    <div class="footer-links">
+      <a href="#packages">Packages</a>
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="/login.html">Login</a>
+      <a href="tel:0706407084">📞 0706407084</a>
+    </div>
+    <div class="footer-copy">© 2026 Maidanja WiFi. Powered by M-Pesa.</div>
+  </div>
+</footer>
+
+
+<!-- ── SCRIPTS ── -->
+<script>
+/* ══════════════════════════════════════════════════════
+   Landing page — live data from GET /api/packages
+   ══════════════════════════════════════════════════════ */
+
+/* ── Swap CTA if already signed in ── */
+(function () {
+  if (api.isLoggedIn()) {
+    const u = api.getUser();
+    const cta = document.getElementById('nav-get-connected');
+    if (cta) { cta.textContent = 'My Dashboard'; cta.href = u?.role === 'admin' ? '/admin.html' : '/dashboard.html'; }
+    const hero = document.getElementById('hero-primary-cta');
+    if (hero) { hero.textContent = 'View Packages →'; }
+  }
+})();
+
+/* ── Duration label ── */
+function fmtDur(h) {
+  const n = Number(h);
+  if (n < 1)    return `${Math.round(n * 60)} min`;
+  if (n === 1)  return '1 hour';
+  if (n === 24) return '24 hrs';
+  if (n === 168) return '7 days';
+  if (n === 336) return '14 days';
+  if (n >= 720)  return '30 days';
+  if (n <= 12)   return `${n} hrs`;
+  return `${Math.round(n / 24)} days`;
+}
+
+/* ── Fetch and render packages ── */
+(async function () {
+  const grid    = document.getElementById('pkg-grid');
+  const loading = document.getElementById('pkg-loading');
+
+  try {
+    const res  = await api.get('/packages', false);
+    const pkgs = (res.data.packages || []).sort((a, b) => a.price_kes - b.price_kes);
+
+    const trustStudents = document.getElementById('trust-students');
+    if (trustStudents) {
+      trustStudents.textContent = pkgs.length;
+    }
+
+    loading.remove();
+
+    if (!pkgs.length) {
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--grey);padding:40px;">No packages available right now.</p>';
+      return;
+    }
+
+    /* The "popular" slot = middle package */
+    const midIdx = Math.floor(pkgs.length / 2);
+
+    /* ── Full package grid ── */
+    grid.innerHTML = pkgs.map((pkg, i) => {
+      const popular = i === midIdx;
+      const perHour = (pkg.price_kes / Math.max(Number(pkg.duration_hours), 1)).toFixed(2);
+      return `
+        <div class="pkg-card ${popular ? 'popular' : ''}">
+          ${popular ? '<div class="pkg-badge">Most Popular</div>' : ''}
+          <div class="pkg-name">${pkg.name}</div>
+          <div class="pkg-price">KES ${parseFloat(pkg.price_kes).toLocaleString('en-KE')}<span> / ${fmtDur(pkg.duration_hours)}</span></div>
+          <div class="pkg-desc">${pkg.description || `${parseFloat(pkg.speed_mbps)} Mbps · Unlimited browsing`}</div>
+          <ul class="pkg-features">
+            <li>${parseFloat(pkg.speed_mbps)} Mbps guaranteed speed</li>
+            <li>Unlimited browsing &amp; LMS access</li>
+            <li>Zoom &amp; Teams optimized</li>
+            <li>KES ${perHour}/hr · instant activation</li>
+          </ul>
+          <button class="pkg-btn" onclick="selectPackage(${JSON.stringify(pkg).replace(/"/g, '&quot;')})">
+            Choose ${pkg.name}
+          </button>
+        </div>`;
+    }).join('');
+
+    /* ── Phone mock-up (first 3 packages) ── */
+    const phonePkgs = document.getElementById('phone-pkgs');
+    if (phonePkgs && pkgs.length) {
+      phonePkgs.innerHTML = pkgs.slice(0, 3).map((pkg, i) => `
+        <div class="phone-pkg ${i === 1 ? 'selected' : ''}">
+          <span>${pkg.name} · ${fmtDur(pkg.duration_hours)}</span>
+          <span class="price">KES ${parseFloat(pkg.price_kes).toLocaleString('en-KE')}</span>
+        </div>`).join('');
+    }
+
+  } catch (err) {
+    loading.innerHTML = `
+      <span style="color:#c0392b;font-size:0.9rem;">Could not load packages. <a href="/packages.html" style="color:var(--green);font-weight:600;">Browse all →</a></span>`;
+    console.error('Packages fetch error:', err.message);
+  }
+})();
+
+/* ── Package select handler ── */
+function selectPackage(pkg) {
+  if (!api.isLoggedIn()) {
+    localStorage.setItem('maidanja_package', JSON.stringify(pkg));
+    window.location.href = '/login.html';
+    return;
+  }
+  localStorage.setItem('maidanja_package', JSON.stringify(pkg));
+  window.location.href = '/checkout.html';
+}
+</script>
+
 </body>
 </html>

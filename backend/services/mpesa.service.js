@@ -3,14 +3,14 @@ const axios = require('axios');
 
 // ---- Constants --------------------------------------------------------
 const SANDBOX_BASE = 'https://sandbox.safaricom.co.ke';
-const PROD_BASE    = 'https://api.safaricom.co.ke';
+const PROD_BASE = 'https://api.safaricom.co.ke';
 
 const getBaseUrl = () =>
   process.env.MPESA_ENVIRONMENT === 'production' ? PROD_BASE : SANDBOX_BASE;
 
 // ---- Token Cache -------------------------------------------------------
-let cachedToken   = null;
-let tokenExpiry   = 0;
+let cachedToken = null;
+let tokenExpiry = 0;
 
 /**
  * Validates that all required M-Pesa environment variables are set.
@@ -45,28 +45,28 @@ const getAccessToken = async (retryCount = 0) => {
     return cachedToken;
   }
 
-  const key    = process.env.MPESA_CONSUMER_KEY;
+  const key = process.env.MPESA_CONSUMER_KEY;
   const secret = process.env.MPESA_CONSUMER_SECRET;
 
   if (!key || !secret) {
     throw new Error('Missing MPESA_CONSUMER_KEY or MPESA_CONSUMER_SECRET in .env');
   }
 
-  const creds  = Buffer.from(`${key}:${secret}`).toString('base64');
+  const creds = Buffer.from(`${key}:${secret}`).toString('base64');
 
   try {
     console.log(`🔐 Fetching M-Pesa access token (${getBaseUrl()})...`);
-    
+
     const response = await axios.get(
       `${getBaseUrl()}/oauth/v1/generate?grant_type=client_credentials`,
-      { 
+      {
         headers: { Authorization: `Basic ${creds}` },
         timeout: 10000,
       }
     );
 
-    cachedToken  = response.data.access_token;
-    tokenExpiry  = Date.now() + (parseInt(response.data.expires_in) - 60) * 1000;
+    cachedToken = response.data.access_token;
+    tokenExpiry = Date.now() + (parseInt(response.data.expires_in) - 60) * 1000;
 
     console.log('✅ Access token retrieved successfully');
     return cachedToken;
@@ -96,17 +96,19 @@ const getAccessToken = async (retryCount = 0) => {
  */
 const getPassword = () => {
   const shortcode = process.env.MPESA_SHORTCODE;
-  const passkey   = process.env.MPESA_PASSKEY;
-  
+  const passkey = process.env.MPESA_PASSKEY;
+
   if (!shortcode || !passkey) {
     throw new Error('Missing MPESA_SHORTCODE or MPESA_PASSKEY in .env');
   }
-  
-  const timestamp = new Date()
+
+  // Safaricom requires timestamp in East African Time (EAT), which is UTC+3
+  const eatOffset = 3 * 60 * 60 * 1000;
+  const timestamp = new Date(Date.now() + eatOffset)
     .toISOString()
     .replace(/[-:T.Z]/g, '')
     .slice(0, 14);
-  const password  = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString('base64');
+  const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString('base64');
   return { password, timestamp };
 };
 
@@ -122,10 +124,10 @@ const stkPush = async (phone, amount, accountRef, description) => {
   try {
     console.log(`📱 Initiating STK Push for ${phone} (KES ${amount})`);
 
-    const token              = await getAccessToken();
+    const token = await getAccessToken();
     const { password, timestamp } = getPassword();
-    const shortcode          = process.env.MPESA_SHORTCODE;
-    const callbackUrl        = process.env.MPESA_CALLBACK_URL;
+    const shortcode = process.env.MPESA_SHORTCODE;
+    const callbackUrl = process.env.MPESA_CALLBACK_URL;
 
     if (!callbackUrl || callbackUrl.includes('yourdomain')) {
       throw new Error(
@@ -136,16 +138,16 @@ const stkPush = async (phone, amount, accountRef, description) => {
 
     const payload = {
       BusinessShortCode: shortcode,
-      Password:          password,
-      Timestamp:         timestamp,
-      TransactionType:   'CustomerPayBillOnline',
-      Amount:            Math.ceil(amount),   // M-Pesa requires integer
-      PartyA:            phone,
-      PartyB:            shortcode,
-      PhoneNumber:       phone,
-      CallBackURL:       callbackUrl,
-      AccountReference:  accountRef,              // User's phone number
-      TransactionDesc:   description,             // Package description
+      Password: password,
+      Timestamp: timestamp,
+      TransactionType: 'CustomerPayBillOnline',
+      Amount: Math.ceil(amount),   // M-Pesa requires integer
+      PartyA: phone,
+      PartyB: shortcode,
+      PhoneNumber: phone,
+      CallBackURL: callbackUrl,
+      AccountReference: accountRef,              // User's phone number
+      TransactionDesc: description,             // Package description
     };
 
     console.log('📤 Sending STK Push payload:', {
@@ -159,7 +161,7 @@ const stkPush = async (phone, amount, accountRef, description) => {
     const response = await axios.post(
       `${getBaseUrl()}/mpesa/stkpush/v1/processrequest`,
       payload,
-      { 
+      {
         headers: { Authorization: `Bearer ${token}` },
         timeout: 15000,
       }
@@ -204,21 +206,21 @@ const stkPush = async (phone, amount, accountRef, description) => {
  */
 const querySTKStatus = async (checkoutRequestId) => {
   try {
-    const token              = await getAccessToken();
+    const token = await getAccessToken();
     const { password, timestamp } = getPassword();
-    const shortcode          = process.env.MPESA_SHORTCODE;
+    const shortcode = process.env.MPESA_SHORTCODE;
 
     const payload = {
       BusinessShortCode: shortcode,
-      Password:          password,
-      Timestamp:         timestamp,
+      Password: password,
+      Timestamp: timestamp,
       CheckoutRequestID: checkoutRequestId,
     };
 
     const response = await axios.post(
       `${getBaseUrl()}/mpesa/stkpushquery/v1/query`,
       payload,
-      { 
+      {
         headers: { Authorization: `Bearer ${token}` },
         timeout: 10000,
       }

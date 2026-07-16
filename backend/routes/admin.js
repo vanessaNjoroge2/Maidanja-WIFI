@@ -238,7 +238,7 @@ router.get('/hotspot/sessions', async (req, res, next) => {
          SELECT id FROM payments 
          WHERE user_id = s.user_id AND package_id = s.package_id 
          AND status = 'completed' 
-         ORDER BY completed_at DESC LIMIT 1
+         ORDER BY updated_at DESC LIMIT 1
        )
        WHERE s.status = $1
        ORDER BY s.started_at DESC
@@ -251,22 +251,22 @@ router.get('/hotspot/sessions', async (req, res, next) => {
       [status]
     );
 
-    // Enhance with real-time stats from MikroTik
-    const enhancedSessions = await Promise.all(
-      sessionsResult.rows.map(async (session) => {
-        const stats = await mikrotikService.getUserStats(session.hotspot_user_id);
-        const expiresAt = new Date(session.expires_at);
-        const timeRemaining = Math.max(0, expiresAt - new Date());
+    // Fetch all active stats from MikroTik in a single batch query
+    const statsMap = await mikrotikService.getAllActiveUserStats();
 
-        return {
-          ...session,
-          timeRemaining: Math.floor(timeRemaining / 1000), // seconds
-          hotstatus: stats.isActive ? 'online' : 'offline',
-          bytesIn: stats.bytesIn || 0,
-          bytesOut: stats.bytesOut || 0,
-        };
-      })
-    );
+    const enhancedSessions = sessionsResult.rows.map((session) => {
+      const stats = statsMap.get(session.hotspot_user_id) || { isActive: false };
+      const expiresAt = new Date(session.expires_at);
+      const timeRemaining = Math.max(0, expiresAt - new Date());
+
+      return {
+        ...session,
+        timeRemaining: Math.floor(timeRemaining / 1000), // seconds
+        hotstatus: stats.isActive ? 'online' : 'offline',
+        bytesIn: stats.bytesIn || 0,
+        bytesOut: stats.bytesOut || 0,
+      };
+    });
 
     res.json({
       success: true,

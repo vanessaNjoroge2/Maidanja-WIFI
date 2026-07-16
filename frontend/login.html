@@ -1,334 +1,297 @@
-<!doctype html>
-<html class="dark" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Login | Maidanja WiFi</title>
-    <script src="/js/api.js"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/navbar.css" />
-    <link rel="stylesheet" href="/css/globals.css" />
-    <style>
-      body {
-        background-color: #0a0a0f;
-        color: #e4e1ed;
-        min-height: 100dvh;
-        font-family: "DM Sans", sans-serif;
-        /* No top padding — navbar is hidden on login page */
-        padding-top: 0 !important;
-        /* Column layout so footer sits BELOW the card, not beside it */
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-      }
-      /* Centred card wrapper — grows to push footer down */
-      .login-main {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1.5rem 1.25rem;
-      }
-      .glass {
-        background: rgba(18, 18, 26, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-      .gradient-btn {
-        background: linear-gradient(135deg, #3cd7ff 0%, #6001d1 100%);
-      }
-      .orb {
-        position: fixed;
-        border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.12;
-        pointer-events: none;
-      }
-      /* Footer rendered by footer.js — full width, below the card */
-      .maidanja-footer {
-        width: 100%;
-        position: relative;
-        z-index: 1;
-        flex-shrink: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Back Button (top-left corner) -->
-    <div style="position: absolute; top: 1rem; left: 1rem; z-index: 50">
-      <button
-        onclick="goBack()"
-        title="Go back to previous page"
-        aria-label="Go back"
-        style="
-          background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          color: #e4e1ed;
-          padding: 0.5rem 0.75rem;
-          border-radius: 0.5rem;
-          font-size: 1.25rem;
-          cursor: pointer;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        "
-      >
-        ←
-      </button>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Maidanja WiFi</title>
+  <meta name="description" content="Sign in or create your Maidanja WiFi account to manage sessions and payments." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="/js/api.js"></script>
+  <style>
+    :root{
+      --paper:#FDFBF7; --paper-dim:#F5F1E9;
+      --ink:#12172B; --ink-soft:#4B5169; --grey:#6B7085;
+      --orange:#F4820A; --orange-dark:#D4690A;
+      --line:#E7E1D3; --card:#FFFFFF; --radius:18px;
+      --red:#D93025;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;}
+    h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;}
+    a{color:inherit;text-decoration:none;}
 
-    <!-- Decorative orbs -->
-    <div
-      class="orb w-96 h-96 bg-cyan-400"
-      style="top: -5rem; left: -5rem"
-    ></div>
-    <div class="orb w-96 h-96 bg-violet-600" style="bottom: 0; right: 0"></div>
+    /* NAV */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;max-width:1140px;margin:0 auto;width:100%;}
+    .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;}
+    .logo img{height:34px;width:auto;object-fit:contain;}
 
-    <!-- Login card wrapper — fills remaining height, centres the card -->
-    <main class="login-main">
-      <!-- Login Card — max-width ensures it never overflows on 320px -->
-      <div
-        class="glass rounded-2xl p-6 sm:p-8 w-full z-10"
-        style="max-width: min(100%, 448px)"
-      >
-        <!-- Logo -->
-        <div class="flex items-center justify-center gap-2 mb-8">
-          <img
-            src="/images/logo.jpg"
-            alt="Maidanja WiFi"
-            style="height: 80px; width: auto; max-width: 100%"
-          />
-        </div>
+    /* AUTH CARD */
+    .auth-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .auth-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:40px;width:100%;max-width:440px;box-shadow:0 20px 60px -20px rgba(18,23,43,0.12);}
 
-        <!-- Tabs -->
-        <div class="flex mb-6 bg-white/5 rounded-xl p-1">
-          <button
-            id="tab-login"
-            onclick="switchTab('login')"
-            class="flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-cyan-500/20 text-cyan-300"
-            style="min-height: 44px"
-          >
-            Login
-          </button>
-          <button
-            id="tab-register"
-            onclick="switchTab('register')"
-            class="flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-400"
-            style="min-height: 44px"
-          >
-            Register
-          </button>
-        </div>
+    .auth-logo{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:28px;}
+    .auth-logo img{height:52px;width:auto;object-fit:contain;}
+    .auth-logo h1{font-size:1.4rem;color:var(--ink);text-align:center;}
+    .auth-logo p{color:var(--grey);font-size:0.9rem;text-align:center;}
 
-        <!-- Error Banner -->
-        <div
-          id="error-banner"
-          class="hidden mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm"
-        ></div>
+    /* TABS */
+    .tabs{display:flex;background:var(--paper-dim);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;margin-bottom:28px;}
+    .tab{flex:1;padding:10px;border-radius:9px;font-weight:600;font-size:0.9rem;cursor:pointer;border:none;background:transparent;color:var(--grey);font-family:'Inter',sans-serif;transition:all .2s;}
+    .tab.active{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(18,23,43,0.08);}
 
-        <!-- Login Form -->
-        <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-          <div>
-            <label
-              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
-              >Phone Number</label
-            >
-            <input
-              type="tel"
-              id="login-phone"
-              placeholder="0712345678 or 254712345678"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-              style="min-height: 48px"
-            />
+    /* PANEL */
+    .panel{display:none;} .panel.active{display:block;}
+
+    /* INPUT */
+    .field{margin-bottom:18px;}
+    .field label{display:block;font-size:0.85rem;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+    .input-wrap{position:relative;}
+    .input-wrap input{
+      width:100%;padding:13px 16px 13px 44px;border:1.5px solid var(--line);
+      border-radius:12px;font-size:1rem;font-family:'Inter',sans-serif;
+      color:var(--ink);background:var(--paper);outline:none;
+      transition:border-color .2s,box-shadow .2s;min-height:50px;
+    }
+    .input-wrap input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(244,130,10,0.12);background:#fff;}
+    .input-wrap input::placeholder{color:#B0B4C0;}
+    .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--grey);font-size:1.1rem;pointer-events:none;}
+    .input-end{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--grey);font-size:1.1rem;display:flex;align-items:center;}
+
+    /* PW REQS */
+    .pw-reqs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+    .req{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#9CA3AF;transition:color .2s;}
+    .req.met{color:#16a34a;}
+    .req-icon{font-size:0.85rem;}
+
+    /* BUTTONS */
+    .btn-submit{
+      width:100%;min-height:52px;border-radius:12px;border:none;cursor:pointer;
+      background:var(--orange);color:#fff;font-weight:700;font-size:1rem;
+      font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;
+      transition:background .2s,transform .15s,box-shadow .2s;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .btn-submit:hover:not(:disabled){background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 8px 24px -6px rgba(244,130,10,0.4);}
+    .btn-submit:disabled{opacity:.55;cursor:not-allowed;}
+
+    /* BANNER */
+    .banner{border-radius:12px;padding:12px 16px;font-size:0.875rem;font-weight:600;display:none;align-items:flex-start;gap:8px;margin-bottom:18px;}
+    .banner.error{background:#FEF2F2;border:1px solid #FECACA;color:#B91C1C;display:flex;}
+    .banner.success{background:#FFF7ED;border:1px solid #FED7AA;color:#C2410C;display:flex;}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--line);padding:24px;text-align:center;font-size:0.82rem;color:var(--grey);}
+    footer a{color:var(--orange);font-weight:600;}
+
+    @keyframes spin{to{transform:rotate(360deg);}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/index.html" class="logo">
+      <img src="/images/logo.png" alt="Maidanja WiFi" />
+      Maidanja WiFi
+    </a>
+    <a href="/packages.html" style="font-size:.9rem;font-weight:600;color:var(--ink-soft);">Browse Packages</a>
+  </nav>
+
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <img src="/images/logo.png" alt="Maidanja WiFi" />
+        <h1>Welcome back</h1>
+        <p>Fast campus WiFi for students in Thika</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" role="tablist">
+        <button class="tab active" id="tab-login"    onclick="switchTab('login')"    role="tab">Sign In</button>
+        <button class="tab"        id="tab-register" onclick="switchTab('register')" role="tab">Create Account</button>
+      </div>
+
+      <!-- Banner -->
+      <div class="banner" id="banner" role="alert"></div>
+
+      <!-- LOGIN -->
+      <div class="panel active" id="panel-login">
+        <form id="form-login" novalidate>
+          <div class="field">
+            <label for="l-phone">Safaricom Number</label>
+            <div class="input-wrap">
+              <span class="input-icon">📱</span>
+              <input type="tel" id="l-phone" placeholder="07XXXXXXXX or 254XXXXXXXXX" autocomplete="tel" inputmode="tel" required />
+            </div>
           </div>
-          <div>
-            <label
-              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
-              >Password</label
-            >
-            <input
-              type="password"
-              id="login-password"
-              placeholder="••••••••"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-              style="min-height: 48px"
-            />
+          <div class="field">
+            <label for="l-pw">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="l-pw" placeholder="Your password" autocomplete="current-password" required />
+              <button type="button" class="input-end" id="toggle-l-pw" aria-label="Show/hide password">👁</button>
+            </div>
           </div>
-          <button
-            type="submit"
-            id="login-btn"
-            class="gradient-btn w-full py-3 rounded-xl font-bold text-white mt-2 active:scale-95 transition-transform"
-            style="min-height: 48px"
-          >
-            Login
-          </button>
-        </form>
-
-        <!-- Register Form -->
-        <form
-          id="register-form"
-          onsubmit="handleRegister(event)"
-          class="space-y-4 hidden"
-        >
-          <div>
-            <label
-              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
-              >Phone Number</label
-            >
-            <input
-              type="tel"
-              id="reg-phone"
-              placeholder="0712345678 or 254712345678"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-              style="min-height: 48px"
-            />
-          </div>
-          <div>
-            <label
-              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
-              >Name (Optional)</label
-            >
-            <input
-              type="text"
-              id="reg-name"
-              placeholder="John Doe"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-              style="min-height: 48px"
-            />
-          </div>
-          <div>
-            <label
-              class="block text-xs text-gray-400 mb-1 uppercase tracking-wider"
-              >Password</label
-            >
-            <input
-              type="password"
-              id="reg-password"
-              placeholder="Min 6 characters"
-              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-              style="min-height: 48px"
-            />
-          </div>
-          <button
-            type="submit"
-            id="reg-btn"
-            class="gradient-btn w-full py-3 rounded-xl font-bold text-white mt-2 active:scale-95 transition-transform"
-            style="min-height: 48px"
-          >
-            Create Account
-          </button>
+          <button type="submit" class="btn-submit" id="btn-login">Sign In →</button>
+          <p style="text-align:center;margin-top:16px;font-size:.88rem;color:var(--grey);">
+            New here? <button type="button" onclick="switchTab('register')" style="background:none;border:none;cursor:pointer;color:var(--orange);font-weight:600;font-family:'Inter',sans-serif;">Create an account</button>
+          </p>
         </form>
       </div>
-    </main>
-    <!-- end .login-main -->
 
-    <!-- Footer injected here by footer.js — renders below the card -->
-    <script src="/js/footer.js"></script>
+      <!-- REGISTER -->
+      <div class="panel" id="panel-register">
+        <form id="form-register" novalidate>
+          <div class="field">
+            <label for="r-name">Full Name <span style="color:var(--grey);font-weight:400;">(optional)</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="r-name" placeholder="e.g. Jane Wanjiku" autocomplete="name" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="r-phone">Safaricom Number</label>
+            <div class="input-wrap">
+              <span class="input-icon">📱</span>
+              <input type="tel" id="r-phone" placeholder="07XXXXXXXX or 254XXXXXXXXX" autocomplete="tel" inputmode="tel" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="r-pw">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="r-pw" placeholder="Create a strong password" autocomplete="new-password" required oninput="checkPw()" />
+              <button type="button" class="input-end" id="toggle-r-pw" aria-label="Show/hide password">👁</button>
+            </div>
+            <div class="pw-reqs" id="pw-reqs">
+              <div class="req" id="req-len"><span class="req-icon">○</span>8+ characters</div>
+              <div class="req" id="req-upper"><span class="req-icon">○</span>Uppercase</div>
+              <div class="req" id="req-num"><span class="req-icon">○</span>Number</div>
+              <div class="req" id="req-special"><span class="req-icon">○</span>Special char</div>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit" id="btn-register">Create Account →</button>
+          <p style="text-align:center;margin-top:16px;font-size:.88rem;color:var(--grey);">
+            Already have an account? <button type="button" onclick="switchTab('login')" style="background:none;border:none;cursor:pointer;color:var(--orange);font-weight:600;font-family:'Inter',sans-serif;">Sign in</button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    <script>
-      /* Redirect if already logged in */
-      if (api.isLoggedIn()) window.location.href = "/packages.html";
+  <footer>
+    © 2026 Maidanja WiFi · <a href="/index.html">Home</a> · Powered by M-Pesa
+  </footer>
 
-      // Check if the URL has a tab parameter to show register tab by default
-      const urlParams = new URLSearchParams(window.location.search);
-      const tabParam = urlParams.get("tab");
-      if (tabParam === "register") {
-        // Switch to register tab on page load
-        switchTab("register");
-      }
+<script>
+  if (api.isLoggedIn()) {
+    const u = api.getUser();
+    window.location.href = u?.role === 'admin' ? '/admin.html' : '/packages.html';
+  }
 
-      function showError(message) {
-        const banner = document.getElementById("error-banner");
-        banner.textContent = message;
-        banner.classList.remove("hidden");
-      }
+  function switchTab(t) {
+    ['login','register'].forEach(x => {
+      document.getElementById('tab-'+x).classList.toggle('active', x===t);
+      document.getElementById('panel-'+x).classList.toggle('active', x===t);
+    });
+    clearBanner();
+  }
 
-      function switchTab(tab) {
-        const isLogin = tab === "login";
-        document
-          .getElementById("login-form")
-          .classList.toggle("hidden", !isLogin);
-        document
-          .getElementById("register-form")
-          .classList.toggle("hidden", isLogin);
-        document.getElementById("tab-login").className =
-          `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${isLogin ? "bg-cyan-500/20 text-cyan-300" : "text-gray-400"}`;
-        document.getElementById("tab-register").className =
-          `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${!isLogin ? "bg-cyan-500/20 text-cyan-300" : "text-gray-400"}`;
-        document.getElementById("error-banner").classList.add("hidden");
-      }
+  function showBanner(msg, type='error') {
+    const el = document.getElementById('banner');
+    el.className = 'banner '+type;
+    el.innerHTML = `<span>${type==='error'?'⚠️':'✅'}</span><span>${msg}</span>`;
+  }
+  function clearBanner() { const el=document.getElementById('banner'); el.className='banner'; el.style.display='none'; }
 
-      async function handleLogin(e) {
-        e.preventDefault();
-        const btn = document.getElementById("login-btn");
-        btn.textContent = "Logging in...";
-        btn.disabled = true;
-        document.getElementById("error-banner").classList.add("hidden");
-        try {
-          const res = await api.post(
-            "/auth/login",
-            {
-              phone_number: document.getElementById("login-phone").value.trim(),
-              password: document.getElementById("login-password").value,
-            },
-            false,
-          );
-          console.log("✅ Login API Response:", res);
-          api.setSession(res.data.token, res.data.user);
-          window.location.href =
-            res.data.user.role === "admin" ? "/admin.html" : "/packages.html";
-        } catch (err) {
-          showError(
-            err.message || "Login failed. Please check your credentials.",
-          );
-          btn.textContent = "Login";
-          btn.disabled = false;
-        }
-      }
+  function setupToggle(inp, btn) {
+    document.getElementById(btn).addEventListener('click', () => {
+      const i = document.getElementById(inp);
+      i.type = i.type==='password' ? 'text' : 'password';
+    });
+  }
+  setupToggle('l-pw','toggle-l-pw');
+  setupToggle('r-pw','toggle-r-pw');
 
-      async function handleRegister(e) {
-        e.preventDefault();
-        const btn = document.getElementById("reg-btn");
-        btn.textContent = "Creating account...";
-        btn.disabled = true;
-        document.getElementById("error-banner").classList.add("hidden");
-        try {
-          const registerData = {
-            phone_number: document.getElementById("reg-phone").value.trim(),
-            name: document.getElementById("reg-name").value.trim(),
-            password: document.getElementById("reg-password").value,
-          };
+  // Auto-switch tab based on URL query parameter (e.g. ?tab=register)
+  const params = new URLSearchParams(window.location.search);
+  const tab = params.get('tab');
+  if (tab === 'register') {
+    switchTab('register');
+  } else {
+    switchTab('login');
+  }
 
-          console.log("📝 Sending registration data:", {
-            phone: registerData.phone_number,
-            name: registerData.name,
-            api_url: API_BASE,
-          });
+  function checkPw() {
+    const pw = document.getElementById('r-pw').value;
+    const set = (id, ok) => {
+      const el = document.getElementById(id);
+      el.classList.toggle('met', ok);
+      el.querySelector('.req-icon').textContent = ok ? '✓' : '○';
+    };
+    set('req-len',    pw.length >= 8);
+    set('req-upper',  /[A-Z]/.test(pw));
+    set('req-num',    /[0-9]/.test(pw));
+    set('req-special',/[^A-Za-z0-9]/.test(pw));
+  }
 
-          const res = await api.post("/auth/register", registerData, false);
+  function setLoading(btn, on) {
+    const el = document.getElementById(btn);
+    el.disabled = on;
+    if (!el._orig) el._orig = el.innerHTML;
+    el.innerHTML = on ? '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Please wait…' : el._orig;
+  }
 
-          console.log("✅ Registration successful:", res.data.user);
-          api.setSession(res.data.token, res.data.user);
-          window.location.href = "/packages.html";
-        } catch (err) {
-          console.error("❌ Registration error:", err);
-          showError(err.message || "Registration failed. Please try again.");
-          btn.textContent = "Create Account";
-          btn.disabled = false;
-        }
-      }
-    </script>
-    <!-- navbar.js loads goBack() — navbar itself is hidden via updateNavbarVisibility -->
-    <script src="/js/navbar.js"></script>
-  </body>
+  document.getElementById('form-login').addEventListener('submit', async e => {
+    e.preventDefault(); clearBanner();
+    const phone = document.getElementById('l-phone').value.trim();
+    const pw    = document.getElementById('l-pw').value;
+    if (!phone || !pw) { showBanner('Phone number and password are required.'); return; }
+    setLoading('btn-login', true);
+    try {
+      const res = await api.post('/auth/login', { phone_number: phone, password: pw }, false);
+      api.setSession(res.data.token, res.data.user);
+      showBanner('Signed in! Redirecting…', 'success');
+      setTimeout(() => {
+        const u = api.getUser();
+        window.location.href = u?.role==='admin' ? '/admin.html' : '/packages.html';
+      }, 600);
+    } catch(err) {
+      showBanner(err.message || 'Login failed. Check your details and try again.');
+      setLoading('btn-login', false);
+    }
+  });
+
+  document.getElementById('form-register').addEventListener('submit', async e => {
+    e.preventDefault(); clearBanner();
+    const name  = document.getElementById('r-name').value.trim();
+    const phone = document.getElementById('r-phone').value.trim();
+    const pw    = document.getElementById('r-pw').value;
+    if (!phone || !pw) { showBanner('Phone number and password are required.'); return; }
+    
+    // Client-side password complexity validation
+    const hasLength = pw.length >= 8;
+    const hasUpper = /[A-Z]/.test(pw);
+    const hasNum = /[0-9]/.test(pw);
+    const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+    if (!hasLength || !hasUpper || !hasNum || !hasSpecial) {
+      showBanner('Password must meet all security requirements (8+ chars, uppercase, number, special character).');
+      return;
+    }
+
+    const payload = { phone_number: phone, password: pw };
+    if (name) payload.name = name;
+    setLoading('btn-register', true);
+    try {
+      const res = await api.post('/auth/register', payload, false);
+      api.setSession(res.data.token, res.data.user);
+      showBanner('Account created! Redirecting…', 'success');
+      setTimeout(() => { window.location.href = '/packages.html'; }, 800);
+    } catch(err) {
+      showBanner(err.message || 'Registration failed. Phone may already be registered.');
+      setLoading('btn-register', false);
+    }
+  });
+</script>
+</body>
 </html>

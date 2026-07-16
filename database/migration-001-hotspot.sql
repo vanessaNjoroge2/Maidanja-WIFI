@@ -147,6 +147,7 @@ CREATE INDEX IF NOT EXISTS idx_system_stats_recorded_at ON system_stats(recorded
 -- ============================================================================
 
 -- Active sessions with user details
+DROP VIEW IF EXISTS active_sessions_view CASCADE;
 CREATE OR REPLACE VIEW active_sessions_view AS
 SELECT 
   s.id,
@@ -163,7 +164,7 @@ SELECT
   p.speed_mbps,
   hu.username AS hotspot_username,
   (s.expires_at - NOW()) AS time_remaining,
-  ((s.expires_at - s.started_at) - (NOW() - s.started_at)) / (s.expires_at - s.started_at) * 100 AS percent_remaining
+  EXTRACT(EPOCH FROM (s.expires_at - NOW())) / EXTRACT(EPOCH FROM (s.expires_at - s.started_at)) * 100 AS percent_remaining
 FROM sessions s
 JOIN users u ON s.user_id = u.id
 JOIN packages p ON s.package_id = p.id
@@ -200,7 +201,7 @@ SELECT
   SUM(s.bytes_downloaded + s.bytes_uploaded) / 1024 / 1024 / 1024 AS total_data_gb,
   COALESCE(SUM(py.amount_kes) FILTER (WHERE py.status = 'completed'), 0) AS revenue_kes
 FROM sessions s
-LEFT JOIN payments py ON s.user_id = py.user_id AND DATE(py.completed_at) = DATE(s.started_at)
+LEFT JOIN payments py ON s.user_id = py.user_id AND DATE(py.updated_at) = DATE(s.started_at)
 WHERE s.status IN ('expired', 'disconnected', 'active')
 GROUP BY DATE(s.started_at)
 ORDER BY date DESC;

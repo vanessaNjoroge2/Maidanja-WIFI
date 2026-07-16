@@ -36,15 +36,23 @@ if (MIKROTIK_MODE === 'real') {
   try {
     RouterOS = require('node-routeros');
   } catch (err) {
-    console.warn('⚠️ node-routeros not installed. Install with: npm install node-routeros');
+    console.error('❌ FATAL: node-routeros not installed. Install with: npm install node-routeros');
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
   }
 }
 
 // Connect to MikroTik on startup (real mode only)
 async function connectToMikroTik() {
-  if (MIKROTIK_MODE !== 'real' || !RouterOS) {
+  if (MIKROTIK_MODE !== 'real') {
     console.log('🔌 MikroTik: Using SIMULATION mode (development)');
     return;
+  }
+
+  if (!RouterOS) {
+    console.error('❌ FATAL: Cannot connect to MikroTik because node-routeros is missing. Exiting.');
+    process.exit(1);
   }
 
   try {
@@ -54,12 +62,22 @@ async function connectToMikroTik() {
       password: MIKROTIK_PASS,
     });
 
+    // Add error event listeners to handle connection issues gracefully
+    routerConnection.on('error', (err) => {
+      console.error('❌ MikroTik Connection Error:', err.message);
+    });
+
     routerConnection.connect();
     console.log(`✅ MikroTik Connected: ${MIKROTIK_HOST}`);
   } catch (err) {
     console.error(`❌ MikroTik Connection Failed: ${err.message}`);
-    console.log('ℹ️ Falling back to simulation mode');
-    process.env.MIKROTIK_MODE = 'simulation';
+    if (process.env.NODE_ENV === 'production') {
+      console.error('❌ FATAL: MikroTik connection failed in production. Exiting.');
+      process.exit(1);
+    } else {
+      console.log('ℹ️ Falling back to simulation mode (development only)');
+      process.env.MIKROTIK_MODE = 'simulation';
+    }
   }
 }
 
@@ -167,7 +185,7 @@ function createHotspotUserSimulation(username, password, speedMbps, durationHour
 /**
  * Create a session for a hotspot user
  */
-async function createSession(userId, phone, hotspotUserId, username, packageId, durationHours) {
+async function createSession(userId, phone, hotspotUserId, username, packageId, durationHours, paymentId = null) {
   const sessionId = uuid();
   const expiresAt = new Date(Date.now() + durationHours * 3600000);
 
@@ -183,6 +201,7 @@ async function createSession(userId, phone, hotspotUserId, username, packageId, 
       startedAt: new Date(),
       expiresAt,
       isActive: true,
+      paymentId,
     });
 
     console.log(`✅ [SIMULATION] Session created for ${username} (expires: ${expiresAt.toISOString()})`);
@@ -190,9 +209,9 @@ async function createSession(userId, phone, hotspotUserId, username, packageId, 
 
   // Log to database
   await pool.query(
-    `INSERT INTO sessions (id, user_id, phone_number, package_id, hotspot_user_id, expires_at, status)
-     VALUES ($1, $2, $3, $4, $5, $6, 'active')`,
-    [sessionId, userId, phone, packageId, hotspotUserId, expiresAt]
+    `INSERT INTO sessions (id, user_id, phone_number, package_id, hotspot_user_id, expires_at, status, payment_id)
+     VALUES ($1, $2, $3, $4, $5, $6, 'active', $7)`,
+    [sessionId, userId, phone, packageId, hotspotUserId, expiresAt, paymentId]
   );
 
   return {
@@ -489,6 +508,60 @@ async function getActiveSessionCount() {
 }
 
 /**
+ * Get real-time stats for all active users in a single batch query
+ * @returns {Promise<Map>} Map of username -> stats
+ */
+async function getAllActiveUserStats() {
+  if (MIKROTIK_MODE === 'real') {
+    return await getAllActiveUserStatsReal();
+  } else {
+    return getAllActiveUserStatsSimulation();
+  }
+}
+
+async function getAllActiveUserStatsReal() {
+  if (!routerConnection) {
+    return new Map();
+  }
+  try {
+    const list = await routerConnection.query('/ip/hotspot/active');
+    const statsMap = new Map();
+    list.forEach(data => {
+      const user = data['user'];
+      if (user) {
+        statsMap.set(user, {
+          username: user,
+          ipAddress: data['address'],
+          bytesOut: parseInt(data['bytes-out'] || 0, 10),
+          bytesIn: parseInt(data['bytes-in'] || 0, 10),
+          uptime: data['uptime'],
+          isActive: true,
+        });
+      }
+    });
+    return statsMap;
+  } catch (err) {
+    console.error(`❌ Failed to batch fetch MikroTik active stats: ${err.message}`);
+    return new Map();
+  }
+}
+
+function getAllActiveUserStatsSimulation() {
+  const statsMap = new Map();
+  for (const [username, user] of simulatedUsers.entries()) {
+    statsMap.set(username, {
+      username,
+      ipAddress: '192.168.100.50',
+      bytesOut: Math.floor(Math.random() * 100000000),
+      bytesIn: Math.floor(Math.random() * 100000000),
+      uptime: '01:23:45',
+      isActive: true,
+    });
+  }
+  return statsMap;
+}
+
+/**
  * ============================================================================
  * EXPORTS
  * ============================================================================
@@ -512,6 +585,7 @@ module.exports = {
 
   // Monitoring
   getUserStats,
+  getAllActiveUserStats,
   getAllActiveSessions,
   getActiveSessionCount,
 
