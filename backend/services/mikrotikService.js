@@ -297,6 +297,8 @@ async function expireSessionsScheduled() {
 
     if (result.rows.length > 0) {
       console.log(`✅ Expired ${result.rows.length} session(s)`);
+    } else {
+      console.log('✅ Checked expired sessions (found 0).');
     }
   } catch (err) {
     console.error('❌ Session expiry check failed:', err.message || err);

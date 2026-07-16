@@ -24,6 +24,11 @@ const API_BASE = (() => {
     return (port === '3000' || isTunnel) ? '/api' : `http://${hostname}:3000/api`;
   }
   
+  // If served directly from Render, use relative path to prevent CORS/CSP domain mismatch issues
+  if (hostname.endsWith('.onrender.com')) {
+    return '/api';
+  }
+  
   // Production (Vercel, custom domain, etc.) → always use Render backend
   return RENDER_BACKEND;
 })();
