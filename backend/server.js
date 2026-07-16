@@ -16,6 +16,7 @@ const { router: sessionRoutes, expireSessions } = require('./routes/sessions');
 const adminRoutes = require('./routes/admin');
 const hotspotRoutes = require('./routes/hotspot');
 const mikrotikService = require('./services/mikrotikService');
+const pool = require('./config/database');
 
 const app = express();
 
