@@ -200,10 +200,12 @@ const server = app.listen(PORT, async () => {
   console.log(`🚀 Maidanja WiFi Server running on port ${PORT}`);
   console.log(`🔌 Current Environment Mode: ${process.env.NODE_ENV || 'development'}`);
   
-  // Connect to database
+  // Connect to database & run migrations/seeding
   try {
     const res = await pool.query('SELECT NOW()');
     console.log(`💾 PostgreSQL Connected: ${res.rows[0].now}`);
+    const initializeDatabase = require('./config/initDb');
+    await initializeDatabase();
   } catch (err) {
     console.error('❌ Database Connection Failed:', err.message);
   }
