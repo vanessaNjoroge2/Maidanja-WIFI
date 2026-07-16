@@ -180,7 +180,7 @@ const expireSessions = async () => {
        WHERE status = 'active' AND expires_at < NOW()`
     );
   } catch (err) {
-    console.error('[Session Expiry]', err.message);
+    console.error('[Session Expiry]', err.message || err);
   }
 };
 

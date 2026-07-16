@@ -49,7 +49,7 @@ async function initializeDatabase() {
       console.log('💾 Database: Seeding completed.');
     }
   } catch (err) {
-    console.error('❌ Database Initialization Failed:', err.message);
+    console.error('❌ Database Initialization Failed:', err.message || err);
   }
 }
 

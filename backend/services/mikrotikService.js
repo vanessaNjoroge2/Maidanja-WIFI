@@ -299,7 +299,7 @@ async function expireSessionsScheduled() {
       console.log(`✅ Expired ${result.rows.length} session(s)`);
     }
   } catch (err) {
-    console.error(`❌ Session expiry check failed: ${err.message}`);
+    console.error('❌ Session expiry check failed:', err.message || err);
   }
 }
 

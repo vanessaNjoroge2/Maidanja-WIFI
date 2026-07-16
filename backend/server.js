@@ -208,7 +208,7 @@ const server = app.listen(PORT, async () => {
     const initializeDatabase = require('./config/initDb');
     await initializeDatabase();
   } catch (err) {
-    console.error('❌ Database Connection Failed:', err.message);
+    console.error('❌ Database Connection Failed:', err.message || err);
   }
 
   // Connect to MikroTik Router
